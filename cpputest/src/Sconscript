@@ -1,0 +1,18 @@
+#!python
+Import('env')
+Import('config')
+
+r = {
+    'libs' : [],
+    'path' : []
+}
+r['path'].append(Dir('./'))
+
+lib_cpputest = env.StaticLibrary('cpputest', Glob('CppUTest/*'))
+r['libs'].append(lib_cpputest)
+
+if config['cpputest_extensions_enabled']:
+    lib_cpputestext = env.StaticLibrary('cpputestext', Glob('CppUTestExt/*'))
+    r['libs'].append(lib_cpputestext)
+
+Return('r')

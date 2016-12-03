@@ -1,0 +1,29 @@
+import os
+
+Import('env')
+Import('name')
+
+# mods = env.SConscript('./src/Sconscript', exports = 'env', variant_dir='./build/' + name)
+
+sources = Glob('./tests/*.c')
+sources.extend(Glob('./tests/*.cpp'))
+
+sources.extend(Glob('./tests/*/*.c'))
+sources.extend(Glob('./tests/*/*.cpp'))
+
+sources.extend(Glob('./platform_' + name + 's/*.c'))
+sources.extend(Glob('./platform_' + name + 's/*.cpp'))
+
+sources.extend(Glob('./platform_' + name + 's/*/*.c'))
+sources.extend(Glob('./platform_' + name + 's/*/*.cpp'))
+
+map_file = Dir('../').path + '/pq_projeto_' + name + '.map'
+
+env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
+
+exes = env.Program(['../pq_projeto_' + name, map_file], sources)
+exe = {'exe': exes[0], 'map': exes[1]}
+Return('exe')
+
+# print Dir('./').abspath
+# print env.GetBuildPath(sources)

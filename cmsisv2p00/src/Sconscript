@@ -1,0 +1,12 @@
+#!python
+Import('env')
+
+r = {
+    'libs' : [],
+    'path' : []
+}
+r['path'].append(Dir('./'))
+
+lib_cmsis = env.StaticLibrary('cmsisv2p00', Glob('./*.c'))
+r['libs'].append(lib_cmsis)
+Return('r')

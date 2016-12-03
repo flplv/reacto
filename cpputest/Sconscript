@@ -1,0 +1,43 @@
+Import('platforms')
+
+cpputest = {
+    'CXXFLAGS' : [
+                  '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
+                  '-Wconversion', '-pedantic', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
+                  '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
+                  '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'
+                 ],
+    'CFLAGS' :   [
+                  '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'
+                 ],
+}
+
+cpputest_exports = {
+    'CPPDEFINES': ['HAVE_CONFIG_H'],
+    'CXXFLAGS' : [
+                  '-include',
+                  File('./include/CppUTest/MemoryLeakDetectorNewMacros.h').path,
+                  '-include',
+                  File('./include/CppUTest/MemoryLeakDetectorMallocMacros.h').path
+                 ],
+    'CFLAGS' : [
+                  '-include',
+                  File('./include/CppUTest/MemoryLeakDetectorMallocMacros.h').path
+                 ],
+    'CPPPATH' : [ Dir('./include') ]
+}
+
+
+for name, plat in platforms.items():
+    # Modify imported environment to be used by the parent script
+    plat['env'].Prepend(**cpputest_exports)
+
+    # Clone, change and use the Environment
+    env = plat['env'].Clone()
+    env.Append(**cpputest)
+    config = {'cpputest_extensions_enabled' : plat['cpputest_extensions_enabled']}
+    mods = env.SConscript('./src/Sconscript', exports = ['env', 'config'], variant_dir='./build/' + name, duplicate=0)
+
+    # Add libs to parent env.
+    plat['env'].Append(LIBS = mods['libs'])
+    plat['env'].Append(LIBPATH = mods['path'])

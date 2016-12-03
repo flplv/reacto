@@ -1,0 +1,10 @@
+Import('platforms')
+
+for name, plat in platforms.items():
+    env = plat['env']
+    mods = env.SConscript('./src/Sconscript', exports = 'env', variant_dir='./build/' + name, duplicate=0)
+
+    # Add libs and includes to parent env.
+    plat['env'].Append(LIBS = mods['libs'])
+    plat['env'].Append(CPPPATH = [Dir('./src')])
+    plat['env'].Append(LIBPATH = mods['path'])

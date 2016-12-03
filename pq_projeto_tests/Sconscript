@@ -1,0 +1,13 @@
+import os
+
+Import('platforms')
+
+r = {}
+
+for name, plat in platforms.items():
+    env = plat['env'].Clone()
+    build_dir = './build/' + name
+    exe = env.SConscript('./Sconscript.variant', exports = ['name','env'], variant_dir=build_dir, src='tests', duplicate=0)
+    plat['pq_projeto_tests_build_dir'] = Dir(build_dir)
+    plat['pq_projeto_tests_executable'] = exe['exe']
+    plat['pq_projeto_tests_map_file'] = exe['map']

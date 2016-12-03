@@ -1,0 +1,20 @@
+#!python
+Import('env')
+
+penv = env.Clone()
+penv.Append(CPPPATH=['./'])
+
+r = {
+    'libs' : [],
+    'path' : []
+}
+r['path'].append(Dir('./'))
+
+lib = penv.StaticLibrary('pq_projeto',
+    [
+        'reusables/timeout.c',
+        'watchdog/watchdog.c',
+    ],
+)
+r['libs'].append(lib)
+Return('r')

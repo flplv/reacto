@@ -1,0 +1,108 @@
+#!python
+import os
+
+# Overview of the build system
+# - All global configurations goes in this file,
+# - Each platforms created contains configurations and environment
+# - Each project is called passing platforms.
+# - For each platform one build will run, always in the 'build' folder.
+# - Projects are expected to append data to platform enviroments when
+#   necessary, such as includes, defines, libraries, etc.
+
+
+default_env = Environment()
+default_env['ENV']['TERM'] = os.environ['TERM'] # Enable color terminal
+
+dev_test_plat = {
+    'cpputest_extensions_enabled' : True,
+    'env' : default_env.Clone (
+            CFLAGS = ['-std=gnu11'],
+            CXXFLAGS = ['-std=c++14'],
+    )
+}
+
+lpc17xx_toolchain_path = '/usr/local/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin'
+lpc17xx_toolchain_prefix = 'arm-none-eabi-'
+
+lpc176x_test_plat = {
+    'cpputest_extensions_enabled' : False,
+    'env' : default_env.Clone (
+        CC     = lpc17xx_toolchain_prefix + 'gcc',
+        CXX    = lpc17xx_toolchain_prefix + "g++",
+        LD     = lpc17xx_toolchain_prefix + "g++",
+        AR     = lpc17xx_toolchain_prefix + "ar",
+        STRIP  = lpc17xx_toolchain_prefix + "strip",
+        RANLIB = lpc17xx_toolchain_prefix + "ranlib",
+        CPPDEFINES = [
+                      '__CODE_RED',
+                      '__NEWLIB__',
+                      '__LPC17XX__'
+                      'CORE_M3',
+                      ('__USE_CMSIS', 'CMSISv2p00_LPC17xx'),
+                      'CPP_USE_HEAP',
+                      ],
+        CPPPATH = ['./CMSISv2p00_LPC17xx/inc'],
+        CFLAGS = ['-std=gnu11'],
+        CXXFLAGS = ['-fno-rtti', '-fno-exceptions', '-std=c++14'],
+        CCFLAGS = ['-O0', '-g3', '-Wall', '-fmessage-length=0',
+                   '-fno-builtin', '-ffunction-sections', '-fdata-sections',
+                   '-mcpu=cortex-m3', '-mthumb'],
+        LINKFLAGS = [
+                     '-nostdlib',
+                     '-Xlinker',
+                     '--gc-sections',
+                     '-Xlinker',
+                     '-print-memory-usage',
+                     '-mcpu=cortex-m3',
+                     '-mthumb'
+                     ]
+    )
+}
+lpc176x_test_plat['env'].PrependENVPath('PATH', lpc17xx_toolchain_path)
+
+# Enable only lpc176x_test platform
+platforms = {'lpc176x_test': lpc176x_test_plat }
+
+# Build CMSIS only for lpc176x_test platform
+SConscript('cmsisv2p00/Sconscript', exports ='platforms')
+
+# Enable all platforms
+platforms['dev_test'] = dev_test_plat
+
+# Build CppUTest libraries for dev_test and lpc176x_test platforms
+SConscript('cpputest/Sconscript', exports ='platforms')
+
+# Enable GNU Coverage for the next builds on dev_platform
+dev_test_plat['env'].Append(
+    CFLAGS = ['-fprofile-arcs', '-ftest-coverage'],
+    CXXFLAGS = ['-fprofile-arcs', '-ftest-coverage'],
+    LIBS = ['gcov']
+)
+
+# Build pq_projeto as library for dev_test and lpc176x_test platforms
+SConscript('pq_projeto/Sconscript', exports ='platforms')
+
+
+# Build pq_projeto_tests executable
+SConscript('pq_projeto_tests/Sconscript', exports ='platforms')
+
+# Run tests, finally :)
+test = Command( target = "test_report",
+                source = platforms['dev_test']['pq_projeto_tests_executable'],
+                action = "./$SOURCE -v | tee $TARGET" )
+
+# Generate coverage after tests run
+lcov = Command( target = ".coverage.info",
+                source = platforms['dev_test']['pq_projeto_tests_build_dir'],
+                action = "lcov -q --capture --directory $SOURCE --output-file $TARGET" )
+Depends(lcov, test)
+coverage_report = Command( target = "coverage",
+                           source = lcov,
+                           action = "genhtml -q $SOURCE --output-directory $TARGET" )
+
+Clean('./', [coverage_report, lcov])
+
+
+# AlwaysBuild(platforms['lpc176x_test']['pq_projeto_tests_build_dir'])
+AlwaysBuild(test)
+AlwaysBuild(coverage_report)
