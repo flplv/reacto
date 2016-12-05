@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <setjmp.h>
 #include <string.h>
+#include <inttypes.h>
 #include <ctype.h>
 #include <math.h>
 #include "CppUTest/TestHarness.h"
@@ -104,9 +105,11 @@ void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferI
 *  In Keil MDK-ARM, clock() default implementation used semihosting.
 *  Resolutions is user adjustable (1 ms for now)
 */
+extern "C" uint32_t time_now_ms ();
+
 static long TimeInMillisImplementation()
 {
-    clock_t t = clock();
+    uint32_t t = time_now_ms();
     return t;
 }
 
@@ -114,7 +117,7 @@ static long TimeInMillisImplementation()
 
 static const char* DummyTimeStringImplementation()
 {
-    time_t tm = 0;
+    time_t tm = 0;//time(NULL); // todo
     return ctime(&tm);
 }
 

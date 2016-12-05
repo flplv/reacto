@@ -400,9 +400,11 @@ void PendSV_Handler(void)
 { while(1) {}
 }
 
+#include "../reusables/plat_time.h"
 __attribute__ ((section(".after_vectors")))
 void SysTick_Handler(void)
-{ while(1) {}
+{
+	time_tick();
 }
 
 //*****************************************************************************

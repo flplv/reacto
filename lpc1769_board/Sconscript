@@ -1,0 +1,6 @@
+Import('platforms')
+
+# Order Matters, Board uses Chip that uses Cmsis
+SConscript('./cmsisv2p00_lpc1769/Sconscript', exports = 'platforms')
+SConscript('./lpc_chip_175x_6x/Sconscript', exports = 'platforms')
+SConscript('./lpc_board_nxp_lpcxpresso_1769/Sconscript', exports = 'platforms')

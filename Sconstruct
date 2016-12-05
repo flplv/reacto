@@ -11,7 +11,8 @@ import os
 
 
 default_env = Environment()
-default_env['ENV']['TERM'] = os.environ['TERM'] # Enable color terminal
+if 'TERM' in os.environ.keys():
+    default_env['ENV']['TERM'] = os.environ['TERM'] # Enable color terminal
 
 dev_test_plat = {
     'cpputest_extensions_enabled' : True,
@@ -36,12 +37,11 @@ lpc176x_test_plat = {
         CPPDEFINES = [
                       '__CODE_RED',
                       '__NEWLIB__',
-                      '__LPC17XX__'
+                      '__LPC17XX__',
                       'CORE_M3',
                       ('__USE_CMSIS', 'CMSISv2p00_LPC17xx'),
                       'CPP_USE_HEAP',
                       ],
-        CPPPATH = ['./CMSISv2p00_LPC17xx/inc'],
         CFLAGS = ['-std=gnu11'],
         CXXFLAGS = ['-fno-rtti', '-fno-exceptions', '-std=c++14'],
         CCFLAGS = ['-O0', '-g3', '-Wall', '-fmessage-length=0',
@@ -64,7 +64,7 @@ lpc176x_test_plat['env'].PrependENVPath('PATH', lpc17xx_toolchain_path)
 platforms = {'lpc176x_test': lpc176x_test_plat }
 
 # Build CMSIS only for lpc176x_test platform
-SConscript('cmsisv2p00/Sconscript', exports ='platforms')
+SConscript('lpc1769_board/Sconscript', exports ='platforms')
 
 # Enable all platforms
 platforms['dev_test'] = dev_test_plat
@@ -105,4 +105,4 @@ Clean('./', [coverage_report, lcov])
 
 # AlwaysBuild(platforms['lpc176x_test']['pq_projeto_tests_build_dir'])
 AlwaysBuild(test)
-AlwaysBuild(coverage_report)
+# AlwaysBuild(coverage_report)

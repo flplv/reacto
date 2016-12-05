@@ -8,8 +8,8 @@
  * LPCXpresso v8.2.2 [Build 650] [2016-09-09]  on Dec 3, 2016 7:55:40 PM
  */
 
-INCLUDE "cmsisv2p00/lpc1769_library.ld"
-INCLUDE "cmsisv2p00/lpc1769_memory.ld"
+INCLUDE "lpc1769_board/cmsisv2p00_lpc1769/lpc1769_memory.ld"
+INCLUDE "lpc1769_board/cmsisv2p00_lpc1769/lpc1769_library.ld"
 
 ENTRY(ResetISR)
 

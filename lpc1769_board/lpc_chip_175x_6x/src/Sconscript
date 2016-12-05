@@ -1,0 +1,12 @@
+#!python
+Import('env')
+
+r = {
+    'libs' : [],
+    'path' : []
+}
+r['path'].append(Dir('./'))
+
+lib = env.StaticLibrary('lpc_chip', Glob('./*.c'))
+r['libs'].append(lib)
+Return('r')
