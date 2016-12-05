@@ -1,3 +1,7 @@
+# Ignore eclipse files
+.project
+.cproject
+.settings
 
 # Ignore build files and folders
 build

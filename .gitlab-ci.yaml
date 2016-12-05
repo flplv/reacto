@@ -1,0 +1,18 @@
+image: ubuntu
+
+before_script:
+  - apt-get install build-essentials lcov scons
+
+stages:
+  - build
+  - test
+
+job1:
+  stage: build
+  script:
+    - scons -Q ./pq_projeto_tests/build/pq_projeto_dev_test
+
+job2:
+  stage: test
+  script:
+    - ./pq_projeto_tests/build/pq_projeto_dev_test -v -c
