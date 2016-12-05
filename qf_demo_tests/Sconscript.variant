@@ -17,11 +17,11 @@ sources.extend(Glob('./platform_' + name + 's/*.cpp'))
 sources.extend(Glob('./platform_' + name + 's/*/*.c'))
 sources.extend(Glob('./platform_' + name + 's/*/*.cpp'))
 
-map_file = Dir('../').path + '/pq_projeto_' + name + '.map'
+map_file = Dir('../').path + '/qf_demo_' + name + '.map'
 
 env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
 
-exes = env.Program(['../pq_projeto_' + name, map_file], sources)
+exes = env.Program(['../qf_demo_' + name, map_file], sources)
 exe = {'exe': exes[0], 'map': exes[1]}
 Return('exe')
 

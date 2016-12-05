@@ -1,0 +1,15 @@
+Import('platforms')
+
+basic_exports = {
+    # Add the linker script to the build flags.
+    'LINKFLAGS' : [ '-T', File('./lpc1769.ld') ]
+}
+
+for name, plat in platforms.items():
+    # Modify imported environment to be used by the parent script
+    plat['env'].Prepend(**basic_exports)
+
+# Order matters here, Board uses Chip's libs that uses Cmsis's libs.
+SConscript('./cmsisv2p00_lpc1769/Sconscript', exports = 'platforms')
+SConscript('./lpc_chip_175x_6x/Sconscript', exports = 'platforms')
+SConscript('./lpc_board_nxp_lpcxpresso_1769/Sconscript', exports = 'platforms')

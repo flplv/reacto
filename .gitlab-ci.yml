@@ -6,5 +6,6 @@ stages:
 job1:
   stage: build
   script:
-    - scons -Q ./pq_projeto_tests/build/pq_projeto_dev_test
-    - ./pq_projeto_tests/build/pq_projeto_dev_test -v -c
+    - cd dependencies && ./setup-cpputest.sh && cd ../
+    - scons -Q ./qf_demo_tests/build/qf_demo_dev_test
+    - ./qf_demo_tests/build/qf_demo_dev_test -v -c

@@ -64,13 +64,13 @@ lpc176x_test_plat['env'].PrependENVPath('PATH', lpc17xx_toolchain_path)
 platforms = {'lpc176x_test': lpc176x_test_plat }
 
 # Build CMSIS only for lpc176x_test platform
-SConscript('lpc1769_board/Sconscript', exports ='platforms')
+SConscript('dependencies/lpc1769_board/Sconscript', exports ='platforms')
 
 # Enable all platforms
 platforms['dev_test'] = dev_test_plat
 
 # Build CppUTest libraries for dev_test and lpc176x_test platforms
-SConscript('cpputest/Sconscript', exports ='platforms')
+SConscript('dependencies/cpputest/Sconscript', exports ='platforms')
 
 # Enable GNU Coverage for the next builds on dev_platform
 dev_test_plat['env'].Append(
@@ -79,21 +79,21 @@ dev_test_plat['env'].Append(
     LIBS = ['gcov']
 )
 
-# Build pq_projeto as library for dev_test and lpc176x_test platforms
-SConscript('pq_projeto/Sconscript', exports ='platforms')
+# Build qf_demo as library for dev_test and lpc176x_test platforms
+SConscript('qf_demo/Sconscript', exports ='platforms')
 
 
-# Build pq_projeto_tests executable
-SConscript('pq_projeto_tests/Sconscript', exports ='platforms')
+# Build qf_demo_tests executable
+SConscript('qf_demo_tests/Sconscript', exports ='platforms')
 
 # Run tests, finally :)
 test = Command( target = "test_report",
-                source = platforms['dev_test']['pq_projeto_tests_executable'],
+                source = platforms['dev_test']['qf_demo_tests_executable'],
                 action = "./$SOURCE -v | tee $TARGET" )
 
 # Generate coverage after tests run
 lcov = Command( target = ".coverage.info",
-                source = platforms['dev_test']['pq_projeto_tests_build_dir'],
+                source = platforms['dev_test']['qf_demo_tests_build_dir'],
                 action = "lcov -q --capture --directory $SOURCE --output-file $TARGET" )
 Depends(lcov, test)
 coverage_report = Command( target = "coverage",
@@ -103,6 +103,6 @@ coverage_report = Command( target = "coverage",
 Clean('./', [coverage_report, lcov])
 
 
-# AlwaysBuild(platforms['lpc176x_test']['pq_projeto_tests_build_dir'])
+# AlwaysBuild(platforms['lpc176x_test']['qf_demo_tests_build_dir'])
 AlwaysBuild(test)
 # AlwaysBuild(coverage_report)

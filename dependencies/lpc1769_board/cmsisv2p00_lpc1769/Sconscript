@@ -3,7 +3,6 @@ Import('platforms')
 
 cmsis_exports = {
     'CPPPATH' : [ Dir('./inc') ],
-    'LINKFLAGS' : [ '-T', File('./lpc1769.ld') ]
 }
 
 for name, plat in platforms.items():
