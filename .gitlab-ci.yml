@@ -3,7 +3,7 @@ image: felipelavratti/ubuntu-buildessentials-scons:16.04
 stages:
   - build
 
-job1:
+build:
   stage: build
   script:
     - cd dependencies && ./setup-cpputest.sh && cd ../
