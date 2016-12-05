@@ -1,7 +1,4 @@
-image: ubuntu
-
-before_script:
-  - apt-get install build-essentials lcov scons
+image: felipelavratti/ubuntu-buildessentials-scons
 
 stages:
   - build
