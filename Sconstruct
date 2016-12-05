@@ -86,26 +86,42 @@ SConscript('qf_demo/Sconscript', exports ='platforms')
 # Build qf_demo_tests executable
 SConscript('qf_demo_tests/Sconscript', exports ='platforms')
 
-# Run tests, finally :)
-test = Command( target = "test_report",
+#
+#
+# Tests Build and Targets
+# Use `scons tests` in deveopment, to print tests results and force
+# build of everything.
+tests = Command( target = "tests",
                 source = platforms['dev_test']['qf_demo_tests_executable'],
-                action = "./$SOURCE -v | tee $TARGET" )
+                action = "./$SOURCE -v | tee tests_report" )
 
-# Generate coverage after tests run
+# Link lpc176x_test platform with tests target to force buiod.
+Depends(tests, platforms['lpc176x_test']['qf_demo_tests_executable'])
+Clean ('./', "tests_report")
+
+#
+#
+# Coverage Commands
+#
+# Re run test and store to file silently
+tests_report_only = Command( target = "tests_report",
+                source = platforms['dev_test']['qf_demo_tests_executable'],
+                action = "./$SOURCE -v > ${TARGET}" )
+
+# Generate .coverage.info
 lcov = Command( target = ".coverage.info",
                 source = [platforms['dev_test']['qf_demo_build_dir'], platforms['dev_test']['qf_demo_tests_build_dir']],
                 action = "lcov -q --capture --directory ${SOURCES[0]} --directory ${SOURCES[1]} --output-file $TARGET" )
-Depends(lcov, test)
+Depends(lcov, tests_report_only)
+
+# Print and safe coverage_report
 coverage_report = Command( target = "coverage_report",
                            source = lcov,
                            action = "lcov --summary $SOURCE | tee $TARGET" )
 
+# Generate html files for coverage
 coverage_html = Command( target = "coverage",
                            source = lcov,
-                           action = "genhtml $SOURCE --output-directory $TARGET" )
+                           action = "genhtml -q $SOURCE --output-directory $TARGET" )
 
-Clean('./', [coverage_html, lcov])
-
-# AlwaysBuild(platforms['lpc176x_test']['qf_demo_tests_build_dir'])
-AlwaysBuild(test)
-AlwaysBuild(coverage_report)
+Clean('./', [coverage_html, coverage_report, lcov])
