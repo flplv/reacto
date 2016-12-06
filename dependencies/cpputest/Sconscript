@@ -12,21 +12,29 @@ cpputest = {
                  ],
 }
 
+cpputest_tree = Command( target = Dir('./cpputest-tree'),
+                source = File('./setup-cpputest.sh'),
+                action = "./${SOURCE} ${TARGET}" )
+
+new_macros = File('./cpputest-tree/include/CppUTest/MemoryLeakDetectorNewMacros.h')
+malloc_macros = File('./cpputest-tree/include/CppUTest/MemoryLeakDetectorMallocMacros.h')
+
 cpputest_exports = {
     'CPPDEFINES': ['HAVE_CONFIG_H'],
     'CXXFLAGS' : [
                   '-include',
-                  File('./include/CppUTest/MemoryLeakDetectorNewMacros.h').path,
+                  new_macros,
                   '-include',
-                  File('./include/CppUTest/MemoryLeakDetectorMallocMacros.h').path
+                  malloc_macros
                  ],
     'CFLAGS' : [
                   '-include',
-                  File('./include/CppUTest/MemoryLeakDetectorMallocMacros.h').path
+                  malloc_macros
                  ],
-    'CPPPATH' : [ Dir('./include') ]
+    'CPPPATH' : [ Dir('./cpputest-tree/include'), Dir('./include') ],
+    # This is a ugly workaround becouse scons is not detecting dependencies in CPPPATH
+    'O_DEPS' : [Dir('./cpputest-tree')]
 }
-
 
 for name, plat in platforms.items():
     # Modify imported environment to be used by the parent script
@@ -36,7 +44,8 @@ for name, plat in platforms.items():
     env = plat['env'].Clone()
     env.Append(**cpputest)
     config = {'cpputest_extensions_enabled' : plat['cpputest_extensions_enabled']}
-    mods = env.SConscript('./src/Sconscript', exports = ['env', 'config'], variant_dir='./build/' + name, duplicate=0)
+    mods = env.SConscript('./Sconscript.variant', exports = ['env', 'name', 'config'], variant_dir='./build/' + name)
+    Depends(mods['libs'], cpputest_tree)
 
     # Add libs to parent env.
     plat['env'].Append(LIBS = mods['libs'])

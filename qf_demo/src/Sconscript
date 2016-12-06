@@ -10,11 +10,10 @@ r = {
 }
 r['path'].append(Dir('./'))
 
-lib = penv.StaticLibrary('pq_projeto',
-    [
-        'reusables/timeout.c',
-        'watchdog/watchdog.c',
-    ],
-)
+src = Glob('./*/*.c')
+lib = penv.StaticLibrary('pq_projeto', src)
+
+Depends ('./*/*.o', env['O_DEPS'])
+
 r['libs'].append(lib)
 Return('r')

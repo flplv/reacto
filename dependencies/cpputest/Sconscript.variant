@@ -1,0 +1,25 @@
+#!python
+Import('env')
+Import('config')
+Import('name')
+
+r = {
+    'libs' : [],
+    'path' : []
+}
+r['path'].append(Dir('./'))
+
+src = Glob('./cpputest-tree/src/CppUTest/*.c')
+src.extend(Glob('./cpputest-tree/src/CppUTest/*.cpp'))
+
+src_ext = Glob('./cpputest-tree/src/CppUTestExt/*')
+src_ext.extend(Glob('./cpputest-tree/src/CppUTestExt/*'))
+
+lib_cpputest = env.StaticLibrary('cpputest', src)
+r['libs'].append(lib_cpputest)
+
+if config['cpputest_extensions_enabled']:
+    lib_cpputestext = env.StaticLibrary('cpputestext', src_ext)
+    r['libs'].append(lib_cpputestext)
+
+Return('r')

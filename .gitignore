@@ -13,3 +13,4 @@ test_report
 # Ignore downloaded cpputest
 cpputest-3.8.tar.gz
 cpputest-3.8
+cpputest-tree

@@ -70,7 +70,7 @@ SConscript('dependencies/lpc1769_board/Sconscript', exports ='platforms')
 platforms['dev_test'] = dev_test_plat
 
 # Build CppUTest libraries for dev_test and lpc176x_test platforms
-SConscript('dependencies/cpputest/Sconscript', exports ='platforms')
+cpputest = SConscript('dependencies/cpputest/Sconscript', exports ='platforms')
 
 # Enable GNU Coverage for the next builds on dev_platform
 dev_test_plat['env'].Append(

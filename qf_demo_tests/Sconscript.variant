@@ -21,6 +21,11 @@ map_file = Dir('../').path + '/qf_demo_' + name + '.map'
 
 env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
 
+Depends ('./tests/*.o', env['O_DEPS'])
+Depends ('./tests/*/*.o', env['O_DEPS'])
+Depends ('./platform_' + name + 's/*.o', env['O_DEPS'])
+Depends ('./platform_' + name + 's/*/*.o', env['O_DEPS'])
+
 exes = env.Program(['../qf_demo_' + name, map_file], sources)
 exe = {'exe': exes[0], 'map': exes[1]}
 Return('exe')
