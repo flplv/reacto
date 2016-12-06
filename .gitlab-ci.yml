@@ -6,6 +6,6 @@ stages:
 build:
   stage: build
   script:
-    - scons -Q ./qf_demo_tests/build/qf_demo_dev_test
-    - ./qf_demo_tests/build/qf_demo_dev_test -v -c
+    - scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
+    - ./qf_demo_tests/build/qf_demo_dev_tests -v -c
     - scons -Q coverage_report
