@@ -3,8 +3,6 @@ import os
 Import('env')
 Import('name')
 
-# mods = env.SConscript('./src/Sconscript', exports = 'env', variant_dir='./build/' + name)
-
 sources = Glob('./tests/*.c')
 sources.extend(Glob('./tests/*.cpp'))
 
@@ -21,10 +19,9 @@ map_file = Dir('../').path + '/qf_demo_' + name + '.map'
 
 env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
 
-Depends ('./tests/*.o', env['O_DEPS'])
-Depends ('./tests/*/*.o', env['O_DEPS'])
-Depends ('./platform_' + name + 's/*.o', env['O_DEPS'])
-Depends ('./platform_' + name + 's/*/*.o', env['O_DEPS'])
+objs = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in sources]
+for obj in objs:
+    Depends(obj, env['CPPINCLUDES'])
 
 exes = env.Program(['../qf_demo_' + name, map_file], sources)
 exe = {'exe': exes[0], 'map': exes[1]}

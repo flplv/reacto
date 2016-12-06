@@ -9,13 +9,64 @@ r = {
 }
 r['path'].append(Dir('./'))
 
-src = Glob('./cpputest-tree/src/CppUTest/*.c')
-src.extend(Glob('./cpputest-tree/src/CppUTest/*.cpp'))
+src_str = """./cpputest-tree/src/CppUTest/CommandLineArguments.cpp
+./cpputest-tree/src/CppUTest/CommandLineTestRunner.cpp
+./cpputest-tree/src/CppUTest/JUnitTestOutput.cpp
+./cpputest-tree/src/CppUTest/MemoryLeakDetector.cpp
+./cpputest-tree/src/CppUTest/MemoryLeakWarningPlugin.cpp
+./cpputest-tree/src/CppUTest/SimpleMutex.cpp
+./cpputest-tree/src/CppUTest/SimpleString.cpp
+./cpputest-tree/src/CppUTest/TeamCityTestOutput.cpp
+./cpputest-tree/src/CppUTest/TestFailure.cpp
+./cpputest-tree/src/CppUTest/TestFilter.cpp
+./cpputest-tree/src/CppUTest/TestHarness_c.cpp
+./cpputest-tree/src/CppUTest/TestMemoryAllocator.cpp
+./cpputest-tree/src/CppUTest/TestOutput.cpp
+./cpputest-tree/src/CppUTest/TestPlugin.cpp
+./cpputest-tree/src/CppUTest/TestRegistry.cpp
+./cpputest-tree/src/CppUTest/TestResult.cpp
+./cpputest-tree/src/CppUTest/TestTestingFixture.cpp
+./cpputest-tree/src/CppUTest/Utest.cpp"""
 
-src_ext = Glob('./cpputest-tree/src/CppUTestExt/*')
-src_ext.extend(Glob('./cpputest-tree/src/CppUTestExt/*'))
+src_ext_str = """./cpputest-tree/src/CppUTestExt/CodeMemoryReportFormatter.cpp
+./cpputest-tree/src/CppUTestExt/IEEE754ExceptionsPlugin.cpp
+./cpputest-tree/src/CppUTestExt/MemoryReportAllocator.cpp
+./cpputest-tree/src/CppUTestExt/MemoryReportFormatter.cpp
+./cpputest-tree/src/CppUTestExt/MemoryReporterPlugin.cpp
+./cpputest-tree/src/CppUTestExt/MockActualCall.cpp
+./cpputest-tree/src/CppUTestExt/MockExpectedCall.cpp
+./cpputest-tree/src/CppUTestExt/MockExpectedCallsList.cpp
+./cpputest-tree/src/CppUTestExt/MockFailure.cpp
+./cpputest-tree/src/CppUTestExt/MockNamedValue.cpp
+./cpputest-tree/src/CppUTestExt/MockSupport.cpp
+./cpputest-tree/src/CppUTestExt/MockSupportPlugin.cpp
+./cpputest-tree/src/CppUTestExt/MockSupport_c.cpp
+./cpputest-tree/src/CppUTestExt/OrderedTest.cpp
+./cpputest-tree/src/CppUTestExt/CodeMemoryReportFormatter.cpp
+./cpputest-tree/src/CppUTestExt/IEEE754ExceptionsPlugin.cpp
+./cpputest-tree/src/CppUTestExt/MemoryReportAllocator.cpp
+./cpputest-tree/src/CppUTestExt/MemoryReportFormatter.cpp
+./cpputest-tree/src/CppUTestExt/MemoryReporterPlugin.cpp
+./cpputest-tree/src/CppUTestExt/MockActualCall.cpp
+./cpputest-tree/src/CppUTestExt/MockExpectedCall.cpp
+./cpputest-tree/src/CppUTestExt/MockExpectedCallsList.cpp
+./cpputest-tree/src/CppUTestExt/MockFailure.cpp
+./cpputest-tree/src/CppUTestExt/MockNamedValue.cpp
+./cpputest-tree/src/CppUTestExt/MockSupport.cpp
+./cpputest-tree/src/CppUTestExt/MockSupportPlugin.cpp
+./cpputest-tree/src/CppUTestExt/MockSupport_c.cpp
+./cpputest-tree/src/CppUTestExt/OrderedTest.cpp"""
+
+src = [File('./' + s) for s in src_str.split('\n')]
+src_ext = [File('./' + s) for s in src_ext_str.split('\n')]
+
+objs = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in src]
+objs_ext = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in src_ext]
+for p in src + objs + src_ext + objs_ext:
+    Depends(p, env['CPPINCLUDES'])
 
 lib_cpputest = env.StaticLibrary('cpputest', src)
+
 r['libs'].append(lib_cpputest)
 
 if config['cpputest_extensions_enabled']:

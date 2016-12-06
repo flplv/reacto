@@ -11,9 +11,11 @@ r = {
 r['path'].append(Dir('./'))
 
 src = Glob('./*/*.c')
-lib = penv.StaticLibrary('pq_projeto', src)
+lib = penv.StaticLibrary('qf_demo', src)
 
-Depends ('./*/*.o', env['O_DEPS'])
+objs = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in src]
+for obj in objs:
+    Depends(obj, env['CPPINCLUDES'])
 
 r['libs'].append(lib)
 Return('r')
