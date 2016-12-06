@@ -7,6 +7,9 @@ r = {
 }
 r['path'].append(Dir('./'))
 
-lib_cmsis = env.StaticLibrary('cmsisv2p00', Glob('./*.c'))
+src = env.FindFiles('./', '*.c')
+Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
+
+lib_cmsis = env.StaticLibrary('cmsisv2p00', src)
 r['libs'].append(lib_cmsis)
 Return('r')

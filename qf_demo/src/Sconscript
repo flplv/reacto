@@ -10,12 +10,10 @@ r = {
 }
 r['path'].append(Dir('./'))
 
-src = Glob('./*/*.c')
+src = env.FindFiles('./', '*.c')
 lib = penv.StaticLibrary('qf_demo', src)
 
-objs = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in src]
-for obj in objs:
-    Depends(obj, env['CPPINCLUDES'])
+Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
 
 r['libs'].append(lib)
 Return('r')

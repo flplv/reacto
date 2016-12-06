@@ -8,7 +8,8 @@ build
 coverage/
 .coverage.info
 .sconsign.dblite
-test_report
+tests_report
+coverage_report
 
 # Ignore downloaded cpputest
 cpputest-3.8.tar.gz

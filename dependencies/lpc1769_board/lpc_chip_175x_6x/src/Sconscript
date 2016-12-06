@@ -7,6 +7,8 @@ r = {
 }
 r['path'].append(Dir('./'))
 
-lib = env.StaticLibrary('lpc_chip', Glob('./*.c'))
+src = env.FindFiles('./', '*.c')
+Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
+lib = env.StaticLibrary('lpc_chip', src)
 r['libs'].append(lib)
 Return('r')

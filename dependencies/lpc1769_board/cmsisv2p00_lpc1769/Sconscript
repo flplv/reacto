@@ -1,6 +1,5 @@
 Import('platforms')
 
-
 cmsis_exports = {
     'CPPPATH' : [ Dir('./inc') ],
 }
@@ -8,11 +7,10 @@ cmsis_exports = {
 for name, plat in platforms.items():
     # Modify imported environment to be used by the parent script
     plat['env'].Prepend(**cmsis_exports)
-
-    # Clone, change and use the Environment
     env = plat['env'].Clone()
+
     mods = env.SConscript('./src/Sconscript', exports = 'env', variant_dir='./build/' + name, duplicate=0)
 
     # Add libs to parent env.
-    plat['env'].Append(LIBS = mods['libs'])
     plat['env'].Append(LIBPATH = mods['path'])
+    plat['env'].Append(LIBS = mods['libs'])

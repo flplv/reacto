@@ -1,7 +1,7 @@
 Import('platforms')
 
 for name, plat in platforms.items():
-    env = plat['env']
+    env = plat['env'].Clone()
     build_dir = './build/' + name
     mods = env.SConscript('./src/Sconscript', exports = 'env', variant_dir=build_dir, duplicate=0)
 

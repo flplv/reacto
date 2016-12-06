@@ -3,11 +3,8 @@ Import('env')
 Import('config')
 Import('name')
 
-r = {
-    'libs' : [],
-    'path' : []
-}
-r['path'].append(Dir('./'))
+# Source files have to be manually added in this case, since cpputest-tree doesn't exists
+# until donwloaded and extracted.
 
 src_str = """./cpputest-tree/src/CppUTest/CommandLineArguments.cpp
 ./cpputest-tree/src/CppUTest/CommandLineTestRunner.cpp
@@ -57,20 +54,19 @@ src_ext_str = """./cpputest-tree/src/CppUTestExt/CodeMemoryReportFormatter.cpp
 ./cpputest-tree/src/CppUTestExt/MockSupport_c.cpp
 ./cpputest-tree/src/CppUTestExt/OrderedTest.cpp"""
 
-src = [File('./' + s) for s in src_str.split('\n')]
-src_ext = [File('./' + s) for s in src_ext_str.split('\n')]
+src = env.MultiLineStringToFiles(src_str)
+objs = env.SourceToObjects(src)
+src_ext = env.MultiLineStringToFiles(src_ext_str)
+objs_ext = env.SourceToObjects(src_ext)
+Depends(src + objs + src_ext + objs_ext, env['CPPINCLUDES'])
 
-objs = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in src]
-objs_ext = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in src_ext]
-for p in src + objs + src_ext + objs_ext:
-    Depends(p, env['CPPINCLUDES'])
-
+r = { 'libs' : [], 'path' : [] }
 lib_cpputest = env.StaticLibrary('cpputest', src)
-
 r['libs'].append(lib_cpputest)
 
 if config['cpputest_extensions_enabled']:
     lib_cpputestext = env.StaticLibrary('cpputestext', src_ext)
     r['libs'].append(lib_cpputestext)
 
+r['path'].append(Dir('./'))
 Return('r')

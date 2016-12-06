@@ -3,29 +3,17 @@ import os
 Import('env')
 Import('name')
 
-sources = Glob('./tests/*.c')
-sources.extend(Glob('./tests/*.cpp'))
-
-sources.extend(Glob('./tests/*/*.c'))
-sources.extend(Glob('./tests/*/*.cpp'))
-
-sources.extend(Glob('./platform_' + name + 's/*.c'))
-sources.extend(Glob('./platform_' + name + 's/*.cpp'))
-
-sources.extend(Glob('./platform_' + name + 's/*/*.c'))
-sources.extend(Glob('./platform_' + name + 's/*/*.cpp'))
-
+env = env.Clone()
 map_file = Dir('../').path + '/qf_demo_' + name + '.map'
-
 env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
 
-objs = [File('#' + s.path.replace('.cpp', '.o').replace('.c', '.o')) for s in sources]
-for obj in objs:
-    Depends(obj, env['CPPINCLUDES'])
+sources = env.FindFiles('./tests', '*.c')
+sources.extend (env.FindFiles('./tests', '*.cpp'))
+sources.extend (env.FindFiles('./platform_' + name, '*.c'))
+sources.extend (env.FindFiles('./platform_' + name, '*.cpp'))
+objects = env.SourceToObjects(sources)
+Depends(objects, env['CPPINCLUDES'])
 
 exes = env.Program(['../qf_demo_' + name, map_file], sources)
 exe = {'exe': exes[0], 'map': exes[1]}
 Return('exe')
-
-# print Dir('./').abspath
-# print env.GetBuildPath(sources)
