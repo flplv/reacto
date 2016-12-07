@@ -164,7 +164,8 @@ tests_report_only = Command( target = "tests_report",
                 action = "./$SOURCE -v > ${TARGET}" )
 
 # Generate .coverage.info for dev_tests executables
-Command( target = ".coverage.info.pre",
+Depends(
+       Command( target = ".coverage.info.pre",
                 source = [
                           platforms['dev_tests']['qf_demo_build_dir'],
                           platforms['dev_tests']['qf_demo_tests_build_dir']
@@ -172,7 +173,9 @@ Command( target = ".coverage.info.pre",
                 action = "lcov -q --capture --directory ${SOURCES[0]} " \
                          "--directory ${SOURCES[1]} " \
                          "--output-file $TARGET " 
-                         )
+                         ),
+       tests_report_only)
+
 lcov = Command( target = ".coverage.info",
                 source = ".coverage.info.pre",
                 action = "echo \"" \
@@ -182,12 +185,11 @@ lcov = Command( target = ".coverage.info",
                          "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE"
                          )
                          
-Depends(lcov, tests_report_only)
 
 # Print and safe coverage_report
 coverage_report = Command( target = "coverage_report",
                            source = lcov,
-                           action = "lcov --summary $SOURCE | tee $TARGET" )
+                           action = "lcov --summary $SOURCE 2>&1 | tee $TARGET" )
 
 # Generate html files for coverage
 coverage_html = Command( target = "coverage",
