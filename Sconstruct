@@ -172,7 +172,7 @@ Depends(
                          ],
                 action = "lcov -q --capture --directory ${SOURCES[0]} " \
                          "--directory ${SOURCES[1]} " \
-                         "--output-file $TARGET " 
+                         "--output-file $TARGET "
                          ),
        tests_report_only)
 
@@ -184,12 +184,12 @@ lcov = Command( target = ".coverage.info",
                          "dependencies/* " \
                          "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE"
                          )
-                         
+
 
 # Print and safe coverage_report
 coverage_report = Command( target = "coverage_report",
                            source = lcov,
-                           action = "lcov --summary $SOURCE 2>&1 tee $TARGET" )
+                           action = "lcov --summary $SOURCE 2>&1 | tee $TARGET" )
 
 # Generate html files for coverage
 coverage_html = Command( target = "coverage",
