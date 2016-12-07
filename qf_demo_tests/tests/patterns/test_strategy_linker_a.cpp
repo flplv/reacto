@@ -28,5 +28,6 @@ TEST_GROUP(StrategyLinkerA)
 
 TEST(StrategyLinkerA, FirstTest)
 {
-   CHECK_TRUE(1 == 1);
+    strategy_linker_do_something();
+    CHECK_TRUE(1 == 1);
 }

@@ -19,9 +19,12 @@
  *   the public methods.
  */
 
-#include "class_private.h"
+struct _class_private
+{
+    int internal_data;
+};
 
-typedef struct class_data_private class_t;
+typedef struct _class_private class_t;
 
 int class_init(class_t * obj);
 void class_dinit(class_t * obj);

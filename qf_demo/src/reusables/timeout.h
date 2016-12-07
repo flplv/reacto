@@ -23,6 +23,7 @@
 #ifndef TIMEOUT_H_
 #define TIMEOUT_H_
 
+#include <stdbool.h>
 #include <stdint.h>
 
 typedef uint32_t timeout_t;

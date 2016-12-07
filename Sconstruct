@@ -58,12 +58,12 @@ dev_tests_plat = {
     'cpputest_extensions_enabled' : True,
     'env' : default_env.Clone (
             # We want lot's of warning on dev_tests
-            CXXFLAGS = ['-std=gnu++14',
+            CXXFLAGS = ['-std=gnu++14', '-g3', '-O0',
                 '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
                 '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
                 '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
                 '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'],
-            CFLAGS  = ['-std=gnu11',
+            CFLAGS  = ['-std=gnu11', '-g3', '-O0',
                 '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
             CPPINCLUDES = []
     )
@@ -189,7 +189,7 @@ lcov = Command( target = ".coverage.info",
 # Print and safe coverage_report
 coverage_report = Command( target = "coverage_report",
                            source = lcov,
-                           action = "lcov --summary $SOURCE 2>&1 | tee $TARGET" )
+                           action = "lcov --summary $SOURCE 2>&1 tee $TARGET" )
 
 # Generate html files for coverage
 coverage_html = Command( target = "coverage",

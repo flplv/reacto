@@ -52,5 +52,6 @@ TEST(timeout, sleep_test)
 	timeout_t tout = timeout_init_cpy();
 	uint32_t now = time_now_ms();
 	timeout_sleep(&tout, 100);
+	timeout_sleep(&tout, 100); /* This one should not wait at all */
 	CHECK_TRUE( (now + 100*0.8) <= time_now_ms() );
 }

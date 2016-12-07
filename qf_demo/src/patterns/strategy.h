@@ -49,6 +49,9 @@ struct private_strategy
 extern const struct strategy_behavior strategy_normal;
 /* Twice behavior will duplicate the number set */
 extern const struct strategy_behavior strategy_twice;
+/* Plus behavior will add the number set */
+extern const struct strategy_behavior strategy_plus;
+
 
 int strategy_init(strategy_t * obj, const struct strategy_behavior * behavior);
 void strategy_deinit(strategy_t * obj);

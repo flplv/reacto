@@ -105,8 +105,7 @@ void watchdog_periodic ()
         {
             if (is_expired(entry))
             {
-                log (entry->name);
-                log ("(Watchdog expired)");
+                log_message ("Watchdog %s expired.", entry->name);
                 return;
             }
         }

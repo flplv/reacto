@@ -5,6 +5,7 @@
 
 extern "C"
 {
+    #include <reusables/time.h>
     #include <watchdog/watchdog.c>
 }
 
@@ -21,6 +22,37 @@ TEST_GROUP(Watchdog)
     }
 };
 
+TEST(Watchdog, repeted_enter)
+{
+    watchdog_t cut, cut2;
+    mock().expectOneCall("hardware_watchdog_init");
+    int r = watchdog_init(&cut, 1, "cut");
+    CHECK_EQUAL (0, r);
+    mock().checkExpectations();
+
+    r = watchdog_init(&cut2, 1, "cut");
+    CHECK_EQUAL (0, r);
+
+    watchdog_enter(&cut);
+    timeout_t t = cut.timeout;
+
+    watchdog_enter(&cut);
+    CHECK_EQUAL(t, cut.timeout);
+
+    time_sleep(1);
+
+    watchdog_kick(&cut);
+    CHECK_FALSE(t == cut.timeout);
+
+    watchdog_exit(&cut);
+    CHECK_EQUAL(0, cut.timeout);
+
+    watchdog_deinit(&cut);
+
+    mock().expectOneCall("hardware_watchdog_deinit");
+    watchdog_deinit(&cut2);
+    mock().checkExpectations();
+}
 TEST(Watchdog, hw_init_deinit)
 {
     watchdog_t cut, cut2;
@@ -41,7 +73,7 @@ TEST(Watchdog, hw_init_deinit)
 
 TEST(Watchdog, init_inval_arg)
 {
-    mock().expectOneCall("_log_impl_file_line")
+    mock().expectOneCall("_log_file_line")
             .withParameter("msg", "Error: Invalid Pointer")
             .ignoreOtherParameters();
     int r = watchdog_init(NULL, 0, "cut");
@@ -105,10 +137,8 @@ TEST(Watchdog, expire)
 
     mock().expectNCalls(4, "hardware_watchdog_kick");
 
-    mock().expectOneCall("_log_impl")
-            .withParameter("msg", "cut");
-    mock().expectOneCall("_log_impl")
-            .withParameter("msg", "(Watchdog expired)");
+    mock().expectOneCall("log_message")
+            .withParameter("msg", "Watchdog cut expired.");
 
     watchdog_t cut, cut2;
     timeout_t tout;
