@@ -26,7 +26,6 @@ src_str = """./cpputest-tree/src/CppUTest/CommandLineArguments.cpp
 ./cpputest-tree/src/CppUTest/Utest.cpp"""
 
 src_ext_str = """./cpputest-tree/src/CppUTestExt/CodeMemoryReportFormatter.cpp
-./cpputest-tree/src/CppUTestExt/IEEE754ExceptionsPlugin.cpp
 ./cpputest-tree/src/CppUTestExt/MemoryReportAllocator.cpp
 ./cpputest-tree/src/CppUTestExt/MemoryReportFormatter.cpp
 ./cpputest-tree/src/CppUTestExt/MemoryReporterPlugin.cpp
@@ -40,7 +39,6 @@ src_ext_str = """./cpputest-tree/src/CppUTestExt/CodeMemoryReportFormatter.cpp
 ./cpputest-tree/src/CppUTestExt/MockSupport_c.cpp
 ./cpputest-tree/src/CppUTestExt/OrderedTest.cpp
 ./cpputest-tree/src/CppUTestExt/CodeMemoryReportFormatter.cpp
-./cpputest-tree/src/CppUTestExt/IEEE754ExceptionsPlugin.cpp
 ./cpputest-tree/src/CppUTestExt/MemoryReportAllocator.cpp
 ./cpputest-tree/src/CppUTestExt/MemoryReportFormatter.cpp
 ./cpputest-tree/src/CppUTestExt/MemoryReporterPlugin.cpp
@@ -53,6 +51,8 @@ src_ext_str = """./cpputest-tree/src/CppUTestExt/CodeMemoryReportFormatter.cpp
 ./cpputest-tree/src/CppUTestExt/MockSupportPlugin.cpp
 ./cpputest-tree/src/CppUTestExt/MockSupport_c.cpp
 ./cpputest-tree/src/CppUTestExt/OrderedTest.cpp"""
+#./cpputest-tree/src/CppUTestExt/IEEE754ExceptionsPlugin.cpp
+#./cpputest-tree/src/CppUTestExt/IEEE754ExceptionsPlugin.cpp
 
 src = env.MultiLineStringToFiles(src_str)
 objs = env.SourceToObjects(src)

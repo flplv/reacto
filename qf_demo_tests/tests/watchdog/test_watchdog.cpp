@@ -41,7 +41,7 @@ TEST(Watchdog, hw_init_deinit)
 
 TEST(Watchdog, init_inval_arg)
 {
-    mock().expectOneCall("log_write")
+    mock().expectOneCall("_log_impl_file_line")
             .withParameter("msg", "Error: Invalid Pointer")
             .ignoreOtherParameters();
     int r = watchdog_init(NULL, 0, "cut");
@@ -105,9 +105,9 @@ TEST(Watchdog, expire)
 
     mock().expectNCalls(4, "hardware_watchdog_kick");
 
-    mock().expectOneCall("log_write2")
+    mock().expectOneCall("_log_impl")
             .withParameter("msg", "cut");
-    mock().expectOneCall("log_write2")
+    mock().expectOneCall("_log_impl")
             .withParameter("msg", "(Watchdog expired)");
 
     watchdog_t cut, cut2;

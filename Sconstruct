@@ -74,7 +74,7 @@ lpc17xx_toolchain_path = '/usr/local/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin'
 lpc17xx_toolchain_prefix = 'arm-none-eabi-'
 
 lpc176x_tests_plat = {
-    'cpputest_extensions_enabled' : False,
+    'cpputest_extensions_enabled' : True,
     'env' : default_env.Clone (
         CC     = lpc17xx_toolchain_prefix + 'gcc',
         CXX    = lpc17xx_toolchain_prefix + "g++",

@@ -21,7 +21,7 @@ TEST_GROUP(Log)
 
 TEST(Log, periodic)
 {
-    mock().expectOneCall("log_write")
+    mock().expectOneCall("_log_impl_file_line")
             .withParameter("msg", "Error: oops!")
             .withParameter("file", __FILE__)
             .withParameter("line", __LINE__ + 2);

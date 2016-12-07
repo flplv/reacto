@@ -286,8 +286,6 @@ TEST(LinkedList, cpp_ll_macros)
     auto r = __ll_container_of(ptr, AStruct, data_field);
     auto r2 = __ll_container_of(ptr, __ll_typeof(as), data_field);
 
-    STRCMP_EQUAL(typeid(&as).name(), typeid(r).name());
-    STRCMP_EQUAL(typeid(&as).name(), typeid(r2).name());
     CHECK_EQUAL (&as, r);
     CHECK_EQUAL (&as, r2);
 }
