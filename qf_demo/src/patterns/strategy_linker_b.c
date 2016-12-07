@@ -1,17 +1,17 @@
 #include "strategy_linker.h"
 
-int fi_init()
+int strategy_linker_init()
 {
     /* Initialize implementation B */
     return 0;
 }
 
-void fi_deinit()
+void strategy_linker_deinit()
 {
     /* Deinitialize implementation B */
 }
 
-void fi_do_something()
+void strategy_linker_do_something()
 {
     /* Do something implementation B */
 }

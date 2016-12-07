@@ -14,20 +14,20 @@ namespace IMPL_B
 using namespace IMPL_B;
 
 
-TEST_GROUP(FlexibleImplementationImplB)
+TEST_GROUP(StrategyLinkerB)
 {
     void setup ()
     {
-       fi_init();
+        strategy_linker_init();
     }
 
     void teardown ()
     {
-        fi_deinit();
+        strategy_linker_deinit();
     }
 };
 
-TEST(FlexibleImplementationImplB, FirstTest)
+TEST(StrategyLinkerB, FirstTest)
 {
    CHECK_TRUE(1 == 1);
 }

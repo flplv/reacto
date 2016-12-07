@@ -13,20 +13,20 @@ namespace IMPL_A
 }
 using namespace IMPL_A;
 
-TEST_GROUP(FlexibleImplementationImplA)
+TEST_GROUP(StrategyLinkerA)
 {
     void setup ()
     {
-       fi_init();
+       strategy_linker_init();
     }
 
     void teardown ()
     {
-        fi_deinit();
+        strategy_linker_deinit();
     }
 };
 
-TEST(FlexibleImplementationImplA, FirstTest)
+TEST(StrategyLinkerA, FirstTest)
 {
    CHECK_TRUE(1 == 1);
 }
