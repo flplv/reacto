@@ -21,7 +21,7 @@ scons:
 #test:
 #  stage: test
 #  script:
-    - ./tests_runner
+    - ./tests_runner -v
     - cat coverage_report
 #
 #pages:
