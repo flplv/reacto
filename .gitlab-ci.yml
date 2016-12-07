@@ -1,10 +1,5 @@
 image: felipelavratti/ubuntu-buildessentials-scons:16.04
 
-before_script:
-  - scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
-  - scons -Q coverage_report
-  - scons -Q coverage
-
 cache:
   paths:
     - qf_demo_tests/build/qf_demo_dev_tests
@@ -12,8 +7,16 @@ cache:
     - coverage/
 
 stages:
+  - build
   - test
   - deploy
+  
+scons:
+  stage: build
+  script:
+    - scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
+    - scons -Q coverage_report
+    - scons -Q coverage
 
 test:
   stage: test
