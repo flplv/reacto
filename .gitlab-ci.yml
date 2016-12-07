@@ -2,9 +2,8 @@ image: felipelavratti/ubuntu-buildessentials-scons:16.04
 
 cache:
   paths:
-    - qf_demo_tests/build/qf_demo_dev_tests
-    - coverage_report
     - coverage/
+    - tests_runner
 
 stages:
   - build
@@ -17,11 +16,12 @@ scons:
     - scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
     - scons -Q coverage_report
     - scons -Q coverage
+    - mv ./qf_demo_tests/build/qf_demo_dev_tests ./tests_runner
 
 test:
   stage: test
   script:
-    - qf_demo_tests/build/qf_demo_dev_tests
+    - ./tests_runner
     - cat coverage_report
 
 pages:
