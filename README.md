@@ -2,9 +2,11 @@
 
 [![Build status](https://gitlab.com/felipe-lavratti/quality-firmware-exemples/badges/master/build.svg)](https://gitlab.com/felipe-lavratti/quality-firmware-exemples/pipelines)
 [![CE coverage report](https://gitlab.com/felipe-lavratti/quality-firmware-exemples/badges/master/coverage.svg)](https://felipe-lavratti.gitlab.io/quality-firmware-exemples/)
+([View Coverage Report](https://felipe-lavratti.gitlab.io/quality-firmware-exemples/))
 
-[View Coverage Report](https://felipe-lavratti.gitlab.io/quality-firmware-exemples/)
+Quality Firmware is a teaching class about quality practices on Embedded System software development. This project is the code base used in class.
 
+Here you will find *demo and templates* for **Test Driven Development** (TDD) and **Unit Testing with Hardware**; a powerful, yet simple, **build system** that create test and application executables for development (your computer) and target (the hardware) platforms with **continuous integration** and **code coverage**; how to do **Object-Based Programming (OBP) in C**, and sometimes OOP; most common **design patterns** for embedded systems; a hand full of **reusable** code; and finally **a few big examples** showing how to apply OBP and use design patterns whiling following the cycles of TDD.  
 
 
 ## Project Structure
