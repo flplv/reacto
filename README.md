@@ -7,18 +7,18 @@
 
 
 
-# Project Structure
+## Project Structure
 
-```
+```md
     .
-    ├── *dependencies*
+    ├── **dependencies**
     │   │       Only for dependency project, no application code here,
     │   │        projects in this folder will not be considered on coverage
     │   │        reports.
     │   │       All projects inside this folder will be built into static
     │   │        libraries for each related platform.
     │   │
-    │   ├── *cpputest*
+    │   ├── **cpputest**
     │   │   │   CppUTest is the test framework we are using, build scripts
     │   │   │    will download and build it here. CppuTest's libraries are
     │   │   │    created for each platform that tests will run.
@@ -33,13 +33,13 @@
     │   │       This is the script responsible to download and decompress
     │   │        CppUTest source.
     │   │
-    │   └── *lpc1769_board*
+    │   └── **lpc1769_board**
     │           I am using a LPCXpresso1769 development board, these are the
     │            dependent projects required to generate a complete firmware to
     │            the board.
     │           Every lpc1769 build will include headers and libraries here.
     │
-    ├── *qf_demo*
+    ├── **qf_demo**
     │   │       Finally the application code. No tests allowed here, nor
     │   │        platform dependent code, only application. Every dependency to
     │   │        external world must be abstracted in order to have a testable
@@ -66,7 +66,7 @@
     │           A hardware watchdog will reboot by the expiration of any soft
     │            one.
     │
-    ├── *qf_demo_tests*
+    ├── **qf_demo_tests**
     │   │       Finally our application tests. This project will create
     │   │        executables for each platform where tests will run.
     │   │       There are test code supposed to run on a platform but not on the
@@ -89,3 +89,11 @@
     └── *README.md*
                 This README :)
 ```
+
+## The build system
+
+*To be described*
+
+## Gitlab Continuous Integration and Coverage Report Page
+
+*To be described*
