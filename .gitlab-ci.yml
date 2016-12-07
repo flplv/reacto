@@ -2,6 +2,7 @@ image: felipelavratti/ubuntu-buildessentials-scons:16.04
 
 stages:
   - build
+  - deploy
 
 build:
   stage: build
@@ -9,3 +10,21 @@ build:
     - scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
     - ./qf_demo_tests/build/qf_demo_dev_tests -v -c
     - scons -Q coverage_report
+    - scons -Q coverage
+
+artifacts:
+  paths:
+    - coverage/
+    
+pages:
+  stage: deploy
+  dependencies:
+    - rspec
+  script:
+    - mv coverage/ public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  only:
+    - master
