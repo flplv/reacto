@@ -58,9 +58,9 @@ dev_tests_plat = {
     'cpputest_extensions_enabled' : True,
     'env' : default_env.Clone (
             # We want lot's of warning on dev_tests
-            CXXFLAGS = ['-std=c++14',
+            CXXFLAGS = ['-std=gnu++14',
                 '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
-                '-Wconversion', '-pedantic', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
+                '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
                 '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
                 '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'],
             CFLAGS  = ['-std=gnu11',
@@ -91,7 +91,7 @@ lpc176x_tests_plat = {
                       'CPP_USE_HEAP',
                       ],
         CFLAGS = ['-std=gnu11'],
-        CXXFLAGS = ['-Wall', '-fno-rtti', '-fno-exceptions', '-std=c++14'],
+        CXXFLAGS = ['-Wall', '-fno-rtti', '-fno-exceptions', '-std=gnu++14'],
         CCFLAGS = ['-O0', '-g3', '-Wall', '-fmessage-length=0',
                    '-fno-builtin', '-ffunction-sections', '-fdata-sections',
                    '-mcpu=cortex-m3', '-mthumb'],

@@ -3,18 +3,18 @@
 
 /*
  * Static Class Pattern
- * It is a variation of the Abstract Data Type, where you cannot
- *  create an instance of the object.
  *
- * Objective: To abstract static data and implementation.
+ * Intent: A non instantiable container that have one single objective, to avoid
+ * coupling between implementation and client code and to be unit testable.
  *
- * Advantages:
- *  Promotes decoupling between Classes;
- *  Hides internal implementation from client code.
+ * When should be used: Every time you need to implement a single functionality
+ *  that deals only with global resources..
  *
- * When sould be used: Everytime you need an static behaviour.
- *
+ * How it works:
+ *  Init and Deinit are the Constructor and Destructor;
+ *  Every public methods must be defined in the header.
  */
+
 
 int sc_init();
 void sc_deinit();

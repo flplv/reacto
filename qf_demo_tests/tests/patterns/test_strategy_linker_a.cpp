@@ -7,14 +7,13 @@
  * namespaces.
  */
 
-namespace IMPL_B
+namespace IMPL_A
 {
-    #include <patterns/flexible_implementation_impl_b.c>
+    #include <patterns/strategy_linker_a.c>
 }
-using namespace IMPL_B;
+using namespace IMPL_A;
 
-
-TEST_GROUP(FlexibleImplementationImplB)
+TEST_GROUP(FlexibleImplementationImplA)
 {
     void setup ()
     {
@@ -27,7 +26,7 @@ TEST_GROUP(FlexibleImplementationImplB)
     }
 };
 
-TEST(FlexibleImplementationImplB, FirstTest)
+TEST(FlexibleImplementationImplA, FirstTest)
 {
    CHECK_TRUE(1 == 1);
 }

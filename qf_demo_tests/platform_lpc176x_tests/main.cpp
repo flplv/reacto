@@ -3,6 +3,14 @@
 #include <chip.h>
 #include <board.h>
 
+#include "reusables/plat_time.h"
+
+__attribute__ ((section(".after_vectors")))
+void SysTick_Handler(void)
+{
+    time_tick();
+}
+
 
 int main()
 {

@@ -1,9 +1,9 @@
 #include <reusables/log.h>
 #include <reusables/checks.h>
 
-#include "abstract_data_type.h"
+#include "class.h"
 
-int adt_init(adt_t * obj)
+int class_init(class_t * obj)
 {
     check_ptr(obj, -1);
     /* Perform initialization of obj */
@@ -11,13 +11,13 @@ int adt_init(adt_t * obj)
     return 0;
 }
 
-void adt_deinit(adt_t * obj)
+void class_deinit(class_t * obj)
 {
     check_ptr(obj);
     /* Perform deinitialization of obj */
 }
 
-int adt_do_something(adt_t * obj, int parameter)
+int class_do_something(class_t * obj, int parameter)
 {
     check_ptr(obj, -1);
     obj->internal_data = parameter;

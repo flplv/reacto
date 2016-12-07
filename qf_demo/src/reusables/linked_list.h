@@ -140,15 +140,15 @@ typedef struct s_linked_list_head linked_list_t;
  */
 #define linked_list_first(ptr_to_current, field) \
 ({ \
-        __ll_auto_type(ptr_to_current) ___ret = ptr_to_current; linked_list_t * ___head;\
-        if (___ret) \
+        __ll_auto_type(ptr_to_current) ___ret2 = ptr_to_current; linked_list_t * ___head;\
+        if (___ret2) \
         { \
-            ___head = &___ret->field; \
+            ___head = &___ret2->field; \
             if (___head->prev) { while (___head->prev) ___head = ___head->prev;} \
-            if (___head) { ___ret  = __ll_container_of(___head, __ll_typeof(*(ptr_to_current)), field); } \
-            else {___ret = 0; } \
+            if (___head) { ___ret2  = __ll_container_of(___head, __ll_typeof(*(ptr_to_current)), field); } \
+            else {___ret2 = 0; } \
         } \
-        ___ret; \
+        ___ret2; \
 })
 
 /**

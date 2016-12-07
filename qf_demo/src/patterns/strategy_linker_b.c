@@ -1,4 +1,4 @@
-#include "flexible_implementation.h"
+#include "strategy_linker.h"
 
 int fi_init()
 {
