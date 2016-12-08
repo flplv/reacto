@@ -171,6 +171,7 @@ Depends(
                           platforms['dev_tests']['qf_demo_tests_build_dir']
                          ],
                 action = "lcov -q --capture --directory ${SOURCES[0]} " \
+                         "--ignore-errors=source " \
                          "--directory ${SOURCES[1]} " \
                          "--output-file $TARGET "
                          ),
@@ -182,14 +183,15 @@ lcov = Command( target = ".coverage.info",
                          "qf_demo_tests/platform_dev_tests/platform/UtestPlatform.cpp " \
                          "/usr/include/* " \
                          "dependencies/* " \
-                         "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE"
+                         "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE && rm $SOURCE"
                          )
 
 
-# Print and safe coverage_report
+# Print and save coverage_report
 coverage_report = Command( target = "coverage_report",
                            source = lcov,
                            action = "lcov --summary $SOURCE 2>&1 | tee $TARGET" )
+Default(coverage_report)
 
 # Generate html files for coverage
 coverage_html = Command( target = "coverage",
