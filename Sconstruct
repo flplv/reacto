@@ -14,9 +14,11 @@
 import os
 import fnmatch
 default_env = Environment()
+
 # Enable color terminal if available
 if 'TERM' in os.environ.keys():
     default_env['ENV']['TERM'] = os.environ['TERM']
+
 # Add a FindFiles function to help Programs to search for code
 def FindFiles(self, path, glob):
     matches = []
@@ -27,8 +29,6 @@ def FindFiles(self, path, glob):
     matches.extend(Glob(path + '/*/*/*/*/' + glob))
     matches.extend(Glob(path + '/*/*/*/*/*/' + glob))
     return matches
-
-
 default_env.AddMethod(FindFiles)
 
 # Transform a multiline string into a list of Files

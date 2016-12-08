@@ -2,11 +2,13 @@
 
 static int init(interface_t * obj)
 {
+    obj->number = 0;
     return 0;
 }
 
 static void deinit(interface_t * obj)
 {
+    obj->number = 0;
 }
 
 static int get_number(interface_t * obj)

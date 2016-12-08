@@ -18,37 +18,17 @@
  * How it works:
  *  It must be a Class, to store selected behavior;
  *  Client code selects behavior at the `init`.
- *  The .c file redirect calls to implementations.
+ *  The interface.c file redirect calls to implementations.
  *  Client depends only on this abstraction (header).
+ *  The interface_private.h is there only to hide implementation details from
+ *   the header file.
  */
 
-typedef struct private_interface interface_t;
-
-/* Behavior struct that selects function pointers to change implementation */
-struct interface_behavior
-{
-    void (*set_number)(interface_t * obj, int number);
-    int  (*get_number)(interface_t * obj);
-    int (*init)(interface_t * obj);
-    void (*deinit)(interface_t * obj);
-};
-
-/* A struct/union to be allocated by the client */
-struct private_interface
-{
-    /*
-     * Sometimes behaviors will not have the same private data, then an union
-     *  will be required here to reserve fields of each interface.
-     */
-    int number;
-    const struct interface_behavior * behavior;
-};
+#include "interface_private.h"
 
 /*
  * Available behaviors
  */
-/* Normal behavior */
-extern const struct interface_behavior interface_normal;
 /* Twice behavior will duplicate the number set */
 extern const struct interface_behavior interface_twice;
 /* Plus behavior will add the number set */
