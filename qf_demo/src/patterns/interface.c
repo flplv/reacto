@@ -1,7 +1,7 @@
 #include <reusables/checks.h>
-#include "strategy.h"
+#include "interface.h"
 
-int strategy_init(strategy_t * obj, const struct strategy_behavior * behavior)
+int interface_init(interface_t * obj, const struct interface_behavior * behavior)
 {
     check_ptr(obj, -1);
     obj->behavior = behavior;
@@ -12,7 +12,7 @@ int strategy_init(strategy_t * obj, const struct strategy_behavior * behavior)
     return 0;
 }
 
-void strategy_deinit(strategy_t * obj)
+void interface_deinit(interface_t * obj)
 {
     check_ptr(obj);
 
@@ -20,7 +20,7 @@ void strategy_deinit(strategy_t * obj)
         obj->behavior->deinit(obj);
 }
 
-void strategy_set_number(strategy_t * obj, int number)
+void interface_set_number(interface_t * obj, int number)
 {
     check_ptr(obj);
 
@@ -30,7 +30,7 @@ void strategy_set_number(strategy_t * obj, int number)
         obj->number = number;
 }
 
-int strategy_get_number(strategy_t * obj)
+int interface_get_number(interface_t * obj)
 {
     check_ptr(obj, 0);
 
@@ -41,4 +41,4 @@ int strategy_get_number(strategy_t * obj)
 }
 
 /* Fall back to default behavior */
-const struct strategy_behavior strategy_normal = { 0,};
+const struct interface_behavior interface_normal = { 0,};

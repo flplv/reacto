@@ -7,27 +7,28 @@
  * namespaces.
  */
 
-namespace IMPL_A
+namespace IMPL_B
 {
-    #include <patterns/strategy_linker_a.c>
+    #include <patterns/interface_linker_b.c>
 }
-using namespace IMPL_A;
+using namespace IMPL_B;
 
-TEST_GROUP(StrategyLinkerA)
+
+TEST_GROUP(InterfaceLinkerB)
 {
     void setup ()
     {
-       strategy_linker_init();
+        interface_linker_init();
     }
 
     void teardown ()
     {
-        strategy_linker_deinit();
+        interface_linker_deinit();
     }
 };
 
-TEST(StrategyLinkerA, FirstTest)
+TEST(InterfaceLinkerB, FirstTest)
 {
-    strategy_linker_do_something();
+    interface_linker_do_something();
     CHECK_TRUE(1 == 1);
 }
