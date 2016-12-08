@@ -6,8 +6,48 @@
 
 Quality Firmware is a teaching class about quality practices on Embedded System software development. This project is the code base used in class.
 
-Here you will find *demo and templates* for **Test Driven Development** (TDD) and **Unit Testing with Hardware**; a powerful, yet simple, **build system** that create test and application executables for development (your computer) and target (the hardware) platforms with **continuous integration** and **code coverage**; how to do **Object-Based Programming (OBP) in C**, and sometimes OOP; most common **design patterns** for embedded systems; a hand full of **reusable** code; and finally **a few big examples** showing how to apply OBP and use design patterns whiling following the cycles of TDD.  
+Here you will find *demo and templates* for **Test Driven Development** (TDD) and **Unit Testing with Hardware**; a powerful, yet simple, **build system** that create test and application executables for development (your computer) and target (the hardware) platforms with **continuous integration** and **code coverage**; how to do **Object-Based Programming (OBP) in C**, and sometimes OOP; most common **design patterns** for embedded systems; a hand full of **reusable** code; and finally **a few big examples** showing how to apply OBP and use design patterns whiling following the cycles of TDD.
 
+*(It is a working in progress)*
+
+## How to Build
+
+**1. Install Dependencies**
+
+- GCC (The compiler)
+- scons (The build generator used)
+- wget (To download dependency source code)
+- lcov (To generate code coverage reports)
+
+In ubuntu:
+```sh
+    sudo apt-get install build-essential scons wget lcov
+```
+
+**2. Build and run Tests**
+
+Inside the project root, this line will build the test executable `qf_demo_dev_tests` in the folder `./qf_demo_tests/build`:
+
+```sh
+    scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
+```
+(You need to pass the full executable path to Scons to only build that single executable, otherwise it will try to build extra executable for target platform, which will require the LPCXpreesso tools installed.)
+
+You can run tests with:
+
+```sh
+    ./qf_demo_tests/build/qf_demo_dev_tests
+```
+
+** 3. Generate and open code coverage **
+
+To generate code coverage and open in firefox:
+```sh
+    scons -Q coverage
+    firefox ./coverage/index.html
+```
+
+**If you want to build for the targeg LPCXpresso board**, download the IDE from the NXP web site and install on the default directory of your Ubuntu machine. This shall be enough to run the complete build with `scons -Q tests`.
 
 ## Project Structure
 
@@ -92,7 +132,7 @@ Here you will find *demo and templates* for **Test Driven Development** (TDD) an
                 This README :)
 ```
 
-## The build system
+## The build system explained
 
 *To be described*
 
