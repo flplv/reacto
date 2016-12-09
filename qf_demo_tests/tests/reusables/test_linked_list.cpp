@@ -162,6 +162,19 @@ TEST(LinkedList, remove3)
     CHECK_EQUAL(0, root);
 }
 
+
+TEST(LinkedList, remove4)
+{
+    root = &cut;
+    test_t not_inserted;
+
+    linked_list_init(root, h);
+    linked_list_init(&not_inserted, h);
+    CHECK_EQUAL(root, linked_list_last(root, h));
+    CHECK_EQUAL(0, linked_list_remove(&not_inserted, h));
+}
+
+
 TEST(LinkedList, insert_prev)
 {
     test_t cuts[10];
