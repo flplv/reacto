@@ -165,6 +165,7 @@ typedef struct s_linked_list_head linked_list_t;
         { \
             ___new->field.next = ___curr->field.next; \
             ___new->field.prev = &___curr->field; \
+            if (___curr->field.next) ___curr->field.next->prev = &___new->field; \
             ___curr->field.next = &___new->field; \
         } \
 })
@@ -183,6 +184,7 @@ typedef struct s_linked_list_head linked_list_t;
         { \
             ___new->field.prev = ___curr->field.prev; \
             ___new->field.next = &___curr->field; \
+            if(___curr->field.prev) ___curr->field.prev->next = &___new->field; \
             ___curr->field.prev = &___new->field; \
         } \
 })

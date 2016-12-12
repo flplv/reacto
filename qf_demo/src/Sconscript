@@ -6,7 +6,8 @@ penv.Append(CPPPATH=['./'])
 
 r = {
     'libs' : [],
-    'path' : []
+    'path' : [],
+    'objs' : []
 }
 r['path'].append(Dir('./'))
 
@@ -14,6 +15,5 @@ src = env.FindFiles('./', '*.c')
 lib = penv.StaticLibrary('qf_demo', src)
 
 Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
-
 r['libs'].append(lib)
 Return('r')

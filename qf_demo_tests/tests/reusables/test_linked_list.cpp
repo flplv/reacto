@@ -172,6 +172,7 @@ TEST(LinkedList, remove4)
     linked_list_init(&not_inserted, h);
     CHECK_EQUAL(root, linked_list_last(root, h));
     CHECK_EQUAL(0, linked_list_remove(&not_inserted, h));
+    CHECK_EQUAL(0, linked_list_remove(root, h));
 }
 
 
@@ -301,4 +302,86 @@ TEST(LinkedList, cpp_ll_macros)
 
     CHECK_EQUAL (&as, r);
     CHECK_EQUAL (&as, r2);
+}
+
+
+TEST(LinkedList, insert_in_the_middle)
+{
+    struct s {
+        linked_list_t ll;
+    } d0, d1, d2, d3, d4, * r;
+
+    linked_list_init(&d0, ll);
+    linked_list_init(&d1, ll);
+    linked_list_init(&d2, ll);
+    linked_list_init(&d3, ll);
+    linked_list_init(&d4, ll);
+
+    r = &d0;
+    CHECK_EQUAL(&d0, r);
+
+    linked_list_insert_after(r, &d4, ll);
+
+    CHECK_EQUAL(&d4.ll, d0.ll.next);
+    CHECK_EQUAL(0, d0.ll.prev);
+
+    CHECK_EQUAL(0, d4.ll.next);
+    CHECK_EQUAL(&d0.ll, d4.ll.prev);
+
+    linked_list_insert_before(&d4, &d1, ll);
+
+    CHECK_EQUAL(&d4.ll, d1.ll.next);
+    CHECK_EQUAL(&d0.ll, d1.ll.prev);
+
+    CHECK_EQUAL(&d1.ll, d0.ll.next);
+    CHECK_EQUAL(&d1.ll, d4.ll.prev);
+
+    linked_list_insert_before(&d4, &d2, ll);
+
+    CHECK_EQUAL(&d4.ll, d2.ll.next);
+    CHECK_EQUAL(&d1.ll, d2.ll.prev);
+
+    CHECK_EQUAL(&d2.ll, d1.ll.next);
+    CHECK_EQUAL(&d2.ll, d4.ll.prev);
+
+    linked_list_insert_after(&d2, &d3, ll);
+
+    CHECK_EQUAL(&d4.ll, d3.ll.next);
+    CHECK_EQUAL(&d2.ll, d3.ll.prev);
+
+    CHECK_EQUAL(&d3.ll, d2.ll.next);
+    CHECK_EQUAL(&d3.ll, d4.ll.prev);
+}
+
+TEST(LinkedList, remove_from_the_middle)
+{
+    struct s {
+        linked_list_t ll;
+    } d0, d1, d2, d3, d4, * r;
+
+    linked_list_init(&d0, ll);
+    linked_list_init(&d1, ll);
+    linked_list_init(&d2, ll);
+    linked_list_init(&d3, ll);
+    linked_list_init(&d4, ll);
+
+    r = &d0;
+    CHECK_EQUAL(&d0, r);
+
+    linked_list_insert_after(r, &d4, ll);
+    linked_list_insert_before(&d4, &d1, ll);
+    linked_list_insert_before(&d4, &d2, ll);
+    linked_list_insert_after(&d2, &d3, ll);
+
+    linked_list_remove(&d2, ll);
+
+    CHECK_EQUAL(0, d2.ll.next);
+    CHECK_EQUAL(0, d2.ll.prev);
+
+    CHECK_EQUAL(&d3.ll, d1.ll.next);
+    CHECK_EQUAL(&d1.ll, d3.ll.prev);
+
+    CHECK_EQUAL(&d0.ll, d1.ll.prev);
+    CHECK_EQUAL(&d4.ll, d3.ll.next);
+
 }

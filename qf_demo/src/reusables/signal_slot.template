@@ -114,16 +114,22 @@ void function(signal_prefix, deinit)(type_name(signal_prefix) * obj)
 }
 
 
-static void function(slot_prefix, call)(parameters_declaration(type_name(slot_prefix) * obj))
+static int function(slot_prefix, call)(parameters_declaration(type_name(slot_prefix) * obj))
 {
-    check_ptr(obj);
+    check_ptr(obj, -1);
 
     if (!obj->handler)
-        return;
+        return 0;
 
-    obj->handler(parameters_list(obj));
+    return obj->handler(handler_parameters_list(obj));
 }
 
+/*
+ * Rules of the Handler:
+ *  Handlers will be called in the order they were inserted.
+ *  If a handler returns anything but 0, the call loop will stop and no other
+ *   connected handler will be called.
+ */
 void function(signal_prefix, emit)(parameters_declaration(type_name(signal_prefix) * obj))
 {
     type_name(slot_prefix) * slot_to_be_called = NULL;
@@ -137,7 +143,8 @@ void function(signal_prefix, emit)(parameters_declaration(type_name(signal_prefi
 
     do
     {
-        function(slot_prefix, call)(parameters_list(slot_to_be_called));
+        int r = function(slot_prefix, call)(parameters_list(slot_to_be_called));
+        if (r != 0) break;
     }
     while ((slot_to_be_called = linked_list_next(slot_to_be_called, ll)));
 }
@@ -205,9 +212,17 @@ void function(slot_prefix, connect)(type_name(slot_prefix) *obj, type_name(signa
     obj->connection = signal;
 }
 
-void function(slot_prefix, disconnect)(type_name(slot_prefix) *obj, type_name(signal_prefix)* signal)
+int function(slot_prefix, disconnect)(type_name(slot_prefix) *obj, type_name(signal_prefix)* signal)
 {
-    check_ptr(obj);
-    check_ptr(signal);
+    check_ptr(obj, -1);
+    check_ptr(signal, -1);
+    
+    if (obj->connection != signal) {
+        log_error ("Provided signal is not connected to slot, cannot disconnect.");
+        return -2;
+    }
+    
     function(signal_prefix, disconnect)(signal, obj);
+    obj->connection = NULL;
+    return 0;
 }

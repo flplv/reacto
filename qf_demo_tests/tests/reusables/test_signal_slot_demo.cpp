@@ -9,12 +9,14 @@ extern "C"
 }
 
 extern "C"
-void handler (slot_demo_t * slot, int number, char * str)
+int handler (slot_demo_t * slot, int number, char * str)
 {
     mock().actualCall("handler")
         .withPointerParameter("slot", slot)
         .withIntParameter("number", number)
         .withStringParameter("str", str);
+
+    return mock().returnValue().getIntValue();
 }
 
 TEST_GROUP(SignalSlotDemo)
@@ -69,7 +71,8 @@ TEST(SignalSlotDemo, emit_a_lot)
     mock().expectNCalls(10, "handler")
             .withParameter("slot", &slot)
             .withParameter("number", number)
-            .withParameter("str", str);
+            .withParameter("str", str)
+            .andReturnValue(0);
 
     slot_demo_connect(&slot, &signal);
     signal_demo_emit(&signal, number, str);
@@ -84,7 +87,6 @@ TEST(SignalSlotDemo, emit_a_lot)
     signal_demo_emit(&signal, number, str);
     slot_demo_disconnect(&slot, &signal);
 }
-
 
 TEST(SignalSlotDemo, emit_to_lots)
 {
@@ -102,7 +104,8 @@ TEST(SignalSlotDemo, emit_to_lots)
         mock().expectOneCall("handler")
                 .withParameter("slot", &slots[i])
                 .withParameter("number", number)
-                .withParameter("str", str);
+                .withParameter("str", str)
+                .andReturnValue(0);
     }
 
     signal_demo_emit(&signal, number, str);
@@ -116,6 +119,37 @@ TEST(SignalSlotDemo, emit_to_lots)
     {
         CHECK_EQUAL(0, slots[i].connection);
         CHECK_EQUAL(1, linked_list_count(&slots[i], ll));
+        slot_demo_deinit(&slots[i]);
+    }
+}
+
+TEST(SignalSlotDemo, handler_return_1)
+{
+    int number = INT_MAX;
+    char str[] = "maria juana";
+    slot_demo_t slots[10];
+
+    mock().strictOrder();
+
+    for (int i = 0; i < 10; i++)
+    {
+        slot_demo_init(&slots[i], handler);
+        slot_demo_connect(&slots[i], &signal);
+
+        if (i <= 5)
+        {
+            mock().expectOneCall("handler")
+                    .withParameter("slot", &slots[i])
+                    .withParameter("number", number)
+                    .withParameter("str", str)
+                    .andReturnValue( i == 5 ? 1 : 0);
+        }
+    }
+
+    signal_demo_emit(&signal, number, str);
+
+    for (int i = 0; i < 10; i++)
+    {
         slot_demo_deinit(&slots[i]);
     }
 }
@@ -147,7 +181,6 @@ TEST(SignalSlotDemo, inits)
     CHECK_EQUAL((void*) handler, (void*) slot.handler);
     CHECK_EQUAL(0, linked_list_count(signal.root, ll));
 }
-
 
 TEST(SignalSlotDemo, connect)
 {
