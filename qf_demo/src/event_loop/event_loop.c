@@ -73,7 +73,7 @@ int event_loop_remove_queue(event_loop_t * obj, event_queue_t * queue)
     check_ptr(queue, -1);
 
     if (queue->loop != obj) {
-        log_error ("Provided event_queue has not in the event_loop, cannot remove it.");
+        log_error ("Provided event_queue hasn't been added to the event_loop, cannot remove it.");
         return -2;
     }
 

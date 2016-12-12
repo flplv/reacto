@@ -1,12 +1,6 @@
 #include <CppUTest/TestHarness.h>
 #include <CppUTestExt/MockSupport.h>
 
-/*
- * Basic testing guideline:
- * 1) Test all functionalities
- * 2) Test buffer boundaries
- * 3) Test invalid arguments
- */
 #include "../reusables/linked_list.hpp"
 
 extern "C"
@@ -83,6 +77,19 @@ TEST(EventLoop, queue_deinit)
     CHECK_EQUAL(0, queue2.loop);
 }
 
+TEST(EventLoop, bad_disconnect)
+{
+    mock().expectOneCall("_log_file_line")
+            .withParameter("msg", "Error: Provided event_queue hasn't been added to the event_loop, cannot remove it.")
+            .ignoreOtherParameters();
+
+    event_queue_t queue;
+
+    event_loop_init(&cut, event_loop_strategy_consume_all_at_once);
+    event_queue_init(&queue, 2);
+    event_loop_remove_queue(&cut, &queue);
+}
+
 static int event_buf[4];
 
 int slot_handler (event_queue_t * queue)
@@ -97,7 +104,51 @@ int slot_handler (event_queue_t * queue)
     return mock().returnValue().getIntValue();
 }
 
-TEST(EventLoop, process_events)
+TEST(EventLoop, process_events_strategy_one)
+{
+    slot_eq_t slot;
+    event_queue_t queue;
+    event_loop_t loop;
+
+    slot_eq_init(&slot, slot_handler);
+    event_queue_init(&queue, 4);
+    event_loop_init(&loop, event_loop_strategy_consume_only_one_per_loop);
+
+    event_loop_add_queue(&loop, &queue, 0);
+    slot_eq_connect(&slot, event_queue_signal(&queue));
+
+    event_queue_push(&queue, event_buf, 10);
+    event_queue_push(&queue, event_buf, 24);
+    event_queue_push(&queue, event_buf, 32);
+
+    mock().strictOrder();
+
+    mock().expectOneCall("slot_handler")
+            .withParameter("queue", &queue)
+            .withParameter("event", 10)
+            .andReturnValue(0);
+
+    event_loop_process(&loop);
+    mock().checkExpectations();
+
+    mock().expectOneCall("slot_handler")
+            .withParameter("queue", &queue)
+            .withParameter("event", 24)
+            .andReturnValue(0);
+
+    event_loop_process(&loop);
+    mock().checkExpectations();
+
+    mock().expectOneCall("slot_handler")
+            .withParameter("queue", &queue)
+            .withParameter("event", 32)
+            .andReturnValue(0);
+
+    event_loop_process(&loop);
+    mock().checkExpectations();
+}
+
+TEST(EventLoop, process_events_strategy_all_at_once)
 {
     slot_eq_t slot;
     event_queue_t queue;

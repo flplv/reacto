@@ -175,6 +175,16 @@ TEST(SignalSlotDemo, disconnect_from_deinit)
     signal_demo_emit(&signal, number, str);
 }
 
+TEST(SignalSlotDemo, bad_disconnect)
+{
+    mock().expectOneCall("_log_file_line")
+            .withParameter("msg", "Error: Provided signal is not connected to slot, cannot disconnect.")
+            .ignoreOtherParameters();
+
+
+    slot_demo_disconnect(&slot, &signal);
+}
+
 TEST(SignalSlotDemo, inits)
 {
     CHECK_EQUAL(0, slot.connection);
