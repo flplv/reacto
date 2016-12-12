@@ -36,6 +36,12 @@ void event_queue_deinit(event_queue_t * obj)
     obj->loop = NULL;
 }
 
+bool event_queue_full(event_queue_t * obj)
+{
+    check_ptr(obj, false);
+    return fast_ring_fifo_full(&obj->fifo);
+}
+
 signal_eq_t * event_queue_signal(event_queue_t * obj)
 {
     check_ptr(obj, NULL);

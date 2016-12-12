@@ -73,13 +73,14 @@ dev_tests_plat = {
     'cpputest_extensions_enabled' : True,
     'env' : default_env.Clone (
             # We want lot's of warning on dev_tests
-            CXXFLAGS = ['-std=gnu++14', '-g3', '-O0', '-fno-inline',
+            CXXFLAGS = ['-std=gnu++14', '-g3', '-O0', '-fno-inline', '-pthread',
                 '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
                 '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
                 '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
                 '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'],
             CFLAGS  = ['-std=gnu11', '-g3', '-O0', '-fno-inline',
                 '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
+            LIBS = ['pthread'],
             CPPINCLUDES = []
     )
 }

@@ -41,6 +41,7 @@ void event_queue_deinit(event_queue_t * obj);
     _success; \
 })
 
+bool event_queue_full(event_queue_t * obj);
 signal_eq_t * event_queue_signal(event_queue_t * obj);
 
 
