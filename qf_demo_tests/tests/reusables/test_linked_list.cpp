@@ -1,7 +1,8 @@
 #include <CppUTest/TestHarness.h>
 #include <CppUTestExt/MockSupport.h>
 #include <stdint.h>
-#include "linked_list.hpp"
+
+#include <reusables/linked_list.hpp>
 
 TEST_GROUP(LinkedList)
 {

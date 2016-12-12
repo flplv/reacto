@@ -2,7 +2,7 @@
 #include <CppUTestExt/MockSupport.h>
 #include <string.h>
 
-#include "../reusables/linked_list.hpp"
+#include <reusables/linked_list.hpp>
 
 extern "C"
 {

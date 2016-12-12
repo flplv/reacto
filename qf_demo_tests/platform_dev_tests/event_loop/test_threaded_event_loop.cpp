@@ -19,7 +19,7 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include "../../tests/reusables/linked_list.hpp"
+#include <reusables/linked_list.hpp>
 
 extern "C"
 {
