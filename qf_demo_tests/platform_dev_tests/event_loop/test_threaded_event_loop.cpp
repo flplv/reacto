@@ -1,3 +1,19 @@
+/*
+ * This is a test that shows how the Event Loop can be used.
+ *
+ * It is composed of a "main" thread where event_loop_process is called
+ *  repeatedly, and a thread that generates events and pushes it into the
+ *  event queue.
+ *
+ * One `event_loop` is created.
+ * One `event_queue` for the data type is created.
+ * After, a `slot_eq` is created and initialized to call our handler and then
+ * connected to the queue's signal.
+ *
+ * Now initialization is done and the producer thread is spawned and tests run.
+ *
+ */
+
 #include <CppUTest/TestHarness.h>
 #include <CppUTestExt/MockSupport.h>
 #include <pthread.h>
