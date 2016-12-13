@@ -3,47 +3,49 @@
 
 #include <reusables/fast_ring_fifo.h>
 #include <reusables/linked_list.h>
+#include <reusables/signal_slot.h>
 
-struct event_loop_private;
-typedef struct event_loop_private event_loop_t;
+struct main_loop_private;
+typedef struct main_loop_private main_loop_t;
 
-struct event_queue_private;
-typedef struct event_queue_private event_queue_t;
+struct queue_private;
+typedef struct queue_private queue_t;
 
-struct slot_eq_private;
-typedef struct slot_eq_private slot_eq_t;
+struct slot_queue_private;
+typedef struct slot_queue_private slot_queue_t;
 
-struct signal_eq_private;
-typedef struct signal_eq_private signal_eq_t;
+struct signal_queue_private;
+typedef struct signal_queue_private signal_queue_t;
 
-typedef int (*slot_eq_handler_t) (event_queue_t * queue);
+typedef bool (*main_loop_strategy)(queue_t * queue);
+typedef int (*slot_queue_handler_t)(queue_t * queue);
 
-typedef void (*event_loop_strategy)(event_queue_t * queue);
-
-struct slot_eq_private
+struct slot_queue_private
 {
-    signal_eq_t * connection;
-    slot_eq_handler_t handler;
+    signal_queue_t * connection;
+    slot_queue_handler_t handler;
     linked_list_t ll;
 };
 
-struct signal_eq_private
+struct signal_queue_private
 {
-    slot_eq_t * root;
+    slot_queue_t * root;
 };
 
-struct event_queue_private
+struct queue_private
 {
-    event_loop_t * loop;
-    signal_eq_t signal;
+    main_loop_t * loop;
+    signal_queue_t signal;
     fast_ring_fifo_t fifo;
     linked_list_t ll;
 };
 
-struct event_loop_private
+struct main_loop_private
 {
-    event_queue_t * root;
-    event_loop_strategy strategy;
+    queue_t * root;
+    main_loop_strategy strategy;
+    signal_t sleep;
+    bool looping;
 };
 
 #endif /* EVENT_LOOP_TYPES_H_ */

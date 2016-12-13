@@ -1,5 +1,5 @@
-#ifndef EVENT_QUEUE_H_
-#define EVENT_QUEUE_H_
+#ifndef EVENT_LOOP_QUEUE_H_
+#define EVENT_LOOP_QUEUE_H_
 
 #include <stddef.h>
 #include "event_loop_types.h"
@@ -9,13 +9,13 @@
  * to its approximate power of two.
  * `event_queue_init` returns -1 if error or the accepted number_of_slots.
  */
-int event_queue_init(event_queue_t * obj, size_t number_of_slots);
-void event_queue_deinit(event_queue_t * obj);
+int queue_init(queue_t * obj, size_t number_of_slots);
+void queue_deinit(queue_t * obj);
 
 /*
  * ISR safe, use this function to add data to the queue.
  */
-#define event_queue_push(queue, buffer, data)   \
+#define queue_push(queue, buffer, data)   \
 ({ \
     fast_ring_fifo_t * _fifo = &((queue)->fifo); \
     int _success = -1; \
@@ -30,7 +30,7 @@ void event_queue_deinit(event_queue_t * obj);
 /*
  * Use this function to get data from the queue in the slot handler.
  */
-#define event_queue_peek(queue, buffer, destination)   \
+#define queue_peek(queue, buffer, destination)   \
 ({ \
     fast_ring_fifo_t * _fifo = &((queue)->fifo); \
     int _success = -1; \
@@ -41,8 +41,8 @@ void event_queue_deinit(event_queue_t * obj);
     _success; \
 })
 
-bool event_queue_full(event_queue_t * obj);
-signal_eq_t * event_queue_signal(event_queue_t * obj);
+bool queue_full(queue_t * obj);
+signal_queue_t * queue_signal(queue_t * obj);
 
 
-#endif /* EVENT_QUEUE_H_ */
+#endif /* EVENT_LOOP_QUEUE_H_ */

@@ -16,7 +16,7 @@ markdown: kramdown
 ### content configuration ###
 title:       "react.o - Reactive Embedded C"
 keywords:    "reactive, embedded, C"
-description: "A portable framework for developing reactive applications in C."
+description: "A portable framework for developing reactive embedded systems in C."
 source_link: ""
 favicon:     "img/icon-32.png"
 touch_icon:  "img/icon-128.png"

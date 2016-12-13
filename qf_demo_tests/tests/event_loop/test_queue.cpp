@@ -6,8 +6,8 @@
 
 extern "C"
 {
-    #include <event_loop/event_queue.h>
-    #include <event_loop/event_loop.h>
+    #include <event_loop/queue.h>
+    #include <event_loop/main_loop.h>
 }
 
 struct my_event
@@ -17,34 +17,34 @@ struct my_event
 
 struct my_event data_queue[256];
 
-TEST_GROUP(EventQueue)
+TEST_GROUP(Queue)
 {
-    event_queue_t cut;
+    queue_t cut;
 
     void setup ()
     {
         memset((void *)data_queue, 0xFF, sizeof(data_queue));
-        int n = event_queue_init(&cut, 256);
+        int n = queue_init(&cut, 256);
         CHECK_EQUAL((int)(sizeof(data_queue) / sizeof(data_queue[0])), n);
     }
 
     void teardown ()
     {
-        event_queue_deinit(&cut);
+        queue_deinit(&cut);
         mock().clear();
     }
 };
 
-TEST(EventQueue, enque)
+TEST(Queue, enque)
 {
     struct my_event event;
     event.data = 10;
 
-    int result = event_queue_push (&cut, data_queue, event);
+    int result = queue_push (&cut, data_queue, event);
     CHECK_EQUAL(0, result);
 
     struct my_event poped;
-    result = event_queue_peek (&cut, data_queue, &poped);
+    result = queue_peek (&cut, data_queue, &poped);
     fast_ring_fifo_read_increment(&cut.fifo);
     CHECK_EQUAL(0, result);
 
@@ -52,7 +52,7 @@ TEST(EventQueue, enque)
 }
 
 
-TEST(EventQueue, enque_full)
+TEST(Queue, enque_full)
 {
     struct my_event event;
 
@@ -62,7 +62,7 @@ TEST(EventQueue, enque_full)
     while (result == 0)
     {
         event.data = i++;
-        result = event_queue_push (&cut, data_queue, event);
+        result = queue_push (&cut, data_queue, event);
     }
     CHECK_EQUAL(255, fast_ring_fifo_count(&cut.fifo));
 
@@ -74,7 +74,7 @@ TEST(EventQueue, enque_full)
     while (result == 0)
     {
         struct my_event poped;
-        result = event_queue_peek (&cut, data_queue, &poped);
+        result = queue_peek (&cut, data_queue, &poped);
         fast_ring_fifo_read_increment(&cut.fifo);
         if (result == 0)
             CHECK_EQUAL(i, poped.data);
@@ -82,9 +82,9 @@ TEST(EventQueue, enque_full)
     }
 }
 
-TEST(EventQueue, inval)
+TEST(Queue, inval)
 {
-    event_queue_t queue;
+    queue_t queue;
 
     mock().strictOrder();
 
@@ -95,36 +95,36 @@ TEST(EventQueue, inval)
             .withParameter("msg", "Error: Unable to initialize Fast Ring FIFO, size is too small")
             .ignoreOtherParameters();
 
-    event_queue_init(0, 0);
-    event_queue_init(&queue, 0);
+    queue_init(0, 0);
+    queue_init(&queue, 0);
 }
 
-TEST(EventQueue, remove_on_deinit)
+TEST(Queue, remove_on_deinit)
 {
-    event_loop_t loop;
-    event_queue_t queue;
+    main_loop_t loop;
+    queue_t queue;
 
-    event_queue_init(&queue, 2);
-    event_loop_init(&loop, event_loop_strategy_consume_all_at_once);
-    event_loop_add_queue(&loop, &queue, 0);
+    queue_init(&queue, 2);
+    main_loop_init(&loop, main_loop_strategy_priority_queue);
+    main_loop_add_queue(&loop, &queue, 0);
     CHECK_EQUAL(&queue, loop.root);
     CHECK_EQUAL(&loop, queue.loop);
-    event_queue_deinit(&queue);
+    queue_deinit(&queue);
     CHECK_EQUAL(0, loop.root);
     CHECK_EQUAL(0, queue.loop);
 }
 
-TEST(EventQueue, remove_on_deinit2)
+TEST(Queue, remove_on_deinit2)
 {
-    event_loop_t loop;
-    event_queue_t queue;
+    main_loop_t loop;
+    queue_t queue;
 
-    event_queue_init(&queue, 2);
-    event_loop_init(&loop, event_loop_strategy_consume_all_at_once);
-    event_loop_add_queue(&loop, &queue, 0);
+    queue_init(&queue, 2);
+    main_loop_init(&loop, main_loop_strategy_priority_queue);
+    main_loop_add_queue(&loop, &queue, 0);
     CHECK_EQUAL(&queue, loop.root);
     CHECK_EQUAL(&loop, queue.loop);
-    event_loop_deinit(&loop);
+    main_loop_deinit(&loop);
     CHECK_EQUAL(0, loop.root);
     CHECK_EQUAL(0, queue.loop);
 }

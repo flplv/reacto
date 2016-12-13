@@ -1,9 +1,9 @@
-#include "signal_slot_eq.h"
+#include "signal_slot_queue.h"
 
 /* Setup macros to the template */
-#define signal_prefix signal_eq_
-#define slot_prefix slot_eq_
-#define parameters_declaration(...) __VA_ARGS__,event_queue_t * the_queue
+#define signal_prefix signal_queue_
+#define slot_prefix slot_queue_
+#define parameters_declaration(...) __VA_ARGS__, queue_t * the_queue
 #define parameters_list(...) __VA_ARGS__, the_queue
 #define handler_parameters_list(...) the_queue
 
