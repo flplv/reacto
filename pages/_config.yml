@@ -6,12 +6,12 @@ safe: false
 
 
 ### site serving configuration ###
-exclude: [CNAME, README.md, .gitignore]
+exclude: [README.md, .gitignore]
 permalink: /:title ## disables post output
 timezone: null
 lsi: false
+baseurl: "/qf"
 markdown: kramdown
-
 
 ### content configuration ###
 title:       "react.o - Reactive Embedded C"
