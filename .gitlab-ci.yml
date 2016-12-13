@@ -27,10 +27,5 @@ scons:
 #pages:
 #  stage: deploy
 #  script:
-    - rm -rf public
-    - mv coverage public
-  artifacts:
-    paths:
-      - public
   only:
     - master
