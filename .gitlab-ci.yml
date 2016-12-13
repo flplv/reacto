@@ -1,31 +1,28 @@
-image: felipelavratti/ubuntu-buildessentials-scons:16.04
-
-#cache:
-#  paths:
-#    - coverage/
-#    - tests_runner
-
 stages:
   - build
-#  - test
-#  - deploy
+  - deploy
 
-scons:
+build:
+  image: felipelavratti/ubuntu-buildessentials-scons:16.04
   stage: build
   script:
     - scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
     - scons -Q coverage_report
     - scons -Q coverage
     - mv ./qf_demo_tests/build/qf_demo_dev_tests ./tests_runner
-#
-#test:
-#  stage: test
-#  script:
     - ./tests_runner -v
     - cat coverage_report
-#
-#pages:
-#  stage: deploy
-#  script:
   only:
     - master
+
+pages:
+  image: ruby:2.3
+  stage: deploy
+  script:
+  - gem install jekyll
+  - cd pages && jekyll build -d ../public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
