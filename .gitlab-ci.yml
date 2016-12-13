@@ -1,6 +1,6 @@
 stages:
   - build
-  - deploy
+  - pages
 
 build:
   image: felipelavratti/ubuntu-buildessentials-scons:16.04
@@ -17,7 +17,7 @@ build:
 
 pages:
   image: ruby:2.3
-  stage: deploy
+  stage: pages
   script:
   - gem install jekyll
   - cd pages && jekyll build -d ../public
