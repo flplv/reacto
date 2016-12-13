@@ -1,8 +1,7 @@
 # Quality Firmware
 
-[![Build status](https://gitlab.com/felipe-lavratti/quality-firmware-exemples/badges/master/build.svg)](https://gitlab.com/felipe-lavratti/quality-firmware-exemples/pipelines)
-[![CE coverage report](https://gitlab.com/felipe-lavratti/quality-firmware-exemples/badges/master/coverage.svg)](https://felipe-lavratti.gitlab.io/quality-firmware-exemples/)
-([View Coverage Report](https://felipe-lavratti.gitlab.io/quality-firmware-exemples/))
+[![Build status](https://gitlab.com/felipe-lavratti/qf/badges/master/build.svg)](https://gitlab.com/felipe-lavratti/qf/pipelines)
+[![CE coverage report](https://gitlab.com/felipe-lavratti/qf/badges/master/coverage.svg)]()
 
 Quality Firmware is a teaching class about quality practices on Embedded System software development. This project is the code base used in class.
 
