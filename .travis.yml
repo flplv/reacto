@@ -12,6 +12,7 @@ addons:
     # install toolchains
     - gcc-5
     - g++-5
+    - lcov
 
 script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc

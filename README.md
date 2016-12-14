@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/felipe-lavratti/reacto.svg?branch=master)](https://travis-ci.org/felipe-lavratti/reacto)
+
 # react.o
 
 *(It is a working in progress)*
