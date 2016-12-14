@@ -2,9 +2,11 @@
 [![Codecov](https://img.shields.io/codecov/c/github/felipe-lavratti/reacto.svg?style=flat-square)](https://codecov.io/gh/felipe-lavratti/reacto)
 [![GitHub release](https://img.shields.io/github/release/felipe-lavratti/reacto.svg?style=flat-square)]()
 
-# react.o
+![react.o](https://github.com/felipe-lavratti/reacto/blob/master/pages/img/reacto-logo.png)
+# A portable framework for developing reactive embedded systems in C.
+---------------------------------------------------------------------
 
-*(It is a working in progress)*
+*(It is a work in progress)*
 
 ## How to Build
 
