@@ -1,5 +1,5 @@
-#include "event_loop_types.h"
 #include <reusables/checks.h>
+#include <event_loop_types.h>
 
 bool queue_interface_emit(queue_i * itf)
 {

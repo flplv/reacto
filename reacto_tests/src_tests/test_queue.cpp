@@ -6,8 +6,8 @@
 
 extern "C"
 {
-    #include <event_loop/queue.h>
-    #include <event_loop/main_loop.h>
+    #include <queue.h>
+    #include <main_loop.h>
 }
 
 struct my_event

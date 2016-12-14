@@ -23,9 +23,9 @@
 
 extern "C"
 {
-    #include <event_loop/main_loop.h>
-    #include <event_loop/queue.h>
-    #include <event_loop/signal_slot_queue.h>
+    #include <main_loop.h>
+    #include <queue.h>
+    #include <signal_slot_queue.h>
 }
 
 static const int test_duration = 100;

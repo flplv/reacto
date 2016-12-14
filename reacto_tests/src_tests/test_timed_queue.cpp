@@ -7,7 +7,7 @@
 
 extern "C"
 {
-    #include <event_loop/main_loop.h>
+    #include <main_loop.h>
 
     /* Faking the time_now_ms */
     static uint32_t injected_now = 0;
@@ -16,7 +16,7 @@ extern "C"
         return injected_now;
     }
 
-    #include <event_loop/timed_queue.c>
+    #include <timed_queue.c>
 }
 
 

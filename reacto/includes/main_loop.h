@@ -1,5 +1,5 @@
-#ifndef EVENT_LOOP_MAIN_LOOP_H_
-#define EVENT_LOOP_MAIN_LOOP_H_
+#ifndef MAIN_LOOP_H_
+#define MAIN_LOOP_H_
 
 #include <stddef.h>
 #include <reusables/signal_slot.h>
@@ -23,4 +23,4 @@ bool main_loop_ready_to_sleep (main_loop_t * obj);
 
 signal_t * main_loop_sleep_signal (main_loop_t * obj);
 
-#endif /* EVENT_LOOP_MAIN_LOOP_H_ */
+#endif /* MAIN_LOOP_H_ */

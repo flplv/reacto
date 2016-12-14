@@ -1,4 +1,4 @@
-#include "signal_slot_queue.h"
+#include <signal_slot_queue.h>
 
 /* Setup macros to the template */
 #define signal_prefix signal_queue_

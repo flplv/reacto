@@ -1,5 +1,5 @@
-#ifndef EVENT_LOOP_SIGNALSLOT_QUEUE_H_
-#define EVENT_LOOP_SIGNALSLOT_QUEUE_H_
+#ifndef SIGNAL_SLOT_QUEUE_H_
+#define SIGNAL_SLOT_QUEUE_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -16,4 +16,4 @@ void slot_queue_connect(slot_queue_t *, signal_queue_t *);
 int slot_queue_disconnect(slot_queue_t *, signal_queue_t *);
 
 
-#endif /* SIGNALSLOT_EVENT_H_ */
+#endif /* SIGNAL_SLOT_QUEUE_H_ */

@@ -1,5 +1,5 @@
-#ifndef EVENT_LOOP_QUEUE_H_
-#define EVENT_LOOP_QUEUE_H_
+#ifndef QUEUE_INTERFACE_H_
+#define QUEUE_INTERFACE_H_
 
 #include <stdbool.h>
 #include "event_loop_types.h"
@@ -9,4 +9,4 @@ size_t queue_interface_count(queue_i * itf);
 void queue_interface_pop(queue_i * itf);
 size_t queue_interface_hash(queue_i * itf);
 
-#endif /* EVENT_LOOP_QUEUE_H_ */
+#endif /* QUEUE_INTERFACE_H_ */

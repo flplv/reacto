@@ -1,10 +1,8 @@
 #include <stddef.h>
 #include <reusables/log.h>
 #include <reusables/checks.h>
-
-#include "hardware_watchdog.h"
-#include "watchdog.h"
-#include "hardware_watchdog.h"
+#include <watchdog/hardware_watchdog.h>
+#include <watchdog/watchdog.h>
 
 static watchdog_t * root = NULL;
 

@@ -1,5 +1,5 @@
-#ifndef EVENT_LOOP_QUEUE_H_
-#define EVENT_LOOP_QUEUE_H_
+#ifndef QUEUE_H_
+#define QUEUE_H_
 
 #include <stddef.h>
 #include "event_loop_types.h"
@@ -54,5 +54,4 @@ void queue_deinit(queue_t * obj);
 signal_queue_t * queue_signal(queue_t * obj);
 queue_i * queue_interface (queue_t * obj);
 
-
-#endif /* EVENT_LOOP_QUEUE_H_ */
+#endif /* QUEUE_H_ */

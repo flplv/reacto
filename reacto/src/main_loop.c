@@ -1,7 +1,7 @@
 #include <reusables/checks.h>
-#include "signal_slot_queue.h"
-#include "main_loop.h"
-#include "queue_interface.h"
+#include <main_loop.h>
+#include <signal_slot_queue.h>
+#include <queue_interface.h>
 
 static void _free (queue_i * queue)
 {

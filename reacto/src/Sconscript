@@ -1,18 +1,14 @@
 #!python
 Import('env')
 
-penv = env.Clone()
-penv.Append(CPPPATH=['./'])
-
 r = {
     'libs' : [],
     'path' : [],
     'objs' : []
 }
-r['path'].append(Dir('./'))
 
 src = env.FindFiles('./', '*.c')
-lib = penv.StaticLibrary('reacto', src)
+lib = env.StaticLibrary('reacto', src)
 
 Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
 r['libs'].append(lib)

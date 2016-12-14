@@ -1,10 +1,10 @@
 #include <reusables/checks.h>
 #include <reusables/macros.h>
-#include <event_loop/main_loop.h>
-#include <event_loop/signal_slot_queue.h>
 #include <reusables/log.h>
-#include "queue.h"
-#include "queue_interface.h"
+#include <queue.h>
+#include <queue_interface.h>
+#include <main_loop.h>
+#include <signal_slot_queue.h>
 
 static bool emitter(queue_i * itf)
 {

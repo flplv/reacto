@@ -1,82 +1,87 @@
 /*
- * 
+ *
  * The Customized Signal Slot Class Body Generator
- * 
- * 
- * This code generates functions with the customized signatures for a signal 
- * slot event emitting system. Besides being a generic template, it keeps type 
- * safety, there's absolutely no opaque data, commonly used to generalize 
- * signatures and bypas type checking on build time. 
- * 
- * Our approach create names and signatures from configuration macros. Because 
+ *
+ *
+ * This code generates functions with the customized signatures for a signal
+ * slot event emitting system. Besides being a generic template, it keeps type
+ * safety, there's absolutely no opaque data, commonly used to generalize
+ * signatures and bypas type checking on build time.
+ *
+ * Our approach create names and signatures from configuration macros. Because
  * that, you have to define four macros that will be used by this file and then
  * `#include` this file to your .c code.
- * 
+ *
  * Below an example of explained .c file to generate a signal slot module where
- * the handler takes an `int` and a `char *` as argument and the modudle is 
+ * the handler takes an `int` and a `char *` as argument and the modudle is
  * called "signal_slot_test":
- * 
- * First, we setup the prefixes used to form function and types names. It has 
+ *
+ * First, we setup the prefixes used to form function and types names. It has
  * to finish with `_`.
- * 
+ *
  *     #define signal_prefix signal_test_
  *     #define slot_prefix slot_test_
- * 
+ *
  * Next the parameters of the handler function that is called when a signal is
- * emmited. It is necessary two macros, one to be used in declarations, with 
- * types, other to be used when forwarding parameters, without types. Also, it
- * must take variable arguments as the first input and put `__VA_ARGS__` in the 
- * beginning of the argument list. 
- * 
+ * emmited. It is necessary three macros:
+ *   `parameters_declaration`: used to create a list of arguments for internal
+ *     functions, __VA_ARGS__ cannot be removed.
+ *   `parameters_list`: used to create a list of arguments passed to internal
+ *     functions, __VA_ARGS__ cannot be removed.
+ *   `handler_parameters_list`: used only to create arguments passed to user
+ *     handler. Here you can remove __VA_ARGS__, if you keep it you will
+ *     have a pointer to the slot as an argument.
+ *
  * ps: add `_` in front of the argument names to avoid conflicts.
- * 
+ *
  *     #define parameters_declaration(...) __VA_ARGS__, int _a, char * _b
  *     #define parameters_list(...) __VA_ARGS__, _a, _b
- *     
+ *     #define handler_parameters_list(...)  __VA_ARGS__, _a, _b
+ *
  * It's done, now we include this file in the `signal_slot_test.c` at the end:
- * 
+ *
  *     #include "signalslot.template"
- * 
+ *
  * Do not export those macros in a header, since they have no namespacing and
  * will cause conflict, this is a point of improvment, since it makes impossible
  * to generate code for the header as well.
- * 
- * The header has to be written manually, this is the appropriate header used 
+ *
+ * The header has to be written manually, this is the appropriate header used
  * to export the generated code in this example:
- * 
+ *
  *     #include "linked_list.h"
  *     #include <stdbool.h>
- * 
+ *
  *     struct slot_test_private;
  *     typedef struct slot_test_private slot_test_t;
- *     
+ *
  *     struct signal_test_private;
  *     typedef struct signal_test_private signal_test_t;
- *     
+ *
  *     typedef void (*slot_test_handler_t) (slot_test_t * slot, int, char *);
- *     
+ *
  *     void signal_test_init(signal_test_t *, slot_demo_handler_t handler);
  *     void signal_test_deinit(signal_test_t *);
  *     bool signal_test_is_connected(signal_test_t *, slot_test_t *);
  *     void signal_test_emit(signal_test_t *, int n, char * buf);
- *     
+ *
  *     void slot_test_init(slot_test_t *);
  *     void slot_test_deinit(slot_test_t *);
  *     void slot_test_connect(slot_test_t *, signal_test_t *);
  *     void slot_test_disconnect(slot_test_t *, signal_test_t *);
- *     
+ *
  *     struct signal_test_private
  *     {
  *         struct slot_test_private * root;
  *     };
- *     
+ *
  *     struct slot_test_private
  *     {
  *         signal_test_t * connection;
  *         slot_test_handler_t handler;
  *         linked_list_t ll;
  *     };
- * 
+ *
  * ps: We avoided calling this file .c to keep it away from being built directly
  * by a build system that build everything that has the .c extension.
  */
@@ -109,7 +114,7 @@ void function(signal_prefix, deinit)(type_name(signal_prefix) * obj)
 
     if (obj->root)
         linked_list_free(obj->root, ll, function(slot_prefix, free_from_signal));
-    
+
     obj->root = 0;
 }
 
@@ -216,12 +221,12 @@ int function(slot_prefix, disconnect)(type_name(slot_prefix) *obj, type_name(sig
 {
     check_ptr(obj, -1);
     check_ptr(signal, -1);
-    
+
     if (obj->connection != signal) {
         log_error ("Provided signal is not connected to slot, cannot disconnect.");
         return -2;
     }
-    
+
     function(signal_prefix, disconnect)(signal, obj);
     obj->connection = NULL;
     return 0;

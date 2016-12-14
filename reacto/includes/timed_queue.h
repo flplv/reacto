@@ -1,5 +1,5 @@
-#ifndef EVENT_LOOP_TIMED_QUEUE_H_
-#define EVENT_LOOP_TIMED_QUEUE_H_
+#ifndef TIMED_QUEUE_H_
+#define TIMED_QUEUE_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -34,4 +34,4 @@ void timed_queue_link(timed_queue_t * obj, timed_event_t * ev);
 
 queue_i * timed_queue_interface (timed_queue_t * obj);
 
-#endif /* EVENT_LOOP_TIMED_QUEUE_H_ */
+#endif /* TIMED_QUEUE_H_ */

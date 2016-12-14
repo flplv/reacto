@@ -1,4 +1,4 @@
-#include "array.h"
+#include <reusables/array.h>
 
 void array_init(array_t * obj, size_t max_length)
 {

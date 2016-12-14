@@ -1,12 +1,15 @@
 Import('platforms')
 
 for name, plat in platforms.items():
+    plat['env'].Append(CPPPATH = [Dir('./includes')])
+    if 'tests' in name:
+        plat['env'].Append(CPPPATH = [Dir('./src')])
+
     env = plat['env'].Clone()
     build_dir = './build/' + name
     mods = env.SConscript('./src/Sconscript', exports = 'env', variant_dir=build_dir, duplicate=0)
 
     # Add libs and includes to parent env.
     plat['env'].Append(LIBS = mods['libs'])
-    plat['env'].Append(CPPPATH = [Dir('./src')])
     plat['env'].Append(LIBPATH = mods['path'])
     plat['reacto_build_dir'] = Dir(build_dir)

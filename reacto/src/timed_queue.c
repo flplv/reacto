@@ -1,12 +1,11 @@
-#include "timed_queue.h"
-
 #include <reusables/checks.h>
 #include <reusables/macros.h>
-#include <event_loop/main_loop.h>
-#include <event_loop/signal_slot_queue.h>
 #include <reusables/log.h>
 #include <reusables/time.h>
 #include <reusables/timeout.h>
+#include <timed_queue.h>
+#include <main_loop.h>
+#include <signal_slot_queue.h>
 
 static bool emitter(queue_i * itf)
 {
@@ -119,4 +118,3 @@ queue_i * timed_queue_interface (timed_queue_t * obj)
     check_ptr(obj, NULL);
     return &obj->itf;
 }
-
