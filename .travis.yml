@@ -1,6 +1,6 @@
 dist: trusty
 sudo: required
-language: c
+language: cpp
 
 addons:
   apt:
@@ -19,7 +19,8 @@ script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - scons -Q reacto_tests/build/reacto_host_tests
   - ./reacto_tests/build/reacto_host_tests -v
-  - scons -Q coverage_report
+  - find .
+  # - scons -Q coverage_report
 
 install:
   - gem install lcoveralls
