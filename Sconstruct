@@ -153,6 +153,10 @@ lcov = Command( target = ".coverage.info",
                          "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE && rm $SOURCE"
                          )
 
+codecov_ignore = "-g \"" + coverage_excludes.replace(" ", "\" -g \"") + "\""
+Command( target = ".codecov.ignore",
+         source = "",
+         action = "echo \'" + codecov_ignore + "\' > $TARGET")
 
 # Print and save coverage_report
 coverage_report = Command( target = "coverage_report",

@@ -4,26 +4,16 @@ language: cpp
 
 addons:
   apt:
-    # sources:
-    # add PPAs with more up-to-date toolchains
-    # - ubuntu-toolchain-r-test
-    # - llvm-toolchain-precise-3.6
     packages:
-    # install toolchains
-    # - gcc-5
-    # - g++-5
     - lcov
 
 script:
   - scons -Q reacto_tests/build/reacto_host_tests
   - ./reacto_tests/build/reacto_host_tests -v
 
-install:
-  - pip install --user cpp-coveralls
-
 after_success:
   - scons -Q .coverage.info
-  - coveralls --gcov-options '\-lp'
-
+  - scons -Q .codecov.ignore
+  - bash <(curl -s https://codecov.io/bash) "$(< .codecov.ignore)"
 branches:
   - master
