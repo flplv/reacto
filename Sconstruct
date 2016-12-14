@@ -71,6 +71,7 @@ default_env.AddMethod(ObjectsToGcov)
 # `host_tests` Platform: Running tests on development computer
 host_tests_plat = {
     'cpputest_extensions_enabled' : True,
+    'coverage_excludes' : [],
     'env' : default_env.Clone (
             # We want lot's of warning on host_tests
             CXXFLAGS = ['-std=gnu++14', '-g3', '-O0', '-fno-inline', '-pthread',
@@ -138,12 +139,17 @@ Depends(
                          ),
        tests_report_only)
 
+coverage_excludes = []
+for name, plat in platforms.items():
+    coverage_excludes.extend(plat['coverage_excludes'])
+coverage_excludes.append("/usr/include/*")
+coverage_excludes.append("dependencies/*")
+coverage_excludes = " ".join(coverage_excludes)
+
 lcov = Command( target = ".coverage.info",
                 source = ".coverage.info.pre",
                 action = "echo \"" \
-                         "reacto_tests/platform_host_tests/platform/UtestPlatform.cpp " \
-                         "/usr/include/* " \
-                         "dependencies/* " \
+                         + coverage_excludes +
                          "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE && rm $SOURCE"
                          )
 

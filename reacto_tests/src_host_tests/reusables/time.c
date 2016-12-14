@@ -20,7 +20,6 @@ uint32_t time_now_ms()
     return msec;
 }
 
-
 void time_sleep (uint32_t ms)
 {
     usleep(ms * 1000);

@@ -9,3 +9,4 @@ for name, plat in platforms.items():
     plat['reacto_tests_build_dir'] = Dir(build_dir)
     plat['reacto_tests_executable'] = exe['exe']
     plat['reacto_tests_map_file'] = exe['map']
+    plat['coverage_excludes'].append(File('./src_host_tests/platform/UtestPlatform.cpp').path)
