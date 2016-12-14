@@ -13,12 +13,19 @@ addons:
     - gcc-5
     - g++-5
     - lcov
+    - rubygems
 
 script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - scons -Q reacto_tests/build/reacto_host_tests
   - ./reacto_tests/build/reacto_host_tests -v
   - scons -Q coverage_report
+
+install:
+  - gem install lcoveralls
+
+after_success:
+  - lcoveralls --retry-count 5 .coverage.info"
 
 branches:
   - master

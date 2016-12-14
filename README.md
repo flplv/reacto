@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/felipe-lavratti/reacto.svg?branch=master)](https://travis-ci.org/felipe-lavratti/reacto)
+[![Coverage Status](https://coveralls.io/repos/github/felipe-lavratti/reacto/badge.svg?branch=master)](https://coveralls.io/github/felipe-lavratti/reacto?branch=master)
 
 # react.o
 
