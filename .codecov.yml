@@ -1,4 +1,5 @@
-ignore:
-  - "/usr"
-  - "dependencies/*"
-  - "*/UtestPlatform.cpp"
+coverage:
+  ignore:
+    - "/usr"
+    - "dependencies/*"
+    - "*/UtestPlatform.cpp"

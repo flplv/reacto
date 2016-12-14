@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/felipe-lavratti/reacto.svg?branch=master)](https://travis-ci.org/felipe-lavratti/reacto)
-[![Coverage Status](https://coveralls.io/repos/github/felipe-lavratti/reacto/badge.svg?branch=master)](https://coveralls.io/github/felipe-lavratti/reacto?branch=master)
+[![Travis](https://img.shields.io/travis/felipe-lavratti/reacto.svg?style=flat-square)](https://travis-ci.org/felipe-lavratti/reacto)
+[![Codecov](https://img.shields.io/codecov/c/github/felipe-lavratti/reacto.svg?style=flat-square)](https://codecov.io/gh/felipe-lavratti/reacto)
+[![GitHub release](https://img.shields.io/github/release/felipe-lavratti/reacto.svg?style=flat-square)]()
 
 # react.o
 
