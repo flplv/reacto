@@ -35,7 +35,7 @@ You can run tests with:
     ./reacto_tests/build/reacto_host_tests
 ```
 
-** 3. Generate and open code coverage **
+**3. Generate and open code coverage**
 
 To generate code coverage and open in firefox:
 ```sh
