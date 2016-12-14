@@ -4,8 +4,8 @@
 
 # react.o
 Portable framework for developing reactive embedded systems in C
-- react.o page: [http://felipe-lavratti.github.io/reacto/](http://felipe-lavratti.github.io/reacto/)
-- react.o docs: *not ready yet*
+- Find examples and why to use it in the project website: [http://felipe-lavratti.github.io/reacto/](http://felipe-lavratti.github.io/reacto/)
+- Do not forget to read the docs: *not ready yet*
 
 ## How to Build
 
