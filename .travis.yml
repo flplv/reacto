@@ -1,9 +1,23 @@
 dist: trusty
-sudo: false
+sudo: required
 language: c
+
+addons:
+  apt:
+    sources:
+    # add PPAs with more up-to-date toolchains
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.6
+    packages:
+    # install toolchains
+    - gcc-5
+    - g++-5
+
 script:
+  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - scons -Q reacto_tests/build/reacto_host_tests
   - ./reacto_tests/build/reacto_host_tests -v
   - scons -Q coverage_report
+
 branches:
   - master
