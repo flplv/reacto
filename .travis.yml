@@ -13,19 +13,17 @@ addons:
     # - gcc-5
     # - g++-5
     - lcov
-    - ruby
 
 script:
   - scons -Q reacto_tests/build/reacto_host_tests
   - ./reacto_tests/build/reacto_host_tests -v
 
 install:
-  - gem install lcoveralls
+  - pip install --user cpp-coveralls
 
 after_success:
-  - find . -iname "*.gc*"
   - scons -Q .coverage.info
-  - lcoveralls --retry-count 5 .coverage.info
+  - coveralls --gcov-options '\-lp'
 
 branches:
   - master
