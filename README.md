@@ -54,7 +54,7 @@ To generate code coverage and open in firefox:
     │   │       All projects inside this folder will be built into static
     │   │        libraries for each related platform.
     │   │
-    │   ├── **cpputest**
+    │   └── **cpputest**
     │       │   CppUTest is the test framework we are using, build scripts
     │       │    will download and build it here. CppuTest's libraries are
     │       │    created for each platform that tests will run.
