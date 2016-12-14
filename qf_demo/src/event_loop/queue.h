@@ -41,8 +41,18 @@ void queue_deinit(queue_t * obj);
     _success; \
 })
 
-bool queue_full(queue_t * obj);
+#define queue_full(queue) \
+({ \
+    fast_ring_fifo_t * _fifo = &((queue)->fifo); \
+    bool _full = false; \
+    if (fast_ring_fifo_full (_fifo)) {\
+        _full = true; \
+    } \
+    _full; \
+})
+
 signal_queue_t * queue_signal(queue_t * obj);
+queue_i * queue_interface (queue_t * obj);
 
 
 #endif /* EVENT_LOOP_QUEUE_H_ */

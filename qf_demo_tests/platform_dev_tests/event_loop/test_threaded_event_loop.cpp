@@ -75,7 +75,7 @@ static void cut_init (struct s_cut *cut)
 
     /* Creates a queue and add it to the loop */
     queue_init(&cut->queue, 4);
-    main_loop_add_queue(&cut->loop, &cut->queue, 0);
+    main_loop_add_queue(&cut->loop, queue_interface(&cut->queue), 0);
 
     /* Creates the slot with the handler and connect it to
      * the queue's signal */
@@ -112,7 +112,7 @@ void * thread_handler (void * opaque_cut)
 
 TEST(ThreadedEventLoop, threaded)
 {
-    struct s_cut cut;
+    static struct s_cut cut;
     pthread_t thread;
 
     mock().strictOrder();

@@ -106,12 +106,12 @@ TEST(Queue, remove_on_deinit)
 
     queue_init(&queue, 2);
     main_loop_init(&loop, main_loop_strategy_priority_queue);
-    main_loop_add_queue(&loop, &queue, 0);
-    CHECK_EQUAL(&queue, loop.root);
-    CHECK_EQUAL(&loop, queue.loop);
+    main_loop_add_queue(&loop, &queue.itf, 0);
+    CHECK_EQUAL(&queue.itf, loop.root);
+    CHECK_EQUAL(&loop, queue.itf.loop);
     queue_deinit(&queue);
     CHECK_EQUAL(0, loop.root);
-    CHECK_EQUAL(0, queue.loop);
+    CHECK_EQUAL(0, queue.itf.loop);
 }
 
 TEST(Queue, remove_on_deinit2)
@@ -121,11 +121,11 @@ TEST(Queue, remove_on_deinit2)
 
     queue_init(&queue, 2);
     main_loop_init(&loop, main_loop_strategy_priority_queue);
-    main_loop_add_queue(&loop, &queue, 0);
-    CHECK_EQUAL(&queue, loop.root);
-    CHECK_EQUAL(&loop, queue.loop);
+    main_loop_add_queue(&loop, &queue.itf, 0);
+    CHECK_EQUAL(&queue.itf, loop.root);
+    CHECK_EQUAL(&loop, queue.itf.loop);
     main_loop_deinit(&loop);
     CHECK_EQUAL(0, loop.root);
-    CHECK_EQUAL(0, queue.loop);
+    CHECK_EQUAL(0, queue.itf.loop);
 }
 

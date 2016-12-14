@@ -1,8 +1,9 @@
 #include <reusables/checks.h>
 #include "signal_slot_queue.h"
 #include "main_loop.h"
+#include "queue_interface.h"
 
-static void _free (queue_t * queue)
+static void _free (queue_i * queue)
 {
     queue->loop = NULL;
     linked_list_init(queue, ll);
@@ -37,11 +38,11 @@ signal_t * main_loop_sleep_signal (main_loop_t * obj)
     return &obj->sleep;
 }
 
-void main_loop_add_queue(main_loop_t * obj, queue_t * queue, int position)
+void main_loop_add_queue(main_loop_t * obj, queue_i * queue, int position)
 {
     check_ptr(obj);
     check_ptr(queue);
-    queue_t * reference_queue;
+    queue_i * reference_queue;
     bool insert_after = false;
 
     if (!obj->root)
@@ -55,7 +56,7 @@ void main_loop_add_queue(main_loop_t * obj, queue_t * queue, int position)
 
     while(position-- > 0)
     {
-        queue_t * next = linked_list_next(reference_queue, ll);
+        queue_i * next = linked_list_next(reference_queue, ll);
         if (!next) {
             /* List ended before position, insert last */
             insert_after = true;
@@ -76,7 +77,7 @@ void main_loop_add_queue(main_loop_t * obj, queue_t * queue, int position)
     queue->loop = obj;
 }
 
-int main_loop_remove_queue(main_loop_t * obj, queue_t * queue)
+int main_loop_remove_queue(main_loop_t * obj, queue_i * queue)
 {
     check_ptr(obj, -1);
     check_ptr(queue, -1);
@@ -113,11 +114,11 @@ void main_loop_quit(main_loop_t * obj)
 bool main_loop_ready_to_sleep (main_loop_t * obj)
 {
     check_ptr(obj, false);
-    queue_t * queue = obj->root;
+    queue_i * queue = obj->root;
 
     while (queue)
     {
-        if (fast_ring_fifo_count(&queue->fifo) != 0)
+        if (queue_interface_count(queue) != 0)
             return false;
 
         queue = linked_list_next(queue, ll);
@@ -126,22 +127,24 @@ bool main_loop_ready_to_sleep (main_loop_t * obj)
     return true;
 }
 
-static bool priority_queue_and_fare (queue_t * queue, bool priority_enabled)
+static bool priority_queue_and_fare (queue_i * queue, bool priority_enabled)
 {
     while (queue)
     {
         size_t cnt;
-        while ((cnt = fast_ring_fifo_count(&queue->fifo)) != 0)
+        while ((cnt = queue_interface_count(queue)) != 0)
         {
-            size_t rd_pos = fast_ring_fifo_read_index(&queue->fifo);
+            size_t hash = queue_interface_hash(queue);
+            bool skip_queue = queue_interface_emit(queue);
 
-            signal_queue_emit(&queue->signal, queue);
+            if (skip_queue)
+                break;
 
             /* If the queue data has not been popped out, we discard it here
              * If a handler pop out data, others handlers will loose access to
              * it. */
-            if (rd_pos == fast_ring_fifo_read_index(&queue->fifo))
-                fast_ring_fifo_read_increment(&queue->fifo);
+            if (hash == queue_interface_hash(queue))
+                queue_interface_pop(queue);
 
             /* Queues are not empty yet */
             if (priority_enabled)
@@ -154,12 +157,12 @@ static bool priority_queue_and_fare (queue_t * queue, bool priority_enabled)
     return true;
 }
 
-static bool priority_queue(queue_t * queue)
+static bool priority_queue(queue_i * queue)
 {
     return priority_queue_and_fare (queue, true);
 }
 
-static bool fare(queue_t * queue)
+static bool fare(queue_i * queue)
 {
     return priority_queue_and_fare (queue, false);
 }

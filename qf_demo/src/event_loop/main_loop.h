@@ -13,8 +13,8 @@ extern const main_loop_strategy main_loop_strategy_fare;
 void main_loop_init(main_loop_t * obj, main_loop_strategy strategy);
 void main_loop_deinit(main_loop_t * obj);
 
-void main_loop_add_queue(main_loop_t * obj, queue_t * queue, int position);
-int main_loop_remove_queue(main_loop_t * obj, queue_t * queue);
+void main_loop_add_queue(main_loop_t * obj, queue_i * queue, int position);
+int main_loop_remove_queue(main_loop_t * obj, queue_i * queue);
 
 void main_loop_run(main_loop_t * obj);
 void main_loop_quit(main_loop_t * obj);

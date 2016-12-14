@@ -43,19 +43,19 @@ TEST(MainLoop, queue_order)
     queue_init(&queue4, 2);
     queue_init(&queue5, 2);
 
-    main_loop_add_queue(&cut, &queue4, 5);
-    main_loop_add_queue(&cut, &queue0, 0);
-    main_loop_add_queue(&cut, &queue1, 1);
-    main_loop_add_queue(&cut, &queue3, 2);
-    main_loop_add_queue(&cut, &queue2, 2);
-    main_loop_add_queue(&cut, &queue5, 121);
+    main_loop_add_queue(&cut, queue_interface(&queue4), 5);
+    main_loop_add_queue(&cut, queue_interface(&queue0), 0);
+    main_loop_add_queue(&cut, queue_interface(&queue1), 1);
+    main_loop_add_queue(&cut, queue_interface(&queue3), 2);
+    main_loop_add_queue(&cut, queue_interface(&queue2), 2);
+    main_loop_add_queue(&cut, queue_interface(&queue5), 121);
 
-    CHECK_EQUAL(&queue0, cut.root);
-    CHECK_EQUAL(&queue1, linked_list_next(cut.root, ll));
-    CHECK_EQUAL(&queue2, linked_list_next(&queue1, ll));
-    CHECK_EQUAL(&queue3, linked_list_next(&queue2, ll));
-    CHECK_EQUAL(&queue4, linked_list_next(&queue3, ll));
-    CHECK_EQUAL(&queue5, linked_list_last(cut.root, ll));
+    CHECK_EQUAL(queue_interface(&queue0), cut.root);
+    CHECK_EQUAL(queue_interface(&queue1), linked_list_next(cut.root, ll));
+    CHECK_EQUAL(queue_interface(&queue2), linked_list_next(queue_interface(&queue1), ll));
+    CHECK_EQUAL(queue_interface(&queue3), linked_list_next(queue_interface(&queue2), ll));
+    CHECK_EQUAL(queue_interface(&queue4), linked_list_next(queue_interface(&queue3), ll));
+    CHECK_EQUAL(queue_interface(&queue5), linked_list_last(cut.root, ll));
 
     main_loop_deinit(&cut);
 }
@@ -81,7 +81,7 @@ TEST(MainLoop, sleep)
     slot_connect(&sleep, main_loop_sleep_signal(&cut));
 
     queue_init(&queue, 2);
-    main_loop_add_queue(&cut, &queue, 0);
+    main_loop_add_queue(&cut, queue_interface(&queue), 0);
     queue_push(&queue, b, 10);
     CHECK_EQUAL(10, b[0]); /* This check is to deal with warning variable unused */
 
@@ -110,14 +110,14 @@ TEST(MainLoop, queue_deinit)
     queue_init(&queue1, 2);
     queue_init(&queue2, 2);
 
-    main_loop_add_queue(&cut, &queue1, 0);
-    main_loop_add_queue(&cut, &queue2, 0);
+    main_loop_add_queue(&cut, queue_interface(&queue1), 0);
+    main_loop_add_queue(&cut, queue_interface(&queue2), 0);
 
     main_loop_deinit(&cut);
-    CHECK_EQUAL(1, linked_list_count(&queue1, ll))
-    CHECK_EQUAL(1, linked_list_count(&queue2, ll))
-    CHECK_EQUAL(0, queue1.loop);
-    CHECK_EQUAL(0, queue2.loop);
+    CHECK_EQUAL(1, linked_list_count(queue_interface(&queue1), ll))
+    CHECK_EQUAL(1, linked_list_count(queue_interface(&queue2), ll))
+    CHECK_EQUAL(0, queue_interface(&queue1)->loop);
+    CHECK_EQUAL(0, queue_interface(&queue2)->loop);
 }
 
 TEST(MainLoop, bad_disconnect)
@@ -132,7 +132,7 @@ TEST(MainLoop, bad_disconnect)
     cut.looping = false;
 
     queue_init(&queue, 2);
-    main_loop_remove_queue(&cut, &queue);
+    main_loop_remove_queue(&cut, queue_interface(&queue));
 }
 
 static int event_buf[4];
@@ -160,7 +160,7 @@ TEST(MainLoop, process_events_priority)
     main_loop_init(&loop, main_loop_strategy_priority_queue);
     loop.looping = false;
 
-    main_loop_add_queue(&loop, &queue, 0);
+    main_loop_add_queue(&loop, queue_interface(&queue), 0);
     slot_queue_connect(&slot, queue_signal(&queue));
 
     queue_push(&queue, event_buf, 10);
@@ -205,7 +205,7 @@ TEST(MainLoop, process_events_strategy_fare)
     main_loop_init(&loop, main_loop_strategy_fare);
     loop.looping = false;
 
-    main_loop_add_queue(&loop, &queue, 0);
+    main_loop_add_queue(&loop, queue_interface(&queue), 0);
     slot_queue_connect(&slot, queue_signal(&queue));
 
     queue_push(&queue, event_buf, 10);
@@ -272,8 +272,8 @@ TEST(MainLoop, process_order)
     main_loop_init(&loop, main_loop_strategy_fare);
     loop.looping = false;
 
-    main_loop_add_queue(&loop, &queue1, 0);
-    main_loop_add_queue(&loop, &queue2, 1);
+    main_loop_add_queue(&loop, queue_interface(&queue1), 0);
+    main_loop_add_queue(&loop, queue_interface(&queue2), 1);
     slot_queue_connect(&slot1, queue_signal(&queue1));
     slot_queue_connect(&slot2, queue_signal(&queue2));
 

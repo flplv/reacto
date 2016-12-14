@@ -38,15 +38,26 @@ timeout_t timeout_init_cpy(void)
 	return cobj;
 }
 
+bool timeout_check_elapsed(uint32_t now, uint32_t before, uint32_t desired_wait)
+{
+    return (now - before) >= desired_wait;
+}
+
+bool timeout_check_reached(uint32_t timestamp, uint32_t now)
+{
+    const uint32_t stupid_big_number = 0x80000000;
+    uint32_t before = timestamp - stupid_big_number;
+    return timeout_check_elapsed(now, before, stupid_big_number);
+}
 
 bool timeout_check(timeout_t * cobj, uint32_t tout_ms)
 {
-    return ( !( (time_now_ms() - *cobj) < tout_ms) );
+    return timeout_check_elapsed(time_now_ms(), *cobj, tout_ms);
 }
 
 bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period_ms)
 {
-    if ( (time_now_ms() - *cobj) < period_ms )
+    if (!timeout_check_elapsed(time_now_ms(), *cobj, period_ms))
     {
     	return false;
     }
