@@ -4,29 +4,28 @@ language: cpp
 
 addons:
   apt:
-    sources:
+    # sources:
     # add PPAs with more up-to-date toolchains
-    - ubuntu-toolchain-r-test
-    - llvm-toolchain-precise-3.6
+    # - ubuntu-toolchain-r-test
+    # - llvm-toolchain-precise-3.6
     packages:
     # install toolchains
-    - gcc-5
-    - g++-5
+    # - gcc-5
+    # - g++-5
     - lcov
     - ruby
 
 script:
-  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - scons -Q reacto_tests/build/reacto_host_tests
   - ./reacto_tests/build/reacto_host_tests -v
-  - find .
-  # - scons -Q coverage_report
 
 install:
   - gem install lcoveralls
 
 after_success:
-  - lcoveralls --retry-count 5 .coverage.info"
+  - find . -iname "*.gc*"
+  - scons -Q .coverage.info
+  - lcoveralls --retry-count 5 .coverage.info
 
 branches:
   - master
