@@ -10,7 +10,7 @@ exclude: [README.md, .gitignore]
 permalink: /:title ## disables post output
 timezone: null
 lsi: false
-baseurl: "/qf"
+baseurl: "/reacto"
 markdown: kramdown
 
 ### content configuration ###

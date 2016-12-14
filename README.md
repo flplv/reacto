@@ -3,7 +3,7 @@
 [![GitHub release](https://img.shields.io/github/release/felipe-lavratti/reacto.svg?style=flat-square)]()
 
 ![react.o](https://github.com/felipe-lavratti/reacto/blob/master/pages/img/reacto-logo.png)
-# A portable framework for developing reactive embedded systems in C.
+### A portable framework for developing reactive embedded systems in C.
 ---------------------------------------------------------------------
 
 *(It is a work in progress)*
