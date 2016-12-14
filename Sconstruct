@@ -74,7 +74,7 @@ host_tests_plat = {
     'coverage_excludes' : [],
     'env' : default_env.Clone (
             # We want lot's of warning on host_tests
-            CXXFLAGS = ['-std=gnu++14', '-g3', '-O0', '-fno-inline', '-pthread',
+            CXXFLAGS = ['-std=gnu++0x', '-g3', '-O0', '-fno-inline', '-pthread',
                 '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
                 '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
                 '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
