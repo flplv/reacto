@@ -12,7 +12,7 @@ r = {
 r['path'].append(Dir('./'))
 
 src = env.FindFiles('./', '*.c')
-lib = penv.StaticLibrary('qf_demo', src)
+lib = penv.StaticLibrary('reacto', src)
 
 Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
 r['libs'].append(lib)

@@ -6,6 +6,6 @@ for name, plat in platforms.items():
     exe = env.SConscript('./Sconscript.variant', exports = ['name','env'], variant_dir = build_dir, src = 'tests', duplicate=0)
 
     # Add build results symbols to the platform
-    plat['qf_demo_tests_build_dir'] = Dir(build_dir)
-    plat['qf_demo_tests_executable'] = exe['exe']
-    plat['qf_demo_tests_map_file'] = exe['map']
+    plat['reacto_tests_build_dir'] = Dir(build_dir)
+    plat['reacto_tests_executable'] = exe['exe']
+    plat['reacto_tests_map_file'] = exe['map']

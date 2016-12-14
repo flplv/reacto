@@ -68,11 +68,11 @@ default_env.AddMethod(ObjectsToGcov)
 
 #
 # Now we describe our platforms and configure its environments.
-# `dev_tests` Platform: Running tests on development computer
-dev_tests_plat = {
+# `host_tests` Platform: Running tests on development computer
+host_tests_plat = {
     'cpputest_extensions_enabled' : True,
     'env' : default_env.Clone (
-            # We want lot's of warning on dev_tests
+            # We want lot's of warning on host_tests
             CXXFLAGS = ['-std=gnu++14', '-g3', '-O0', '-fno-inline', '-pthread',
                 '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
                 '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
@@ -85,76 +85,24 @@ dev_tests_plat = {
     )
 }
 
-# `lpc176x_tests` Platform: Running tests on target board
-lpc17xx_toolchain_path = '/usr/local/lpcxpresso_8.2.2_650/lpcxpresso/tools/bin'
-lpc17xx_toolchain_prefix = 'arm-none-eabi-'
+platforms = {'host_tests' : host_tests_plat}
 
-lpc176x_tests_plat = {
-    'cpputest_extensions_enabled' : True,
-    'env' : default_env.Clone (
-        CC     = lpc17xx_toolchain_prefix + 'gcc',
-        CXX    = lpc17xx_toolchain_prefix + "g++",
-        LD     = lpc17xx_toolchain_prefix + "g++",
-        AR     = lpc17xx_toolchain_prefix + "ar",
-        STRIP  = lpc17xx_toolchain_prefix + "strip",
-        RANLIB = lpc17xx_toolchain_prefix + "ranlib",
-        CPPDEFINES = [
-                      '__CODE_RED',
-                      '__NEWLIB__',
-                      '__LPC17XX__',
-                      'CORE_M3',
-                      ('__USE_CMSIS', 'CMSISv2p00_LPC17xx'),
-                      'CPP_USE_HEAP',
-                      ],
-        CFLAGS = ['-std=gnu11'],
-        CXXFLAGS = ['-Wall', '-fno-rtti', '-fno-exceptions', '-std=gnu++14'],
-        CCFLAGS = ['-O0', '-g3', '-Wall', '-fmessage-length=0',
-                   '-fno-builtin', '-ffunction-sections', '-fdata-sections',
-                   '-mcpu=cortex-m3', '-mthumb'],
-        CPPINCLUDES = [],
-        LINKFLAGS = [
-                     '-nostdlib',
-                     '-Xlinker',
-                     '--gc-sections',
-                     '-Xlinker',
-                     '-print-memory-usage',
-                     '-mcpu=cortex-m3',
-                     '-mthumb'
-                     ]
-    )
-}
-lpc176x_tests_plat['env'].PrependENVPath('PATH', lpc17xx_toolchain_path)
-
-# Enable all platforms
-platforms = {'lpc176x_tests' : lpc176x_tests_plat,
-             'dev_tests' : dev_tests_plat}
-
-# Build CppUTest libraries for dev_tests and lpc176x_tests platforms
+# Build CppUTest libraries for each platforms
 cpputest = SConscript('dependencies/cpputest/Sconscript', exports ='platforms')
 
-# Enable only lpc176x_tests platform
-platforms = {'lpc176x_tests': lpc176x_tests_plat }
-
-# Build CMSIS only for lpc176x_tests platform
-SConscript('dependencies/lpc1769_board/Sconscript', exports ='platforms')
-
-# Enable all platforms
-platforms = {'lpc176x_tests' : lpc176x_tests_plat,
-             'dev_tests' : dev_tests_plat}
-
-# Enable GNU Coverage for the next builds on dev_tests platform
-dev_tests_plat['env'].Append(
+# Enable GNU Coverage for the next builds on host_tests platform
+host_tests_plat['env'].Append(
     CFLAGS = ['-fprofile-arcs', '-ftest-coverage'],
     CXXFLAGS = ['-fprofile-arcs', '-ftest-coverage'],
     LIBS = ['gcov']
 )
 
-# Build qf_demo as library for dev_tests and lpc176x_tests platforms
-SConscript('qf_demo/Sconscript', exports ='platforms')
+# Build reacto as library
+SConscript('reacto/Sconscript', exports ='platforms')
 
 
-# Build qf_demo_tests executable for both platforms
-SConscript('qf_demo_tests/Sconscript', exports ='platforms')
+# Build reacto_tests executable
+SConscript('reacto_tests/Sconscript', exports ='platforms')
 
 #
 #
@@ -162,13 +110,10 @@ SConscript('qf_demo_tests/Sconscript', exports ='platforms')
 # Use `scons tests` during deveopment, to print tests results and force
 # build of everything.
 tests = Command( target = "tests",
-                source = platforms['dev_tests']['qf_demo_tests_executable'],
+                source = platforms['host_tests']['reacto_tests_executable'],
                 action = "./$SOURCE -v | tee tests_report" )
 
 Default(tests)
-
-# Link lpc176x_tests platform with tests target to force buiod.
-Depends(tests, platforms['lpc176x_tests']['qf_demo_tests_executable'])
 
 #
 #
@@ -176,15 +121,15 @@ Depends(tests, platforms['lpc176x_tests']['qf_demo_tests_executable'])
 #
 # Re run test and store to file silently
 tests_report_only = Command( target = "tests_report",
-                source = platforms['dev_tests']['qf_demo_tests_executable'],
+                source = platforms['host_tests']['reacto_tests_executable'],
                 action = "./$SOURCE -v > ${TARGET}" )
 
-# Generate .coverage.info for dev_tests executables
+# Generate .coverage.info for host_tests executables
 Depends(
        Command( target = ".coverage.info.pre",
                 source = [
-                          platforms['dev_tests']['qf_demo_build_dir'],
-                          platforms['dev_tests']['qf_demo_tests_build_dir']
+                          platforms['host_tests']['reacto_build_dir'],
+                          platforms['host_tests']['reacto_tests_build_dir']
                          ],
                 action = "lcov -q --capture --directory ${SOURCES[0]} " \
                          "--ignore-errors=source " \
@@ -196,7 +141,7 @@ Depends(
 lcov = Command( target = ".coverage.info",
                 source = ".coverage.info.pre",
                 action = "echo \"" \
-                         "qf_demo_tests/platform_dev_tests/platform/UtestPlatform.cpp " \
+                         "reacto_tests/platform_host_tests/platform/UtestPlatform.cpp " \
                          "/usr/include/* " \
                          "dependencies/* " \
                          "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE && rm $SOURCE"

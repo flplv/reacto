@@ -25,17 +25,17 @@ In ubuntu:
 
 **2. Build and run Tests**
 
-Inside the project root, this line will build the test executable `qf_demo_dev_tests` in the folder `./qf_demo_tests/build`:
+Inside the project root, this line will build the test executable `reacto_host_tests` in the folder `./reacto_tests/build`:
 
 ```sh
-    scons -Q ./qf_demo_tests/build/qf_demo_dev_tests
+    scons -Q ./reacto_tests/build/reacto_host_tests
 ```
 (You need to pass the full executable path to Scons to only build that single executable, otherwise it will try to build extra executable for target platform, which will require the LPCXpreesso tools installed.)
 
 You can run tests with:
 
 ```sh
-    ./qf_demo_tests/build/qf_demo_dev_tests
+    ./reacto_tests/build/reacto_host_tests
 ```
 
 ** 3. Generate and open code coverage **
@@ -80,7 +80,7 @@ To generate code coverage and open in firefox:
     │            the board.
     │           Every lpc1769 build will include headers and libraries here.
     │
-    ├── **qf_demo**
+    ├── **reacto**
     │   │       Finally the application code. No tests allowed here, nor
     │   │        platform dependent code, only application. Every dependency to
     │   │        external world must be abstracted in order to have a testable
@@ -107,17 +107,17 @@ To generate code coverage and open in firefox:
     │           A hardware watchdog will reboot by the expiration of any soft
     │            one.
     │
-    ├── **qf_demo_tests**
+    ├── **reacto_tests**
     │   │       Finally our application tests. This project will create
     │   │        executables for each platform where tests will run.
     │   │       There are test code supposed to run on a platform but not on the
     │   │        others, this is why you have a source folder for each platform
     │   │        and one that will have tests that run on every platforms.
-    │   │       Each sub folder of *qf_demo_tests* is equivalent of the *src*
+    │   │       Each sub folder of *reacto_tests* is equivalent of the *src*
     │   │        folder of the application. It means that, if you are testing a
     │   │        pattern, the test code will be at *platform_X/patterns/*.
     │   │
-    │   ├── *platform_dev_tests*
+    │   ├── *platform_host_tests*
     │   │       Test code that will run only on development platform, your
     │   │        computer.
     │   │

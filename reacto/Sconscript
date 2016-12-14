@@ -9,4 +9,4 @@ for name, plat in platforms.items():
     plat['env'].Append(LIBS = mods['libs'])
     plat['env'].Append(CPPPATH = [Dir('./src')])
     plat['env'].Append(LIBPATH = mods['path'])
-    plat['qf_demo_build_dir'] = Dir(build_dir)
+    plat['reacto_build_dir'] = Dir(build_dir)
