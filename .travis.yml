@@ -1,0 +1,7 @@
+language: c
+script:
+  - scons -Q reacto_tests/build/reacto_host_tests
+  - ./reacto_tests/build/reacto_host_tests -v
+  - scons -Q coverage_report
+branches:
+  - master
