@@ -1,3 +1,5 @@
+dist: trusty
+sudo: false
 language: c
 script:
   - scons -Q reacto_tests/build/reacto_host_tests
