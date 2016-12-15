@@ -1,98 +1,106 @@
 #!python
-
 Import ("default_env")
+from PlatformBaseClass import PlatformBaseClass
 
-def PostBuildTargets (platform):
-    #
-    #
-    # Tests Build
-    # Use `scons tests` during deveopment, to print tests results and force
-    # build of everything.
-    tests = Command( target = "tests",
-                    source = platform['reacto_tests_executable'],
-                    action = "./$SOURCE -v | tee tests_report" )
+class HostTestsPlatform(PlatformBaseClass):
+    def Name(self):
+        return 'host_tests'
 
-    Default(tests)
+    def TargetNameList(self):
+        return ['tests',
+                'coverage', 'coverage_report',
+                str(self._build_libraries['reacto']),
+                str(self._build_binaries['reacto_tests'])]
 
-    #
-    #
-    # Coverage Commands
-    #
-    # Re run test and store to file silently
-    tests_report_only = Command( target = "tests_report",
-                    source = platform['reacto_tests_executable'],
-                    action = "./$SOURCE -v > ${TARGET}" )
+    def BuildList(self):
+        return [
+            'cpputest',
+            'reacto',
+            'reacto_tests'
+        ]
 
-    # Generate .coverage.info for host_tests executables
-    Depends(
-           Command( target = ".coverage.info.pre",
-                    source = [
-                              platform['reacto_build_dir'],
-                              platform['reacto_tests_build_dir']
-                             ],
-                    action = "lcov -q --capture --directory ${SOURCES[0]} " \
-                             "--ignore-errors=source " \
-                             "--directory ${SOURCES[1]} " \
-                             "--output-file $TARGET "
-                             ),
-           tests_report_only)
+    def ProfileEnabled(self):
+        return True
 
-    coverage_excludes = platform['coverage_excludes']
-    coverage_excludes.append("/usr/include/*")
-    coverage_excludes.append("dependencies/*")
-    coverage_excludes = " ".join(coverage_excludes)
+    def CppUTestExtensionsEnabled (self):
+        return True
 
-    lcov = Command( target = ".coverage.info",
-                    source = ".coverage.info.pre",
-                    action = "echo \"" \
-                             + coverage_excludes +
-                             "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE && rm $SOURCE"
-                             )
+    def PostBuildTargets(self):
+        #
+        #
+        # Tests Build
+        # Use `scons tests` during deveopment, to print tests results and force
+        # build of everything.
+        tests = Command( target = "tests",
+                        source = self._build_binaries['reacto_tests'],
+                        action = "./$SOURCE -v | tee tests_report" )
 
-    codecov_ignore = "-g \"" + coverage_excludes.replace(" ", "\" -g \"") + "\""
-    Command( target = ".codecov.ignore",
-             source = "",
-             action = "echo \'" + codecov_ignore + "\' > $TARGET")
+        Default(tests)
 
-    # Print and save coverage_report
-    coverage_report = Command( target = "coverage_report",
-                               source = lcov,
-                               action = "lcov --summary $SOURCE 2>&1 | tee $TARGET" )
-    Default(coverage_report)
+        #
+        #
+        # Coverage Commands
+        #
+        # Re run test and store to file silently
+        tests_run = Command( target = "tests_run",
+                        source = self._build_binaries['reacto_tests'],
+                        action = "./$SOURCE -v > /dev/null" )
 
-    # Generate html files for coverage
-    coverage_html = Command( target = "coverage",
-                               source = lcov,
-                               action = "genhtml -q $SOURCE --output-directory $TARGET" )
+        # Generate .coverage.info for host_tests executables
+        Depends(
+               Command( target = ".coverage.info.pre",
+                        source = [
+                                  self._build_dirs['reacto'],
+                                  self._build_dirs['reacto_tests']
+                                 ],
+                        action = "lcov -q --capture --directory ${SOURCES[0]} " \
+                                 "--ignore-errors=source " \
+                                 "--directory ${SOURCES[1]} " \
+                                 "--output-file $TARGET "
+                                 ),
+               tests_run)
 
-    Clean('./', [coverage_html, coverage_report, lcov])
-    Clean ('./', "tests_report")
+        self.CoverageAddExclusion("/usr/include/*")
+        self.CoverageAddExclusion("dependencies/*")
+        coverage_excludes = " ".join(self._coverage_excludes)
 
+        lcov = Command( target = ".coverage.info",
+                        source = ".coverage.info.pre",
+                        action = "echo \"" \
+                                 + coverage_excludes +
+                                 "\" | xargs lcov -q --output-file $TARGET --remove $SOURCE && rm $SOURCE"
+                                 )
 
-platform = {
-    'cpputest_extensions_enabled' : True,
-    'coverage_excludes' : [],
-    'env' : default_env.Clone (
-            # We want lot's of warning on host_tests
-            CXXFLAGS = ['-std=gnu++0x', '-g3', '-O0', '-fno-inline', '-pthread',
-                '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
-                '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
-                '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
-                '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'],
-            CFLAGS  = ['-std=gnu11', '-g3', '-O0', '-fno-inline',
-                '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
-            CPPDEFINES = ['REACTO_ENABLE_LOGGING'],
-            LIBS = ['pthread'],
-            CPPINCLUDES = []
-    ),
-    'name' : 'host_tests',
-    'builds' : [
-        'cpputest',
-        'reacto',
-        'reacto_tests'
-    ],
-    'profile_enabled' : False,
-    'post_build_targets' : PostBuildTargets
-}
+        codecov_ignore = "-g \"" + coverage_excludes.replace(" ", "\" -g \"") + "\""
+        Command( target = ".codecov.ignore",
+                 source = "",
+                 action = "echo \'" + codecov_ignore + "\' > $TARGET")
 
-Return ('platform')
+        # Print and save coverage_report
+        coverage_report = Command( target = "coverage_report",
+                                   source = lcov,
+                                   action = "lcov --summary $SOURCE" )
+        Default(coverage_report)
+
+        # Generate html files for coverage
+        coverage_html = Command( target = "coverage",
+                                   source = lcov,
+                                   action = "genhtml -q $SOURCE --output-directory $TARGET" )
+
+    def _SetupEnv(self):
+        self._env = default_env.Clone (
+                # We want lot's of warning on host_tests
+                CXXFLAGS = ['-std=gnu++0x', '-g3', '-O0', '-fno-inline', '-pthread',
+                    '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
+                    '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
+                    '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
+                    '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'],
+                CFLAGS  = ['-std=gnu11', '-g3', '-O0', '-fno-inline',
+                    '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
+                CPPDEFINES = ['REACTO_ENABLE_LOGGING'],
+                LIBS = ['pthread'],
+                CPPINCLUDES = []
+        )
+
+instance = HostTestsPlatform()
+Return('instance')

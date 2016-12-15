@@ -8,9 +8,12 @@ build
 coverage/
 .coverage.info
 .coverage.info.pre
+.codecov.ignore
 .sconsign.dblite
 tests_report
 coverage_report
+*.pyc
+*.pyo
 
 # Ignore downloaded cpputest
 cpputest-3.8.tar.gz

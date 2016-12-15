@@ -65,11 +65,11 @@ def ObjectsToGcov(self, source_list):
     return r
 default_env.AddMethod(ObjectsToGcov)
 
-def EnablePlatformsFor(build_name, extra_platforms):
-    r = {}
-    for plat in extra_platforms:
-        if build_name in plat['builds']:
-            r[plat['name']] = plat;
+def EnablePlatformsFor(build_name, available_platforms):
+    r = []
+    for plat in available_platforms:
+        if build_name in plat.BuildList():
+            r.append(plat);
     return r
 
 def FindAvailablePlatforms():
@@ -87,8 +87,8 @@ cpputest = SConscript('dependencies/cpputest/Sconscript', exports ='platforms')
 
 # Enable GNU Coverage for the next builds
 for plat in available_platforms:
-    if plat['profile_enabled']:
-        plat['env'].Append(
+    if plat.ProfileEnabled():
+        plat.Env().Append(
             CFLAGS = ['-fprofile-arcs', '-ftest-coverage'],
             CXXFLAGS = ['-fprofile-arcs', '-ftest-coverage'],
             LIBS = ['gcov']
@@ -98,11 +98,9 @@ for plat in available_platforms:
 platforms = EnablePlatformsFor('reacto', available_platforms)
 SConscript('reacto/Sconscript', exports ='platforms')
 
-
 # Build reacto_tests executable
 platforms = EnablePlatformsFor('reacto_tests', available_platforms)
 SConscript('reacto_tests/Sconscript', exports ='platforms')
-
 
 # Build examples
 platforms = EnablePlatformsFor('msp430_blink', available_platforms)
@@ -114,5 +112,10 @@ SConscript('examples/msp430_timed_blink/Sconscript', exports ='platforms')
 
 # Create extra targets for each platform
 for p in available_platforms:
-    if 'post_build_targets' in p.keys():
-        p['post_build_targets'](p)
+    p.PostBuildTargets()
+
+print "Available targets:"
+for plat in available_platforms:
+    print '\t' + plat.Name() + ':'
+    for target in plat.TargetNameList():
+        print '\t\t'+ target

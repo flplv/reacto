@@ -11,5 +11,5 @@ src = env.FindFiles('./', '*.c')
 lib = env.StaticLibrary('reacto', src)
 
 Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
-r['libs'].append(lib)
+r['libs'].extend(lib)
 Return('r')

@@ -1,0 +1,73 @@
+#!python
+Import ("default_env")
+from PlatformBaseClass import PlatformBaseClass
+
+class Msp430Platform(PlatformBaseClass):
+    def Name(self):
+        return 'msp430'
+
+    def TargetNameList(self):
+        return [
+                str(self._build_binaries['msp430_blink']),
+                str(self._build_binaries['msp430_timed_blink']),
+                'msp430_blink_deploy',
+                'msp430_timed_blink_deploy'
+            ]
+
+    def BuildList(self):
+        return [
+            'reacto',
+            'msp430_blink',
+            'msp430_timed_blink'
+        ]
+
+    def ProfileEnabled(self):
+        return False
+
+    def CppUTestExtensionsEnabled (self):
+        return False
+
+    def PostBuildTargets(self):
+        #
+        #
+        # Tests Build
+        # Use `scons tests` during deveopment, to print tests results and force
+        # build of everything.
+        msp430_b = Command( target = "msp430_blink",
+                        source = self._build_binaries['msp430_blink'],
+                        action = "msp430-size $SOURCE" )
+
+        msp430_b_deploy = Command( target = "msp430_blink_deploy",
+                        source = [msp430_b, self._build_binaries['msp430_blink']],
+                        action = "echo \"prog ${SOURCES[1]}\" | mspdebug rf2500" )
+        msp430_t = Command( target = "msp430_timed_blink",
+                        source = self._build_binaries['msp430_timed_blink'],
+                        action = "msp430-size $SOURCE" )
+
+        msp430_t_deploy = Command( target = "msp430_timed_blink_deploy",
+                        source = [msp430_t, self._build_binaries['msp430_timed_blink']],
+                        action = "echo \"prog ${SOURCES[1]}\" | mspdebug rf2500" )
+
+    def _SetupEnv(self):
+        prefix = 'msp430-'
+        mcu_flag = '-mmcu=msp430g2553'
+        # mcu_flag = '-mmcu=msp430g2231'
+        self._env = default_env.Clone (
+            CC     = prefix + 'gcc',
+            CXX    = prefix + "g++",
+            LD     = prefix + "g++",
+            AR     = prefix + "ar",
+            AS     = prefix + "gcc",
+            STRIP  = prefix + "strip",
+            RANLIB = prefix + "ranlib",
+            CPPDEFINES = [],
+            CFLAGS = [mcu_flag, ],
+            ASFLAGS = [mcu_flag, '-x', 'assembler-with-cpp', '-Wa,-gstabs' ],
+            CPPFLAGS = ['-g', '-Os', '-Wall'],
+            LINKFLAGS = [mcu_flag,
+                         ],
+            CPPINCLUDES = [],
+        )
+
+instance = Msp430Platform()
+Return('instance')

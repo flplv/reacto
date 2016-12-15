@@ -31,15 +31,16 @@ Command(target = [new_macros, malloc_macros],
         source = File('./setup-cpputest.sh'),
         action = './${SOURCE} ' + Dir('./cpputest-tree').path )
 
-for name, plat in platforms.items():
+for plat in platforms:
+    name = plat.Name()
     # Modify imported environment to be used by further builds
-    plat['env'].Prepend(**cpputest_exports)
-    env = plat['env'].Clone()
+    plat.Env().Prepend(**cpputest_exports)
+    env = plat.Env().Clone()
 
     # Call script to build cpputest
-    config = {'cpputest_extensions_enabled' : plat['cpputest_extensions_enabled']}
+    config = {'cpputest_extensions_enabled' : plat.CppUTestExtensionsEnabled()}
     mods = env.SConscript('./Sconscript.variant', exports = ['env', 'name', 'config'], variant_dir='./build/' + name, duplicate=0)
 
-    # Add libs to parent env.
-    plat['env'].Append(LIBS = mods['libs'])
-    plat['env'].Append(LIBPATH = mods['path'])
+    # Add libs to platform env
+    plat.Env().Append(LIBS = mods['libs'])
+    plat.Env().Append(LIBPATH = mods['path'])
