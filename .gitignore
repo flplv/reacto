@@ -1,18 +1,2 @@
-# Ignore eclipse files
-.project
-.cproject
-.settings
-
-# Ignore build files and folders
-build
-coverage/
-.coverage.info
-.coverage.info.pre
-.sconsign.dblite
-tests_report
-coverage_report
-
-# Ignore downloaded cpputest
-cpputest-3.8.tar.gz
-cpputest-3.8
-cpputest-tree
+_site/
+.DS_Store
