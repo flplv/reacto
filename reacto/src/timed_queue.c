@@ -35,7 +35,7 @@ static bool emitter(queue_i * itf)
     timed_queue_t * obj = container_of(itf, typeof(*obj), itf);
     timed_event_t * ev = obj->root;
 
-    if (!timeout_check_reached(ev->timestamp, time_now_ms()))
+    if (!timeout_check_elapsed(time_now_ms(), ev->link_timestamp, ev->timeout))
         return true; /* Skip this queue */
 
     obj->root = linked_list_remove(ev, ll);
@@ -97,14 +97,20 @@ void timed_event_init(timed_event_t * ev, uint32_t timeout, timed_event_handler_
 {
     check_ptr(ev);
     check_ptr(handler);
-    ev->timestamp = time_now_ms() + timeout;
+    ev->link_timestamp = 0;
+    ev->timeout = timeout;
     ev->handler = handler;
     linked_list_init(ev, ll);
 }
 
+bool timed_event_is_linked(timed_event_t * ev)
+{
+    return linked_list_next(ev, ll) || linked_list_previous(ev, ll) ? true : false;
+}
+
 static bool comp (uint32_t seed, timed_event_t * ev)
 {
-    return ev->timestamp > seed ? true : false;
+    return (ev->link_timestamp + ev->timeout) > seed ? true : false;
 }
 
 void timed_queue_link(timed_queue_t * obj, timed_event_t * ev)
@@ -112,6 +118,7 @@ void timed_queue_link(timed_queue_t * obj, timed_event_t * ev)
     check_ptr(obj);
     check_ptr(ev);
 
+    ev->link_timestamp = time_now_ms();
     linked_list_init(ev, ll);
 
     if (!obj->root)
@@ -120,7 +127,7 @@ void timed_queue_link(timed_queue_t * obj, timed_event_t * ev)
     }
     else
     {
-        timed_event_t * after = linked_list_find(obj->root, ll, comp, ev->timestamp);
+        timed_event_t * after = linked_list_find(obj->root, ll, comp, ev->link_timestamp + ev->timeout);
 
         if (after)
         {

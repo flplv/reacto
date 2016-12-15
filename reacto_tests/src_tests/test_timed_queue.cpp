@@ -53,7 +53,7 @@ void handler (timed_event_t * ev)
     CHECK_TRUE(ev);
 
     mock().actualCall("handler")
-            .withIntParameter("timestamp", (int)ev->timestamp);
+            .withIntParameter("timestamp", (int)ev->link_timestamp + (int)ev->timeout);
 
     CHECK_EQUAL(0, ev->ll.next);
     CHECK_EQUAL(0, ev->ll.prev);
@@ -93,6 +93,8 @@ TEST(TimedQueue, link_order_2)
 {
     timed_event_t evs[5];
     main_loop_t loop;
+
+    injected_now = 0;
 
     for (uint32_t i = 0; i < 5; i++) {
         timed_event_init(&evs[i], (i+1) * 100, handler);
@@ -211,4 +213,3 @@ TEST(TimedQueue, remove_on_deinit2)
     CHECK_EQUAL(0, loop.root);
     CHECK_EQUAL(0, queue.itf.loop);
 }
-

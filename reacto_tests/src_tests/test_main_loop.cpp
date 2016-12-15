@@ -60,25 +60,21 @@ TEST(MainLoop, queue_order)
     main_loop_deinit(&cut);
 }
 
-int slot_handler_sleep (slot_t * s)
+void handler_sleep (main_loop_t * s)
 {
-    mock().actualCall("slot_handler_sleep")
-        .withPointerParameter("slot", s);
-
-    return mock().returnValue().getIntValue();
+    mock().actualCall("handler_sleep")
+        .withPointerParameter("loop", s);
 }
 
 TEST(MainLoop, sleep)
 {
     queue_t queue;
-    slot_t sleep;
     int b[2];
 
     main_loop_init(&cut, main_loop_strategy_priority_queue);
     cut.looping = false;
 
-    slot_init(&sleep, slot_handler_sleep);
-    slot_connect(&sleep, main_loop_sleep_signal(&cut));
+    main_loop_set_sleep_handler(&cut, handler_sleep);
 
     queue_init(&queue, 2);
     main_loop_add_queue(&cut, queue_interface(&queue), 0);
@@ -89,8 +85,8 @@ TEST(MainLoop, sleep)
     main_loop_run(&cut);
     mock().checkExpectations();
 
-    mock().expectOneCall("slot_handler_sleep")
-            .withParameter("slot", &sleep);
+    mock().expectOneCall("handler_sleep")
+            .withParameter("loop", &cut);
 
     CHECK_TRUE(main_loop_ready_to_sleep(&cut));
     main_loop_run(&cut);

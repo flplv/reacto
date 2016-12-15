@@ -1,0 +1,18 @@
+#!python
+
+import os
+
+Import('env')
+Import('name')
+
+env = env.Clone()
+map_file = Dir('../').path + '/msp430_timed_blink_' + name + '.map'
+env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
+
+sources = [File('main.c')]
+objects = env.SourceToObjects(sources)
+Depends(objects, env['CPPINCLUDES'])
+
+exes = env.Program(['../msp430_timed_blink_' + name + '.elf', map_file], sources)
+exe = {'exe': exes[0], 'map': exes[1]}
+Return('exe')

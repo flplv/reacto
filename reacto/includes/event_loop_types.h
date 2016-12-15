@@ -91,7 +91,7 @@ struct main_loop_private
 {
     queue_i * root;
     main_loop_strategy strategy;
-    signal_t sleep;
+    void (*sleep)(main_loop_t *);
     bool looping;
 };
 

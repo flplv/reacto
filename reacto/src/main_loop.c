@@ -40,7 +40,7 @@ void main_loop_init(main_loop_t * obj, main_loop_strategy strategy)
     obj->root = NULL;
     obj->strategy = strategy;
     obj->looping = true;
-    signal_init(&obj->sleep);
+    obj->sleep = NULL;
 }
 
 void main_loop_deinit(main_loop_t * obj)
@@ -52,13 +52,13 @@ void main_loop_deinit(main_loop_t * obj)
 
     obj->root = NULL;
     obj->strategy = NULL;
-    signal_deinit(&obj->sleep);
+    obj->sleep = NULL;
 }
 
-signal_t * main_loop_sleep_signal (main_loop_t * obj)
+void main_loop_set_sleep_handler (main_loop_t * obj, void (*handler)(main_loop_t *))
 {
-    check_ptr(obj, NULL);
-    return &obj->sleep;
+    check_ptr(obj);
+    obj->sleep = handler;
 }
 
 void main_loop_add_queue(main_loop_t * obj, queue_i * queue, int position)
@@ -122,8 +122,8 @@ void main_loop_run(main_loop_t * obj)
     do
     {
         bool go_to_sleep = obj->strategy(obj->root);
-        if (go_to_sleep)
-            signal_emit(&obj->sleep);
+        if (go_to_sleep && obj->sleep)
+            obj->sleep(obj);
     }
     while (obj->looping);
 }

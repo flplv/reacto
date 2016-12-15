@@ -1,0 +1,60 @@
+#!python
+
+# Dependencies:
+# sudo apt-get install binutils-msp430 gcc-msp430 msp430-libc mspdebug
+Import ("default_env")
+
+def PostBuildTargets (platform):
+    #
+    #
+    # Tests Build
+    # Use `scons tests` during deveopment, to print tests results and force
+    # build of everything.
+    msp430_b = Command( target = "msp430_blink",
+                    source = platform['msp430_blink_executable'],
+                    action = "msp430-size $SOURCE" )
+
+    msp430_b_deploy = Command( target = "msp430_blink_deploy",
+                    source = [msp430_b, platform['msp430_blink_executable']],
+                    action = "echo \"prog ${SOURCES[1]}\" | mspdebug rf2500" )
+    msp430_t = Command( target = "msp430_timed_blink",
+                    source = platform['msp430_timed_blink_executable'],
+                    action = "msp430-size $SOURCE" )
+
+    msp430_t_deploy = Command( target = "msp430_timed_blink_deploy",
+                    source = [msp430_t, platform['msp430_timed_blink_executable']],
+                    action = "echo \"prog ${SOURCES[1]}\" | mspdebug rf2500" )
+
+prefix = 'msp430-'
+
+mcu_flag = '-mmcu=msp430g2553'
+# mcu_flag = '-mmcu=msp430g2231'
+
+platform = {
+    'env' : default_env.Clone (
+        CC     = prefix + 'gcc',
+        CXX    = prefix + "g++",
+        LD     = prefix + "g++",
+        AR     = prefix + "ar",
+        AS     = prefix + "gcc",
+        STRIP  = prefix + "strip",
+        RANLIB = prefix + "ranlib",
+        CPPDEFINES = [],
+        CFLAGS = [mcu_flag, ],
+        ASFLAGS = [mcu_flag, '-x', 'assembler-with-cpp', '-Wa,-gstabs' ],
+        CPPFLAGS = ['-g', '-Os', '-Wall'],
+        LINKFLAGS = [mcu_flag,
+                     ],
+        CPPINCLUDES = [],
+    ),
+    'name' : 'msp430',
+    'builds' : [
+        'reacto',
+        'msp430_blink',
+        'msp430_timed_blink'
+    ],
+    'profile_enabled' : False,
+    'post_build_targets' : PostBuildTargets
+}
+
+Return ('platform')

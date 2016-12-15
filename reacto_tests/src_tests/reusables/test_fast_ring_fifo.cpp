@@ -26,7 +26,8 @@ TEST(fast_ring_fifo, boundaries)
     int * const buf = buffer + 1;
     int c;
 
-    fast_ring_fifo_init(&cut, 1024);
+    int sz = fast_ring_fifo_init(&cut, 1024);
+    CHECK_EQUAL(1024, sz);
 
     c = 0;
     while (!fast_ring_fifo_full(&cut))
@@ -47,7 +48,8 @@ TEST(fast_ring_fifo, read_write)
     char reference_buffer[] = "abcdefghijklmn";
     char buffer[16];
 
-    fast_ring_fifo_init(&cut, 16);
+    int sz = fast_ring_fifo_init(&cut, 16);
+    CHECK_EQUAL(16, sz);
 
     int i = 0;
 

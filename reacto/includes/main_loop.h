@@ -44,6 +44,6 @@ void main_loop_quit(main_loop_t * obj);
 
 bool main_loop_ready_to_sleep (main_loop_t * obj);
 
-signal_t * main_loop_sleep_signal (main_loop_t * obj);
+void main_loop_set_sleep_handler (main_loop_t * obj, void (*handler)(main_loop_t *));
 
 #endif /* MAIN_LOOP_H_ */

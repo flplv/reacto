@@ -26,6 +26,7 @@
 
 #include <stddef.h>
 #include "event_loop_types.h"
+#include "signal_slot_queue.h"
 
 /*
  * Number of slots must be a power of two, otherwise it will be down sized

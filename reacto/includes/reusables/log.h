@@ -24,10 +24,25 @@
 #ifndef LOG_H_
 #define LOG_H_
 
-__attribute__ ((format (printf, 3, 4))) void _log_file_line (const char * file, int line, const char * msg, ...);
-__attribute__ ((format (printf, 1, 2))) void log_message (const char * msg, ...);
+#ifdef REACTO_ENABLE_LOGGING
 
-#define log_error(...) _log_file_line(__FILE__, __LINE__, "Error: " __VA_ARGS__)
-#define log_warning(...) _log_file_line(__FILE__, __LINE__, "Warning: " __VA_ARGS__)
+    __attribute__ ((format (printf, 3, 4))) void _log_file_line (const char * file, int line, const char * msg, ...);
+    __attribute__ ((format (printf, 1, 2))) void log_message (const char * msg, ...);
+
+    #ifdef REACTO_SHORT_LOGGING
+        #define log_error(...) log_message("[E]" __VA_ARGS__)
+        #define log_warning(...) log_message("[W]" __VA_ARGS__)
+    #else /* REACTO_SHORT_LOGGING */
+        #define log_error(...) _log_file_line(__FILE__, __LINE__, "Error: " __VA_ARGS__)
+        #define log_warning(...) _log_file_line(__FILE__, __LINE__, "Warning: " __VA_ARGS__)
+    #endif /* REACTO_SHORT_LOGGING */
+
+#else /* REACTO_ENABLE_LOGGING */
+
+    __attribute__ ((format (printf, 1, 2))) static inline void log_error(const char * msg, ...) {msg = msg+1;};
+    __attribute__ ((format (printf, 1, 2))) static inline void log_warning(const char * msg, ...) {msg = msg+1;};
+    __attribute__ ((format (printf, 1, 2))) static inline void log_message(const char * msg, ...) {msg = msg+1;};
+
+#endif /* REACTO_ENABLE_LOGGING */
 
 #endif /* LOG_H_ */

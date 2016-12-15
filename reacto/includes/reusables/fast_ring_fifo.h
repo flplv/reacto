@@ -26,6 +26,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef struct s_fast_ring_fifo_private {
     size_t mask;
@@ -38,7 +39,8 @@ typedef struct s_fast_ring_fifo_private {
  */
 static inline int fast_ring_fifo_init(fast_ring_fifo_t * obj, size_t num_of_slots)
 {
-    size_t pre_mask = 0x80000000;
+    size_t pre_mask = (SIZE_MAX >> 1) + 1;
+
     while (pre_mask)
     {
         if (num_of_slots & pre_mask) {

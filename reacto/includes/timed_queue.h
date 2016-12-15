@@ -38,12 +38,13 @@ typedef void (*timed_event_handler_t)(timed_event_t *);
 
 struct timed_event_private
 {
-    uint32_t timestamp;
+    uint32_t link_timestamp;
+    uint32_t timeout;
     timed_event_handler_t handler;
     linked_list_t ll;
 };
 void timed_event_init(timed_event_t * ev, uint32_t timeout, timed_event_handler_t handler);
-
+bool timed_event_is_linked(timed_event_t * ev);
 
 void timed_queue_init(timed_queue_t * obj);
 void timed_queue_deinit(timed_queue_t * obj);
