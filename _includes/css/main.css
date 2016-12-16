@@ -276,7 +276,15 @@ nav ul li:hover, nav ul li.active {
 .longlist { font-size: 14px !important; }
 .longlist li { margin-bottom: 3px; }
 
-
+#download-release a {
+  color: #111;
+  text-decoration: none;
+  text-align:center;
+  display:block;
+  background-color: rgba(255, 128, 0, 0.5);
+  border-radius: 100px;
+  align-items: center;
+}
 
 /* ----- fork on github banner ----- */
 #forkongithub a {
