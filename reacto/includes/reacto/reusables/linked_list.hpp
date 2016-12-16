@@ -21,15 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef QUEUE_INTERFACE_H_
-#define QUEUE_INTERFACE_H_
+#ifndef REACTO_REUSABLES_LINKED_LIST_HPP_
+#define REACTO_REUSABLES_LINKED_LIST_HPP_
 
-#include <stdbool.h>
-#include "event_loop_types.h"
+#ifdef __cplusplus
+#include <typeinfo>
+#include <type_traits>
 
-bool queue_interface_emit(queue_i * itf);
-size_t queue_interface_count(queue_i * itf);
-void queue_interface_pop(queue_i * itf);
-size_t queue_interface_hash(queue_i * itf);
+#define __ll_auto_type(___zcxzzarg) auto
+#define __ll_typeof(___zarg) std::remove_reference<decltype(___zarg)>::type
 
-#endif /* QUEUE_INTERFACE_H_ */
+template<class P, class M>
+size_t __ll_offsetof(const M P::*member)
+{
+    return (size_t) &( reinterpret_cast<P*>(0)->*member);
+}
+
+template<class P, class M>
+P* __ll_container_of_impl(M* ptr, const M P::*member)
+{
+    return (P*)( (char*)ptr - __ll_offsetof(member));
+}
+
+#define __ll_container_of(ptr, type, member) \
+     __ll_container_of_impl (ptr, &type::member)
+#endif
+
+#include "linked_list.h"
+
+#endif /* REACTO_REUSABLES_LINKED_LIST_HPP_ */

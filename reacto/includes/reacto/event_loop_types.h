@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef EVENT_LOOP_TYPES_H_
-#define EVENT_LOOP_TYPES_H_
+#ifndef REACTO_EVENT_LOOP_TYPES_H_
+#define REACTO_EVENT_LOOP_TYPES_H_
 
-#include <reusables/fast_ring_fifo.h>
-#include <reusables/linked_list.h>
-#include <reusables/signal_slot.h>
+#include "reusables/fast_ring_fifo.h"
+#include "reusables/linked_list.h"
+#include "reusables/signal_slot.h"
 
 struct main_loop_private;
 typedef struct main_loop_private main_loop_t;
@@ -95,4 +95,4 @@ struct main_loop_private
     bool looping;
 };
 
-#endif /* EVENT_LOOP_TYPES_H_ */
+#endif /* REACTO_EVENT_LOOP_TYPES_H_ */

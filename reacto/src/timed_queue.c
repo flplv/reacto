@@ -21,14 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <reusables/checks.h>
-#include <reusables/macros.h>
-#include <reusables/log.h>
-#include <reusables/time.h>
-#include <reusables/timeout.h>
-#include <timed_queue.h>
-#include <main_loop.h>
-#include <signal_slot_queue.h>
+#include <reacto/reusables/debug.h>
+#include <reacto/reusables/macros.h>
+#include <reacto/reusables/log.h>
+#include <reacto/reusables/debug.h>
+#include <reacto/reusables/time.h>
+#include <reacto/reusables/timeout.h>
+#include <reacto/timed_queue.h>
+#include <reacto/main_loop.h>
+#include <reacto/signal_slot_queue.h>
+
+static void unlink(timed_queue_t * obj, timed_event_t * ev)
+{
+    obj->root = linked_list_remove(ev, ll);
+    linked_list_init(ev, ll);
+    obj->cnt_cache--;
+}
 
 static bool emitter(queue_i * itf)
 {
@@ -38,8 +46,7 @@ static bool emitter(queue_i * itf)
     if (!timeout_check_elapsed(time_now_ms(), ev->link_timestamp, ev->timeout))
         return true; /* Skip this queue */
 
-    obj->root = linked_list_remove(ev, ll);
-    obj->cnt_cache--;
+    unlink(obj, ev);
     ev->handler(ev);
     return false;
 }
@@ -63,7 +70,7 @@ static void pop(queue_i * obj)
 
 void timed_queue_init(timed_queue_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
 
     obj->itf.loop = NULL;
     obj->itf.emitter = emitter;
@@ -82,7 +89,7 @@ static void _free (timed_event_t * ev)
 
 void timed_queue_deinit(timed_queue_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
 
     if (obj->itf.loop)
         main_loop_remove_queue(obj->itf.loop, &obj->itf);
@@ -95,17 +102,12 @@ void timed_queue_deinit(timed_queue_t * obj)
 
 void timed_event_init(timed_event_t * ev, uint32_t timeout, timed_event_handler_t handler)
 {
-    check_ptr(ev);
-    check_ptr(handler);
+    debug_ptr(ev);
+    debug_ptr(handler);
     ev->link_timestamp = 0;
     ev->timeout = timeout;
     ev->handler = handler;
     linked_list_init(ev, ll);
-}
-
-bool timed_event_is_linked(timed_event_t * ev)
-{
-    return linked_list_next(ev, ll) || linked_list_previous(ev, ll) ? true : false;
 }
 
 static bool comp (uint32_t seed, timed_event_t * ev)
@@ -113,13 +115,26 @@ static bool comp (uint32_t seed, timed_event_t * ev)
     return (ev->link_timestamp + ev->timeout) > seed ? true : false;
 }
 
+void timed_queue_unlink(timed_queue_t * obj, timed_event_t * ev)
+{
+    debug_ptr(obj);
+    debug_ptr(ev);
+
+    if (ev->ll.next == 0 && ev->ll.prev == 0 && obj->root != ev)
+        return;
+
+    unlink(obj, ev);
+}
+
 void timed_queue_link(timed_queue_t * obj, timed_event_t * ev)
 {
-    check_ptr(obj);
-    check_ptr(ev);
+    debug_ptr(obj);
+    debug_ptr(ev);
+
+    timed_queue_unlink(obj, ev);
 
     ev->link_timestamp = time_now_ms();
-    linked_list_init(ev, ll);
+
 
     if (!obj->root)
     {
@@ -143,8 +158,18 @@ void timed_queue_link(timed_queue_t * obj, timed_event_t * ev)
     obj->cnt_cache++;
 }
 
+
+void timed_queue_link_update_timeout(timed_queue_t * obj, timed_event_t * ev, uint32_t timeout)
+{
+    debug_ptr(obj);
+    debug_ptr(ev);
+
+    ev->timeout = timeout;
+    timed_queue_link(obj, ev);
+}
+
 queue_i * timed_queue_interface (timed_queue_t * obj)
 {
-    check_ptr(obj, NULL);
+    debug_ptr(obj, NULL);
     return &obj->itf;
 }

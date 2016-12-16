@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef LINKED_LIST_H_
-#define LINKED_LIST_H_
+#ifndef REACTO_REUSABLES_LINKED_LIST_H_
+#define REACTO_REUSABLES_LINKED_LIST_H_
 
 #include <stddef.h>
 
@@ -251,4 +251,4 @@ typedef struct s_linked_list_head linked_list_t;
         ___item; \
 })
 
-#endif /* LINKED_LIST_H_ */
+#endif /* REACTO_REUSABLES_LINKED_LIST_H_ */

@@ -21,22 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef CHECKS_H_
-#define CHECKS_H_
+#ifndef REACTO_QUEUE_INTERFACE_H_
+#define REACTO_QUEUE_INTERFACE_H_
 
-#include "log.h"
+#include <stdbool.h>
+#include "event_loop_types.h"
 
-/*
- * check_ptr
- * will check if `p` is NULL and will return the next argument.
- */
-#define check_ptr(p, ...) do {if (!(p)) {log_error("Invalid Pointer"); return __VA_ARGS__;}} while(0)
+bool queue_interface_emit(queue_i * itf);
+size_t queue_interface_count(queue_i * itf);
+void queue_interface_pop(queue_i * itf);
+size_t queue_interface_hash(queue_i * itf);
 
-/*
- * check_assert
- * will check if `p` solves to false and will return the next argument.
- */
-#define check_assert(p, ...) do {if (!(p)) {log_error("Assertion failed: " #p); return __VA_ARGS__;}} while(0)
-
-
-#endif /* CHECKS_H_ */
+#endif /* REACTO_QUEUE_INTERFACE_H_ */

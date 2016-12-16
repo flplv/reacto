@@ -7,8 +7,8 @@ class HostTestsPlatform(PlatformBaseClass):
         return 'host_tests'
 
     def TargetNameList(self):
-        return ['tests',
-                'coverage', 'coverage_report',
+        return [self.Default('tests'),
+                'coverage', self.Default('coverage_report'),
                 str(self._build_libraries['reacto']),
                 str(self._build_binaries['reacto_tests'])]
 
@@ -34,9 +34,6 @@ class HostTestsPlatform(PlatformBaseClass):
         tests = Command( target = "tests",
                         source = self._build_binaries['reacto_tests'],
                         action = "./$SOURCE -v | tee tests_report" )
-
-        Default(tests)
-
         #
         #
         # Coverage Commands
@@ -80,8 +77,6 @@ class HostTestsPlatform(PlatformBaseClass):
         coverage_report = Command( target = "coverage_report",
                                    source = lcov,
                                    action = "lcov --summary $SOURCE" )
-        Default(coverage_report)
-
         # Generate html files for coverage
         coverage_html = Command( target = "coverage",
                                    source = lcov,
@@ -97,7 +92,7 @@ class HostTestsPlatform(PlatformBaseClass):
                     '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'],
                 CFLAGS  = ['-std=gnu11', '-g3', '-O0', '-fno-inline',
                     '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
-                CPPDEFINES = ['REACTO_ENABLE_LOGGING'],
+                CPPDEFINES = ['REACTO_ENABLE_DEBUG'],
                 LIBS = ['pthread'],
                 CPPINCLUDES = []
         )

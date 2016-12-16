@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <reusables/checks.h>
-#include <main_loop.h>
-#include <signal_slot_queue.h>
-#include <queue_interface.h>
+#include <reacto/reusables/debug.h>
+#include <reacto/main_loop.h>
+#include <reacto/signal_slot_queue.h>
+#include <reacto/queue_interface.h>
 
 static void _free (queue_i * queue)
 {
@@ -34,8 +34,8 @@ static void _free (queue_i * queue)
 
 void main_loop_init(main_loop_t * obj, main_loop_strategy strategy)
 {
-    check_ptr(obj);
-    check_ptr(strategy);
+    debug_ptr(obj);
+    debug_ptr(strategy);
 
     obj->root = NULL;
     obj->strategy = strategy;
@@ -45,7 +45,7 @@ void main_loop_init(main_loop_t * obj, main_loop_strategy strategy)
 
 void main_loop_deinit(main_loop_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
 
     if (obj->root)
         linked_list_free(obj->root, ll, _free);
@@ -57,14 +57,14 @@ void main_loop_deinit(main_loop_t * obj)
 
 void main_loop_set_sleep_handler (main_loop_t * obj, void (*handler)(main_loop_t *))
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     obj->sleep = handler;
 }
 
 void main_loop_add_queue(main_loop_t * obj, queue_i * queue, int position)
 {
-    check_ptr(obj);
-    check_ptr(queue);
+    debug_ptr(obj);
+    debug_ptr(queue);
     queue_i * reference_queue;
     bool insert_after = false;
 
@@ -102,8 +102,8 @@ void main_loop_add_queue(main_loop_t * obj, queue_i * queue, int position)
 
 int main_loop_remove_queue(main_loop_t * obj, queue_i * queue)
 {
-    check_ptr(obj, -1);
-    check_ptr(queue, -1);
+    debug_ptr(obj, -1);
+    debug_ptr(queue, -1);
 
     if (queue->loop != obj) {
         log_error ("Provided queue hasn't been added to the main_loop, cannot remove it.");
@@ -116,8 +116,8 @@ int main_loop_remove_queue(main_loop_t * obj, queue_i * queue)
 
 void main_loop_run(main_loop_t * obj)
 {
-    check_ptr(obj);
-    check_ptr(obj->strategy);
+    debug_ptr(obj);
+    debug_ptr(obj->strategy);
 
     do
     {
@@ -130,13 +130,13 @@ void main_loop_run(main_loop_t * obj)
 
 void main_loop_quit(main_loop_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     obj->looping = false;
 }
 
 bool main_loop_ready_to_sleep (main_loop_t * obj)
 {
-    check_ptr(obj, false);
+    debug_ptr(obj, false);
     queue_i * queue = obj->root;
 
     while (queue)

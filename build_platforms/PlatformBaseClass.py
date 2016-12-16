@@ -55,3 +55,9 @@ class PlatformBaseClass(object):
     # Use this call to add your custom Commands.
     def PostBuildTargets(self):
         pass
+
+    class Default(object):
+        def __init__(self, target):
+            self._target = target
+        def __str__(self):
+            return self._target

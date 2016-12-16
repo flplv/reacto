@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 #include <stdbool.h>
-#include <reusables/timeout.h>
-#include <reusables/time.h>
+#include <reacto/reusables/timeout.h>
+#include <reacto/reusables/time.h>
 
 void timeout_init(timeout_t * cobj)
 {

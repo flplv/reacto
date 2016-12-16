@@ -21,41 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef TIMED_QUEUE_H_
-#define TIMED_QUEUE_H_
+#ifndef REACTO_REUSABLES_SIGNAL_SLOT_H_
+#define REACTO_REUSABLES_SIGNAL_SLOT_H_
 
+#include "linked_list.h"
 #include <stdbool.h>
-#include <stdint.h>
-#include <reusables/linked_list.h>
-#include "event_loop_types.h"
+
+struct slot_private;
+typedef struct slot_private slot_t;
+
+struct signal_private;
+typedef struct signal_private signal_t;
 
 /*
- * This is the Timed Queue, to be used with the Main Loop.
- * You can schedule deferred handlers to be called in the configured timestamp.
+ * Rules of the Handler:
+ *  Handlers will be called in the order they were inserted.
+ *  If a handler returns anything but 0, the call loop will stop and no other
+ *   connected handler will be called.
  */
+typedef int (*slot_handler_t) (slot_t *);
 
-typedef void (*timed_event_handler_t)(timed_event_t *);
+void signal_init(signal_t *);
+void signal_deinit(signal_t *);
+bool signal_is_connected(signal_t *, slot_t *);
+void signal_emit(signal_t *);
 
-struct timed_event_private
+void slot_init(slot_t *, slot_handler_t handler);
+void slot_deinit(slot_t *);
+void slot_connect(slot_t *, signal_t *);
+int slot_disconnect(slot_t *, signal_t *);
+
+struct signal_private
 {
-    uint32_t link_timestamp;
-    uint32_t timeout;
-    timed_event_handler_t handler;
+    struct slot_private * root;
+};
+
+struct slot_private
+{
+    signal_t * connection;
+    slot_handler_t handler;
     linked_list_t ll;
 };
-void timed_event_init(timed_event_t * ev, uint32_t timeout, timed_event_handler_t handler);
-bool timed_event_is_linked(timed_event_t * ev);
 
-void timed_queue_init(timed_queue_t * obj);
-void timed_queue_deinit(timed_queue_t * obj);
-
-/*
- * Whenever you link a timed_event_t to the queue, you must keep it in valid scope until
- * the handler is called, zero copy here, it is only linked.
- * NOT ISR SAFE
- */
-void timed_queue_link(timed_queue_t * obj, timed_event_t * ev);
-
-queue_i * timed_queue_interface (timed_queue_t * obj);
-
-#endif /* TIMED_QUEUE_H_ */
+#endif /* REACTO_REUSABLES_SIGNAL_SLOT_H_ */

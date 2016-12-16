@@ -1,8 +1,13 @@
 #include <msp430.h>
 #include <legacymsp430.h>
-#include <main_loop.h>
-#include <queue.h>
-#include <timed_queue.h>
+#include <stdint.h>
+#include <reacto/main_loop.h>
+#include <reacto/queue.h>
+#include <reacto/timed_queue.h>
+
+#ifndef interrupt
+#define interrupt(...) void
+#endif
 
 #define LED0 BIT0
 #define LED1 BIT6
@@ -45,11 +50,13 @@ static main_loop_t loop;
 static struct button_stream button_stream;
 static struct led_stream led_stream;
 static struct time_stream time_stream;
-static uint8_t button_0_pressed_cnt;
+static uint8_t button_accumulator;
 
 static int button_stream_handler (queue_t * queue);
 static void delayed_handler (timed_event_t * ev);
 static int led_stream_handler (queue_t * queue);
+static void single_pressed();
+static void double_pressed();
 
 static void button_stream_init()
 {
@@ -81,8 +88,10 @@ static void board_init(void)
     BCSCTL1 = CALBC1_1MHZ;     // Set range
     DCOCTL = CALDCO_1MHZ;      // SMCLK = DCO = 1MHz
     CCTL0 = CCIE;
-    TACTL = TASSEL_2 + MC_2; // Set the timer A to SMCLCK, Continuous
+    TACTL = TASSEL_2 + MC_1; // Set the timer A to SMCLCK, Continuous
+    TACCR0 = 1000;
     // Clear the timer and enable timer interrupt
+
     P1DIR |= (LED0 + LED1); // Set P1.0 to output direction
     // P1.3 must stay at input
     P1OUT |= (LED0 + LED1);
@@ -98,7 +107,7 @@ int main (void)
     button_stream_init();
     led_stream_init();
     time_stream_init();
-    button_0_pressed_cnt = 0;
+    button_accumulator = 0;
 
     __enable_interrupt(); // enable all interrupts
     // __bis_SR_register(LPM0 + GIE); // LPM0 with interrupts enabled
@@ -131,19 +140,19 @@ static int button_stream_handler (queue_t * queue)
     button_event_t event = button_invalid;
     queue_peek (&button_stream.queue, button_stream.buffer, &event);
 
-    if (!timed_event_is_linked(&time_stream.event))
+    if (button_accumulator == 0)
     {
-        /* Starts the 250ms job */
+        /* First press, increment the accumulator and schedule timeout on */
+        button_accumulator += 1;
         timed_queue_link(&time_stream.queue, &time_stream.event);
     }
-
-    if (event == button_0)
+    else
     {
-        /* Increment the counter */
-        button_0_pressed_cnt ++;
-
-        /* Push to the queue a led_0 event */
-        queue_push (&led_stream.queue, led_stream.buffer, led_0);
+        /* It is a second press, unschedule the timeout and deal with double press
+         * here */
+        button_accumulator = 0;
+        timed_queue_unlink(&time_stream.queue, &time_stream.event);
+        double_pressed(event);
     }
 
     return 0;
@@ -152,14 +161,22 @@ static int button_stream_handler (queue_t * queue)
 /* Third the timed event handler */
 static void delayed_handler (timed_event_t * ev)
 {
-    button_event_t event = button_invalid;
-    queue_peek (&button_stream.queue, button_stream.buffer, &event);
+    /* Handler got called, we have a timeout.
+     * it only happens in single press */
+    button_accumulator = 0;
+    single_pressed();
+}
 
-    if (button_0_pressed_cnt > 1)
-        /* Push to the queue a led_1 event if multiple clicked */
-        queue_push (&led_stream.queue, led_stream.buffer, led_1);
+static void single_pressed()
+{
+    /* Push to the queue a led_1 event */
+    queue_push (&led_stream.queue, led_stream.buffer, led_0);
+}
 
-    button_0_pressed_cnt = 0;
+static void double_pressed()
+{
+    /* Push to the queue a led_1 event */
+    queue_push (&led_stream.queue, led_stream.buffer, led_1);
 }
 
 /* 4th the led stream handler */
@@ -180,16 +197,9 @@ static int led_stream_handler (queue_t * queue)
 
 static uint32_t time_ms_cnt;
 
-interrupt(TIMER0_A1_VECTOR) timer_isr (void)
+interrupt(TIMER0_A0_VECTOR) timer_isr (void)
 {
-    static uint16_t pre_cnt;
-    pre_cnt ++;
-
-    if (pre_cnt > 1000)
-    {
-        pre_cnt = 0;
-        time_ms_cnt++;
-    }
+    time_ms_cnt++;
 }
 
 /* Timed Queue uses the time.h module, it is necessary to define

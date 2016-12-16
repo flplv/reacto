@@ -21,11 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef REUSABLES_MACROS_H_
-#define REUSABLES_MACROS_H_
+#ifndef REACTO_MAIN_LOOP_H_
+#define REACTO_MAIN_LOOP_H_
 
-#define container_of(ptr, type, member) ({                      \
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-        (type *)( (char *)__mptr - offsetof(type,member) );})
+#include <stddef.h>
+#include "reusables/signal_slot.h"
+#include "event_loop_types.h"
 
-#endif /* REUSABLES_MACROS_H_ */
+/* First queues get prioritized */
+extern const main_loop_strategy main_loop_strategy_priority_queue;
+/* Queues get approximately the same importance */
+extern const main_loop_strategy main_loop_strategy_fare;
+
+void main_loop_init(main_loop_t * obj, main_loop_strategy strategy);
+void main_loop_deinit(main_loop_t * obj);
+
+void main_loop_add_queue(main_loop_t * obj, queue_i * queue, int position);
+int main_loop_remove_queue(main_loop_t * obj, queue_i * queue);
+
+void main_loop_run(main_loop_t * obj);
+void main_loop_quit(main_loop_t * obj);
+
+bool main_loop_ready_to_sleep (main_loop_t * obj);
+
+void main_loop_set_sleep_handler (main_loop_t * obj, void (*handler)(main_loop_t *));
+
+#endif /* REACTO_MAIN_LOOP_H_ */

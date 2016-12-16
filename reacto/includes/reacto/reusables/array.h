@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef ARRAY_H_
-#define ARRAY_H_
+#ifndef REACTO_REUSABLES_ARRAY_H_
+#define REACTO_REUSABLES_ARRAY_H_
 
-#include "checks.h"
+#include "debug.h"
 #include "log.h"
 #include <stddef.h>
 #include <stdbool.h>
@@ -54,7 +54,7 @@ bool array_full(array_t * obj);
 
 static inline size_t _array_insert_prepare(array_t * obj)
 {
-    check_ptr(obj, 0);
+    debug_ptr(obj, 0);
 
     if (array_full(obj))
     {
@@ -67,7 +67,7 @@ static inline size_t _array_insert_prepare(array_t * obj)
 
 static inline void _array_insert_end(array_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     obj->top ++;
 }
 
@@ -80,7 +80,7 @@ static inline void _array_insert_end(array_t * obj)
 
 static inline size_t _array_remove_prepare(array_t * obj, size_t pos)
 {
-    check_ptr(obj, 0);
+    debug_ptr(obj, 0);
 
     if (pos >= obj->top)
         return 0;
@@ -90,7 +90,7 @@ static inline size_t _array_remove_prepare(array_t * obj, size_t pos)
 
 static inline void _array_remove_end(array_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     obj->top --;
 }
 
@@ -130,4 +130,4 @@ static inline void _array_remove_end(array_t * obj)
 })
 
 
-#endif /* ARRAY_H_ */
+#endif /* REACTO_REUSABLES_ARRAY_H_ */

@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef QUEUE_H_
-#define QUEUE_H_
+#ifndef REACTO_QUEUE_H_
+#define REACTO_QUEUE_H_
 
 #include <stddef.h>
 #include "event_loop_types.h"
@@ -78,4 +78,4 @@ void queue_deinit(queue_t * obj);
 signal_queue_t * queue_signal(queue_t * obj);
 queue_i * queue_interface (queue_t * obj);
 
-#endif /* QUEUE_H_ */
+#endif /* REACTO_QUEUE_H_ */

@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef FAST_RING_FIFO_H_
-#define FAST_RING_FIFO_H_
+#ifndef REACTO_REUSABLES_FAST_RING_FIFO_H_
+#define REACTO_REUSABLES_FAST_RING_FIFO_H_
 
 #include <stddef.h>
 #include <stdbool.h>
@@ -108,4 +108,4 @@ static inline size_t fast_ring_fifo_count(fast_ring_fifo_t * obj)
     return obj->mask & (obj->wrIdx - obj->rdIdx);
 }
 
-#endif /* FAST_RING_FIFO_H_ */
+#endif /* REACTO_REUSABLES_FAST_RING_FIFO_H_ */

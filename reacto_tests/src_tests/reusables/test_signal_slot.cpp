@@ -1,11 +1,11 @@
 #include <CppUTest/TestHarness.h>
 #include <CppUTestExt/MockSupport.h>
 
-#include <reusables/linked_list.hpp>
+#include <reacto/reusables/linked_list.hpp>
 
 extern "C"
 {
-    #include <reusables/signal_slot.h>
+    #include <reacto/reusables/signal_slot.h>
 }
 
 extern "C"

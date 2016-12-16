@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <reusables/checks.h>
-#include <reusables/macros.h>
-#include <reusables/log.h>
-#include <queue.h>
-#include <queue_interface.h>
-#include <main_loop.h>
-#include <signal_slot_queue.h>
+#include <reacto/reusables/debug.h>
+#include <reacto/reusables/macros.h>
+#include <reacto/reusables/log.h>
+#include <reacto/queue.h>
+#include <reacto/queue_interface.h>
+#include <reacto/main_loop.h>
+#include <reacto/signal_slot_queue.h>
 
 static bool emitter(queue_i * itf)
 {
@@ -57,7 +57,7 @@ static void pop(queue_i * itf)
 int queue_init(queue_t * obj, size_t number_of_slots)
 {
     int r;
-    check_ptr(obj, -1);
+    debug_ptr(obj, -1);
 
     obj->itf.loop = NULL;
     obj->itf.emitter = emitter;
@@ -80,7 +80,7 @@ int queue_init(queue_t * obj, size_t number_of_slots)
 
 void queue_deinit(queue_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
 
     if (obj->itf.loop)
         main_loop_remove_queue(obj->itf.loop, &obj->itf);
@@ -92,12 +92,12 @@ void queue_deinit(queue_t * obj)
 
 signal_queue_t * queue_signal(queue_t * obj)
 {
-    check_ptr(obj, NULL);
+    debug_ptr(obj, NULL);
     return &obj->signal;
 }
 
 queue_i * queue_interface (queue_t * obj)
 {
-    check_ptr(obj, NULL);
+    debug_ptr(obj, NULL);
     return &obj->itf;
 }

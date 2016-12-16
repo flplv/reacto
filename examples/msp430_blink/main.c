@@ -1,7 +1,7 @@
 #include <msp430.h>
 #include <legacymsp430.h>
-#include <main_loop.h>
-#include <queue.h>
+#include <reacto/main_loop.h>
+#include <reacto/queue.h>
 
 #define LED0 BIT0
 #define LED1 BIT6

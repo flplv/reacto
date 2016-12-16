@@ -3,11 +3,11 @@
 #include <string.h>
 #include <stdint.h>
 
-#include <reusables/linked_list.hpp>
+#include <reacto/reusables/linked_list.hpp>
 
 extern "C"
 {
-    #include <main_loop.h>
+    #include <reacto/main_loop.h>
 
     /* Faking the time_now_ms */
     static uint32_t injected_now = 0;
@@ -57,6 +57,58 @@ void handler (timed_event_t * ev)
 
     CHECK_EQUAL(0, ev->ll.next);
     CHECK_EQUAL(0, ev->ll.prev);
+}
+
+
+TEST(TimedQueue, link_relink_update)
+{
+    timed_queue_t queue;
+    timed_event_t ev1, ev2;
+
+    timed_queue_init(&queue);
+    timed_event_init(&ev1, 1000, handler);
+    timed_event_init(&ev2, 500, handler);
+
+    timed_queue_link(&queue, &ev1);
+    timed_queue_link(&queue, &ev2);
+
+    timed_queue_link_update_timeout(&queue, &ev2, 2000);
+    CHECK_EQUAL(&ev1, queue.root);
+    CHECK_EQUAL(0, ev1.ll.prev);
+    CHECK_EQUAL(0, ev2.ll.next);
+    CHECK_EQUAL(&ev2.ll, ev1.ll.next);
+    CHECK_EQUAL(&ev1.ll, ev2.ll.prev);
+}
+
+TEST(TimedQueue, link_unlink)
+{
+    timed_queue_t queue;
+    timed_event_t ev1, ev2;
+
+    timed_queue_init(&queue);
+    timed_event_init(&ev2, 500, handler);
+    timed_event_init(&ev1, 1000, handler);
+    CHECK_EQUAL(0, queue.root);
+    CHECK_EQUAL(0, ev1.ll.prev);
+    CHECK_EQUAL(0, ev2.ll.prev);
+    CHECK_EQUAL(0, ev1.ll.next);
+    CHECK_EQUAL(0, ev2.ll.next);
+
+    timed_queue_link(&queue, &ev1);
+    timed_queue_link(&queue, &ev2);
+    CHECK_EQUAL(&ev2, queue.root);
+    CHECK_EQUAL(0, ev2.ll.prev);
+    CHECK_EQUAL(0, ev1.ll.next);
+    CHECK_EQUAL(&ev1.ll, ev2.ll.next);
+    CHECK_EQUAL(&ev2.ll, ev1.ll.prev);
+
+    timed_queue_unlink(&queue, &ev1);
+    timed_queue_unlink(&queue, &ev2);
+    CHECK_EQUAL(0, queue.root);
+    CHECK_EQUAL(0, ev1.ll.prev);
+    CHECK_EQUAL(0, ev2.ll.prev);
+    CHECK_EQUAL(0, ev1.ll.next);
+    CHECK_EQUAL(0, ev2.ll.next);
 }
 
 TEST(TimedQueue, link_unlink_on_deinit)

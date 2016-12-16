@@ -4,7 +4,7 @@
 
 extern "C"
 {
-    #include <reusables/array.h>
+    #include <reacto/reusables/array.h>
 }
 
 TEST_GROUP(Array)

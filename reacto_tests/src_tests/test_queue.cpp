@@ -2,12 +2,12 @@
 #include <CppUTestExt/MockSupport.h>
 #include <string.h>
 
-#include <reusables/linked_list.hpp>
+#include <reacto/reusables/linked_list.hpp>
 
 extern "C"
 {
-    #include <queue.h>
-    #include <main_loop.h>
+    #include <reacto/queue.h>
+    #include <reacto/main_loop.h>
 }
 
 struct my_event

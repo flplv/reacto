@@ -21,29 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef MAIN_LOOP_H_
-#define MAIN_LOOP_H_
+#ifndef REACTO_REUSABLES_LOG_H_
+#define REACTO_REUSABLES_LOG_H_
 
-#include <stddef.h>
-#include <reusables/signal_slot.h>
-#include "event_loop_types.h"
+#ifndef REACTO_DISABLE_LOGGING
 
-/* First queues get prioritized */
-extern const main_loop_strategy main_loop_strategy_priority_queue;
-/* Queues get approximately the same importance */
-extern const main_loop_strategy main_loop_strategy_fare;
+    __attribute__ ((format (printf, 3, 4))) void _log_file_line (const char * file, int line, const char * msg, ...);
+    __attribute__ ((format (printf, 1, 2))) void log_message (const char * msg, ...);
 
-void main_loop_init(main_loop_t * obj, main_loop_strategy strategy);
-void main_loop_deinit(main_loop_t * obj);
+    #ifdef REACTO_SHORT_LOGS
+        #define log_error(...) log_message("[E]" __VA_ARGS__)
+        #define log_warning(...) log_message("[W]" __VA_ARGS__)
+    #else /* REACTO_SHORT_LOGS */
+        #define log_error(...) _log_file_line(__FILE__, __LINE__, "Error: " __VA_ARGS__)
+        #define log_warning(...) _log_file_line(__FILE__, __LINE__, "Warning: " __VA_ARGS__)
+    #endif /* REACTO_SHORT_LOGS */
 
-void main_loop_add_queue(main_loop_t * obj, queue_i * queue, int position);
-int main_loop_remove_queue(main_loop_t * obj, queue_i * queue);
+#else /* REACTO_DISABLE_LOGGING */
 
-void main_loop_run(main_loop_t * obj);
-void main_loop_quit(main_loop_t * obj);
+    __attribute__ ((format (printf, 1, 2))) static inline void log_error(const char * msg, ...) {msg = msg+1;};
+    __attribute__ ((format (printf, 1, 2))) static inline void log_warning(const char * msg, ...) {msg = msg+1;};
+    __attribute__ ((format (printf, 1, 2))) static inline void log_message(const char * msg, ...) {msg = msg+1;};
 
-bool main_loop_ready_to_sleep (main_loop_t * obj);
+#endif /* REACTO_DISABLE_LOGGING */
 
-void main_loop_set_sleep_handler (main_loop_t * obj, void (*handler)(main_loop_t *));
-
-#endif /* MAIN_LOOP_H_ */
+#endif /* REACTO_REUSABLES_LOG_H_ */

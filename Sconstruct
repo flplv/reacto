@@ -114,8 +114,28 @@ SConscript('examples/msp430_timed_blink/Sconscript', exports ='platforms')
 for p in available_platforms:
     p.PostBuildTargets()
 
-print "Available targets:"
+# Creating root target for each platform
 for plat in available_platforms:
-    print '\t' + plat.Name() + ':'
+    t = Command (target=plat.Name(), source='', action='@echo Built default targets for $TARGET')
     for target in plat.TargetNameList():
-        print '\t\t'+ target
+        if isinstance(target, plat.Default):
+            Depends(t, str(target))
+
+# printing targets
+def PrintHelp(target, source, env):
+    print
+    print "Usage:"
+    print " scons -Q <target name> "
+    print
+    print "Available targets ([d]efault targets for platform)"
+    for plat in available_platforms:
+        print '\t' + plat.Name() + ':'
+        for target in plat.TargetNameList():
+            if isinstance(target, plat.Default):
+                d = '[d] '
+            else:
+                d = '    '
+            print '\t\t' + d + str(target)
+
+none = Command ('none', '', PrintHelp)
+Default(none)

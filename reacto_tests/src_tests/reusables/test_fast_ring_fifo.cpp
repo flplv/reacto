@@ -3,7 +3,7 @@
 
 extern "C"
 {
-    #include <reusables/fast_ring_fifo.h>
+    #include <reacto/reusables/fast_ring_fifo.h>
 }
 
 TEST_GROUP(fast_ring_fifo)

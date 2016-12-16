@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef WATCHDOG_H_
-#define WATCHDOG_H_
+#ifndef REACTO_WATCHDOG_WATCHDOG_H_
+#define REACTO_WATCHDOG_WATCHDOG_H_
 
 /*
  * This is a Software Watchdog Module
@@ -31,8 +31,8 @@
  * If any software watchdog expires, no hardware feeding will occur.
  */
 
-#include <reusables/linked_list.h>
-#include <reusables/timeout.h>
+#include "../reusables/linked_list.h"
+#include "../reusables/timeout.h"
 
 struct _watchdog_private
 {
@@ -72,4 +72,4 @@ void watchdog_kick (watchdog_t * obj);
  */
 void watchdog_periodic ();
 
-#endif /* WATCHDOG_H_ */
+#endif /* REACTO_WATCHDOG_WATCHDOG_H_ */

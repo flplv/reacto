@@ -2,8 +2,8 @@
 
 extern "C"
 {
-    #include <reusables/time.h>
-    #include <reusables/timeout.h>
+    #include <reacto/reusables/time.h>
+    #include <reacto/reusables/timeout.h>
 }
 
 TEST_GROUP(timeout)

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <signal_slot_queue.h>
+#include <reacto/signal_slot_queue.h>
 
 /* Setup macros to the template */
 #define signal_prefix signal_queue_
@@ -31,4 +31,4 @@
 #define handler_parameters_list(...) the_queue
 
 /* Now we include the template, that was lots of fun, right? */
-#include <reusables/signal_slot.template>
+#include <reacto/reusables/signal_slot.template>

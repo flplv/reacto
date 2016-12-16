@@ -1,13 +1,13 @@
 #include <CppUTest/TestHarness.h>
 #include <CppUTestExt/MockSupport.h>
 
-#include <reusables/linked_list.hpp>
+#include <reacto/reusables/linked_list.hpp>
 
 extern "C"
 {
-    #include <main_loop.h>
-    #include <queue.h>
-    #include <signal_slot_queue.h>
+    #include <reacto/main_loop.h>
+    #include <reacto/queue.h>
+    #include <reacto/signal_slot_queue.h>
 }
 
 TEST_GROUP(MainLoop)

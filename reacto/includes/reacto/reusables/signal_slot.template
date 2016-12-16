@@ -112,7 +112,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
-#include <reusables/checks.h>
+#include <reacto/reusables/debug.h>
 
 #define macro_cat(a, ...) a ## __VA_ARGS__
 #define function(m, f) macro_cat(m, f)
@@ -128,13 +128,13 @@ static void function(slot_prefix, free_from_signal)(type_name(slot_prefix) * obj
 
 void function(signal_prefix, init)(type_name(signal_prefix) * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     obj->root = NULL;
 }
 
 void function(signal_prefix, deinit)(type_name(signal_prefix) * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
 
     if (obj->root)
         linked_list_free(obj->root, ll, function(slot_prefix, free_from_signal));
@@ -145,7 +145,7 @@ void function(signal_prefix, deinit)(type_name(signal_prefix) * obj)
 
 static int function(slot_prefix, call)(parameters_declaration(type_name(slot_prefix) * obj))
 {
-    check_ptr(obj, -1);
+    debug_ptr(obj, -1);
 
     if (!obj->handler)
         return 0;
@@ -163,7 +163,7 @@ void function(signal_prefix, emit)(parameters_declaration(type_name(signal_prefi
 {
     type_name(slot_prefix) * slot_to_be_called = NULL;
 
-    check_ptr(obj);
+    debug_ptr(obj);
 
     if (!obj->root)
         return;
@@ -182,8 +182,8 @@ bool function(signal_prefix, is_connected)(type_name(signal_prefix) *obj, type_n
 {
     type_name(slot_prefix) * registered_slot = NULL;
 
-    check_ptr(obj, false);
-    check_ptr(slot, false);
+    debug_ptr(obj, false);
+    debug_ptr(slot, false);
 
     if (!obj->root)
         return false;
@@ -217,7 +217,7 @@ static void function(signal_prefix, disconnect)(type_name(signal_prefix) *obj, t
 
 void function(slot_prefix, init)(type_name(slot_prefix) * obj, handler_declaration(slot_prefix) handler)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     linked_list_init(obj, ll);
     obj->connection = NULL;
     obj->handler = handler;
@@ -225,7 +225,7 @@ void function(slot_prefix, init)(type_name(slot_prefix) * obj, handler_declarati
 
 void function(slot_prefix, deinit)(type_name(slot_prefix) * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     if (obj->connection)
         function(signal_prefix, disconnect)(obj->connection, obj);
     obj->connection = NULL;
@@ -235,16 +235,16 @@ void function(slot_prefix, deinit)(type_name(slot_prefix) * obj)
 
 void function(slot_prefix, connect)(type_name(slot_prefix) *obj, type_name(signal_prefix)* signal)
 {
-    check_ptr(obj);
-    check_ptr(signal);
+    debug_ptr(obj);
+    debug_ptr(signal);
     function(signal_prefix, connect)(signal, obj);
     obj->connection = signal;
 }
 
 int function(slot_prefix, disconnect)(type_name(slot_prefix) *obj, type_name(signal_prefix)* signal)
 {
-    check_ptr(obj, -1);
-    check_ptr(signal, -1);
+    debug_ptr(obj, -1);
+    debug_ptr(signal, -1);
 
     if (obj->connection != signal) {
         log_error ("Provided signal is not connected to slot, cannot disconnect.");

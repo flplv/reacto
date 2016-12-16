@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 #include <stddef.h>
-#include <reusables/log.h>
-#include <reusables/checks.h>
-#include <watchdog/hardware_watchdog.h>
-#include <watchdog/watchdog.h>
+#include <reacto/reusables/log.h>
+#include <reacto/reusables/debug.h>
+#include <reacto/watchdog/hardware_watchdog.h>
+#include <reacto/watchdog/watchdog.h>
 
 static watchdog_t * root = NULL;
 
@@ -72,7 +72,7 @@ static bool is_expired (watchdog_t * obj)
 
 int watchdog_init(watchdog_t * obj, uint32_t period_ms, const char * name)
 {
-    check_ptr(obj, -1);
+    debug_ptr(obj, -1);
 
     obj->name = name;
     obj->period_ms = period_ms;
@@ -87,7 +87,7 @@ int watchdog_init(watchdog_t * obj, uint32_t period_ms, const char * name)
 
 void watchdog_deinit (watchdog_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
 
     watchdog_exit(obj);
     remove_entry (obj);
@@ -96,7 +96,7 @@ void watchdog_deinit (watchdog_t * obj)
 
 void watchdog_enter (watchdog_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
 
     if (obj->timeout)
         return;
@@ -106,13 +106,13 @@ void watchdog_enter (watchdog_t * obj)
 
 void watchdog_exit (watchdog_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     obj->timeout = (timeout_t) 0;
 }
 
 void watchdog_kick (watchdog_t * obj)
 {
-    check_ptr(obj);
+    debug_ptr(obj);
     timeout_init(&obj->timeout);
 }
 

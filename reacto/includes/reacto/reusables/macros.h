@@ -21,28 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef LOG_H_
-#define LOG_H_
+#ifndef REACTO_REUSABLES_MACROS_H_
+#define REACTO_REUSABLES_MACROS_H_
 
-#ifdef REACTO_ENABLE_LOGGING
+#define container_of(ptr, type, member) ({                      \
+        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+        (type *)( (char *)__mptr - offsetof(type,member) );})
 
-    __attribute__ ((format (printf, 3, 4))) void _log_file_line (const char * file, int line, const char * msg, ...);
-    __attribute__ ((format (printf, 1, 2))) void log_message (const char * msg, ...);
-
-    #ifdef REACTO_SHORT_LOGGING
-        #define log_error(...) log_message("[E]" __VA_ARGS__)
-        #define log_warning(...) log_message("[W]" __VA_ARGS__)
-    #else /* REACTO_SHORT_LOGGING */
-        #define log_error(...) _log_file_line(__FILE__, __LINE__, "Error: " __VA_ARGS__)
-        #define log_warning(...) _log_file_line(__FILE__, __LINE__, "Warning: " __VA_ARGS__)
-    #endif /* REACTO_SHORT_LOGGING */
-
-#else /* REACTO_ENABLE_LOGGING */
-
-    __attribute__ ((format (printf, 1, 2))) static inline void log_error(const char * msg, ...) {msg = msg+1;};
-    __attribute__ ((format (printf, 1, 2))) static inline void log_warning(const char * msg, ...) {msg = msg+1;};
-    __attribute__ ((format (printf, 1, 2))) static inline void log_message(const char * msg, ...) {msg = msg+1;};
-
-#endif /* REACTO_ENABLE_LOGGING */
-
-#endif /* LOG_H_ */
+#endif /* REACTO_REUSABLES_MACROS_H_ */

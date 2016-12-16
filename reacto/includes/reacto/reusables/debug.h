@@ -21,46 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#ifndef SIGNAL_SLOT_H_
-#define SIGNAL_SLOT_H_
 
-#include "linked_list.h"
-#include <stdbool.h>
+#ifndef REACTO_REUSABLES_DEBUG_H_
+#define REACTO_REUSABLES_DEBUG_H_
 
-struct slot_private;
-typedef struct slot_private slot_t;
+#ifdef REACTO_ENABLE_DEBUG
 
-struct signal_private;
-typedef struct signal_private signal_t;
+#include "log.h"
 
-/*
- * Rules of the Handler:
- *  Handlers will be called in the order they were inserted.
- *  If a handler returns anything but 0, the call loop will stop and no other
- *   connected handler will be called.
- */
-typedef int (*slot_handler_t) (slot_t *);
+#define debug_if(__expr) if (__expr)
+#define debug(_code_under_debug) _code_under_debug
+#define debug_ptr(p, ...) do {if (!(p)) {log_error("Invalid Pointer"); return __VA_ARGS__;}} while(0)
+#define debug_assert(p, ...) do {if (!(p)) {log_error("Assertion failed: " #p); return __VA_ARGS__;}} while(0)
 
-void signal_init(signal_t *);
-void signal_deinit(signal_t *);
-bool signal_is_connected(signal_t *, slot_t *);
-void signal_emit(signal_t *);
+#else /* REACTO_ENABLE_DEBUG */
 
-void slot_init(slot_t *, slot_handler_t handler);
-void slot_deinit(slot_t *);
-void slot_connect(slot_t *, signal_t *);
-int slot_disconnect(slot_t *, signal_t *);
+#define debug_if(__expr) if (0)
+#define debug(_code_under_debug)
+#define debug_ptr(p, ...)
+#define debug_assert(p, ...)
 
-struct signal_private
-{
-    struct slot_private * root;
-};
+#endif  /* REACTO_ENABLE_DEBUG */
 
-struct slot_private
-{
-    signal_t * connection;
-    slot_handler_t handler;
-    linked_list_t ll;
-};
 
-#endif /* SIGNAL_SLOT_H_ */
+#endif /* REACTO_REUSABLES_DEBUG_H_ */

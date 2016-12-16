@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <reusables/signal_slot.h>
+#include <reacto/reusables/signal_slot.h>
 
 /* Setup macros to the template */
 #define signal_prefix signal_
@@ -31,4 +31,4 @@
 #define handler_parameters_list(...)  __VA_ARGS__
 
 /* Now we include the template, that was lots of fun, right? */
-#include <reusables/signal_slot.template>
+#include <reacto/reusables/signal_slot.template>

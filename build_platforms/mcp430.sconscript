@@ -8,8 +8,8 @@ class Msp430Platform(PlatformBaseClass):
 
     def TargetNameList(self):
         return [
-                str(self._build_binaries['msp430_blink']),
-                str(self._build_binaries['msp430_timed_blink']),
+                self.Default(str(self._build_binaries['msp430_blink'])),
+                self.Default(str(self._build_binaries['msp430_timed_blink'])),
                 'msp430_blink_deploy',
                 'msp430_timed_blink_deploy'
             ]
@@ -50,7 +50,7 @@ class Msp430Platform(PlatformBaseClass):
 
     def _SetupEnv(self):
         prefix = 'msp430-'
-        mcu_flag = '-mmcu=msp430g2553'
+        mcu_flag = '-mmcu=msp430g2452'
         # mcu_flag = '-mmcu=msp430g2231'
         self._env = default_env.Clone (
             CC     = prefix + 'gcc',
@@ -60,7 +60,7 @@ class Msp430Platform(PlatformBaseClass):
             AS     = prefix + "gcc",
             STRIP  = prefix + "strip",
             RANLIB = prefix + "ranlib",
-            CPPDEFINES = [],
+            CPPDEFINES = ['REACTO_DISABLE_LOGGING'],
             CFLAGS = [mcu_flag, ],
             ASFLAGS = [mcu_flag, '-x', 'assembler-with-cpp', '-Wa,-gstabs' ],
             CPPFLAGS = ['-g', '-Os', '-Wall'],
