@@ -57,6 +57,12 @@ To generate code coverage and open in firefox:
     firefox ./coverage/index.html
 ```
 
+If you need to know what targets are available to build:
+
+```sh
+    scons -Q
+```
+
 # Project Structure
 
 ```md
