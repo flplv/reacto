@@ -30,7 +30,10 @@
 
 /*
  * Number of slots must be a power of two, otherwise it will be down sized
- * to its approximate power of two.
+ *  to its approximate power of two.
+ * The fast_ring_fifo algorithm used by this queue cannot fill the whole
+ *  buffer, it becomes full with number_of_slots - 1. If you need a queue
+ *  of two slots, make it 4, if you need 3, make it 8, and so on.
  * `event_queue_init` returns -1 if error or the accepted number_of_slots.
  */
 int queue_init(queue_t * obj, size_t number_of_slots);
