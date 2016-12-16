@@ -67,6 +67,15 @@ hr {
   border-color: {{ site.colors.black }};
 }
 
+table {
+    table-layout: fixed;
+}
+
+table td{
+    width: 50%;
+    text-align: center;
+}
+
 .container { word-wrap: break-word; }
 .container { word-wrap: break-word; }
 .center { text-align: center; }
@@ -74,6 +83,7 @@ hr {
 
 .container cnt {
     padding: 1% 2%;
+    display: block;
 }
 
 .container h1, .container h2, .container h3, .container h4 {
