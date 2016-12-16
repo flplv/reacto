@@ -4,7 +4,7 @@
 
 # react.o
 Portable framework for developing reactive embedded systems in C
-- Find examples and why to use it in the project website: [http://felipe-lavratti.github.io/reacto/](http://felipe-lavratti.github.io/reacto/)
+- Project web page: [http://felipe-lavratti.github.io/reacto/](http://felipe-lavratti.github.io/reacto/)
 
 # Table of Content
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
