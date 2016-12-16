@@ -405,7 +405,7 @@ body {
 
 body {
   background:url(img/bgnoise.png);
-  background-color: #222;
+  background-color: #111;
 }
 
 body,
@@ -438,7 +438,7 @@ code {
 
 /* SIDEBAR */
 #sidebar {
-  background-color: #68B4D2;
+  background-color: #244959;
   color: #eee;
   float: left;
   height: 100%;
@@ -488,7 +488,7 @@ code {
 }
 
 #sidebar input {
-  background-color: #68B4D2;
+  background-color: #244959;
   border-width: 0 0 1px 0;
   color: #fff;
   margin-bottom: 20px;

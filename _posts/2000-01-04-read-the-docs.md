@@ -1,11 +1,10 @@
 ---
 title: "docs"
-bg: blue
-color: white
-fa-icon: book
+bg: orange
+color: black
+# fa-icon: book
 section: 'landpage'
-link: docs.html
-menu-fa-icon: arrow-right
+link: "https://github.com/felipe-lavratti/reacto"
 ---
 
 #### [Go to the docs page](docs.html)

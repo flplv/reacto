@@ -29,7 +29,7 @@ $.extend($.easing,
     	navItems.on('click', function(event){
     		event.preventDefault();
             var navID = $(this).attr("href").substring(1);
-            if (navID.indexOf(".htm") < 0) {
+            if (navID.indexOf(".htm") < 0 && $(this).attr("href").indexOf("http") < 0 ) {
                 disableScrollFn = true;
                 activateNav(navID);
                 populateDestinations(); //recalculate these!
@@ -62,7 +62,7 @@ $.extend($.easing,
     function populateDestinations() {
         navItems.each(function(){
             var scrollID = $(this).attr('href').substring(1);
-            if (scrollID.indexOf(".htm") < 0 ) {
+            if (scrollID.indexOf(".htm") < 0 && $(this).attr('href').indexOf("http") < 0) {
                 navs[scrollID] = (settings.activateParentNode)? this.parentNode : this;
                 sections[scrollID] = $(document.getElementById(scrollID)).offset().top;
             }

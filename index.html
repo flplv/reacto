@@ -34,7 +34,7 @@
 
 
     {% for page in site.posts reversed %}
-      {% if page.section == 'landpage' %}
+      {% if page.section == 'landpage' and page.link == null %}
         {% capture id %}{{ page.id | remove:'/' | downcase }}{% endcapture %}
         <div id="{{id}}" class="section p-{{id}}">
           {% if page.icon %}

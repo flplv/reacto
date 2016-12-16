@@ -56,7 +56,7 @@ pre {
 /* ----- base elements ----- */
 
 img {
-  max-width:100%!important;
+  max-width:80%!important;
   height:auto;
   vertical-align:middle;
 }
@@ -77,12 +77,12 @@ hr {
 }
 
 .container h1, .container h2, .container h3, .container h4 {
-  margin-bottom: 20px;
+  margin-bottom: 28px;
   text-align: center;
   padding: 1% 4%;
 }
 .container p, .container ol, .container ul {
-  font-size: 21px;
+  font-size: 18px;
   padding: 0 5%;
   text-align: center;
 }
@@ -126,8 +126,8 @@ hr {
 nav {
   font-size:15px;
   width:100%;
-  position:fixed;
-  z-index:100;
+  position: sticky;
+  z-index:0;
   top:0;
   left:0;
   background:#2e2e2e;
@@ -179,13 +179,13 @@ nav ul li:hover, nav ul li.active {
   display:block;
   width:100%;
   min-height:300px;
-  padding:210px 0;
+  padding:50px 0;
   background:url(img/bgnoise.png);
   /* generated noise from noisetexturegenerator.com */
 }
 
 .section:first-of-type {
-    padding-top: 140px;
+    padding-top: 100px;
 }
 
 
@@ -251,9 +251,9 @@ nav ul li:hover, nav ul li.active {
 
 
 .columned {
-  -webkit-column-count: 2;
-  -moz-column-count:    2;
-  column-count:         2;
+    -webkit-columns: 2 360px;
+       -moz-columns: 2 360px;
+            columns: 2 360px;
 
   -webkit-column-gap: 40px;
   -moz-column-gap:    40px;
@@ -330,7 +330,7 @@ nav ul li:hover, nav ul li.active {
 
 /* anything not desktop */
 @media only screen and (max-width: 767px) {
-	.container h1 { font-size: 30px; }
+	.container h1 { font-size: 35px; }
 	.container h2 { font-size: 24px; }
 	.container h3 { font-size: 20px; }
 	.container h4 { font-size: 18px; }

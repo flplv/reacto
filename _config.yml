@@ -35,7 +35,7 @@ colors:
   orange:    '#fab125'
   blue2:     '#819bc6'
   turquoise: '#0fbfcf'
-  gray-blue: '#8080A0'
+  gray-blue: '#D0D0DE'
 
 kramdown:
   auto_ids:  false
