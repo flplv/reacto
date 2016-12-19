@@ -6,14 +6,19 @@ addons:
   apt:
     packages:
     - lcov
+    - binutils-msp430
+    - gcc-msp430
+    - msp430-libc
 
 script:
   - scons -Q reacto_tests/build/reacto_host_tests
   - ./reacto_tests/build/reacto_host_tests -v
+  - scons -Q examples/msp430_timed_blink/build/msp430_timed_blink_msp430.elf
 
 after_success:
   - scons -Q .coverage.info
   - scons -Q .codecov.ignore
   - bash <(curl -s https://codecov.io/bash) "$(< .codecov.ignore)"
+
 branches:
   - master

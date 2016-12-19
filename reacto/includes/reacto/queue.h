@@ -25,8 +25,17 @@
 #define REACTO_QUEUE_H_
 
 #include <stddef.h>
+#include "reusables/macros.h"
 #include "event_loop_types.h"
 #include "signal_slot_queue.h"
+
+
+#ifdef __cplusplus
+#define __queue_auto_type(___zcxzzarg) auto
+#else
+#define __queue_auto_type(___zcxzzarg) typeof(___zcxzzarg)
+#endif
+
 
 /*
  * Number of slots must be a power of two, otherwise it will be down sized
@@ -80,5 +89,6 @@ void queue_deinit(queue_t * obj);
 
 signal_queue_t * queue_signal(queue_t * obj);
 queue_i * queue_interface (queue_t * obj);
+
 
 #endif /* REACTO_QUEUE_H_ */

@@ -110,6 +110,10 @@ SConscript('examples/msp430_blink/Sconscript', exports ='platforms')
 platforms = EnablePlatformsFor('msp430_timed_blink', available_platforms)
 SConscript('examples/msp430_timed_blink/Sconscript', exports ='platforms')
 
+# Build examples
+platforms = EnablePlatformsFor('msp430_realtime_blink', available_platforms)
+SConscript('examples/msp430_realtime_blink/Sconscript', exports ='platforms')
+
 # Create extra targets for each platform
 for p in available_platforms:
     p.PostBuildTargets()

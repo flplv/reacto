@@ -31,6 +31,7 @@ typedef uint32_t timeout_t;
 
 void timeout_init(timeout_t *);
 timeout_t timeout_init_cpy(void);
+void timeout_copy(timeout_t * to, timeout_t * from);
 
 /* Return true if tout_ms has elapsed */
 bool timeout_check(timeout_t *, uint32_t tout_ms);

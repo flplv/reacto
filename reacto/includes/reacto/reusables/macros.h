@@ -28,4 +28,6 @@
         const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
         (type *)( (char *)__mptr - offsetof(type,member) );})
 
+#define ARRAY_SIZE(x)  (sizeof(x) / sizeof((x)[0]))
+
 #endif /* REACTO_REUSABLES_MACROS_H_ */

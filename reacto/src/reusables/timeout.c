@@ -39,6 +39,11 @@ timeout_t timeout_init_cpy(void)
 	return cobj;
 }
 
+void timeout_copy(timeout_t * to, timeout_t * from)
+{
+	*to = *from;
+}
+
 bool timeout_check_elapsed(uint32_t now, uint32_t before, uint32_t desired_wait)
 {
     return (now - before) >= desired_wait;

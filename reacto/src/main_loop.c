@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 #include <reacto/reusables/debug.h>
+#include <reacto/reusables/log.h>
 #include <reacto/main_loop.h>
 #include <reacto/signal_slot_queue.h>
 #include <reacto/queue_interface.h>

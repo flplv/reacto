@@ -3,9 +3,7 @@
 #include <reacto/main_loop.h>
 #include <reacto/queue.h>
 
-#define LED0 BIT0
-#define LED1 BIT6
-#define BUTTON BIT3
+#include "../msp430_board.h"
 
 typedef enum button
 {
@@ -54,19 +52,6 @@ static void led_stream_init()
     slot_queue_init(&led_stream.slot, led_stream_handler);
     slot_queue_connect(&led_stream.slot, queue_signal(&led_stream.queue));
     main_loop_add_queue(&loop, queue_interface(&led_stream.queue), 0);
-}
-
-static void board_init(void)
-{
-    __disable_interrupt();
-    WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
-    BCSCTL1 = CALBC1_1MHZ;     // Set range
-    DCOCTL = CALDCO_1MHZ;      // SMCLK = DCO = 1MHz
-    P1DIR |= (LED0 + LED1); // Set P1.0 to output direction
-    // P1.3 must stay at input
-    P1OUT |= (LED0 + LED1);
-    P1IE |= BUTTON; // P1.3 interrupt enabled
-    P1IFG &= ~BUTTON; // P1.3 IFG cleared
 }
 
 int main (void)

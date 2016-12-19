@@ -9,16 +9,19 @@ class Msp430Platform(PlatformBaseClass):
     def TargetNameList(self):
         return [
                 self.Default(str(self._build_binaries['msp430_blink'])),
-                self.Default(str(self._build_binaries['msp430_timed_blink'])),
                 'msp430_blink_deploy',
-                'msp430_timed_blink_deploy'
+                self.Default(str(self._build_binaries['msp430_timed_blink'])),
+                'msp430_timed_blink_deploy',
+                self.Default(str(self._build_binaries['msp430_realtime_blink'])),
+                'msp430_realtime_blink_deploy'
             ]
 
     def BuildList(self):
         return [
             'reacto',
             'msp430_blink',
-            'msp430_timed_blink'
+            'msp430_timed_blink',
+            'msp430_realtime_blink'
         ]
 
     def ProfileEnabled(self):
@@ -36,16 +39,22 @@ class Msp430Platform(PlatformBaseClass):
         msp430_b = Command( target = "msp430_blink",
                         source = self._build_binaries['msp430_blink'],
                         action = "msp430-size $SOURCE" )
-
         msp430_b_deploy = Command( target = "msp430_blink_deploy",
                         source = [msp430_b, self._build_binaries['msp430_blink']],
                         action = "echo \"prog ${SOURCES[1]}\" | mspdebug rf2500" )
+
         msp430_t = Command( target = "msp430_timed_blink",
                         source = self._build_binaries['msp430_timed_blink'],
                         action = "msp430-size $SOURCE" )
-
         msp430_t_deploy = Command( target = "msp430_timed_blink_deploy",
                         source = [msp430_t, self._build_binaries['msp430_timed_blink']],
+                        action = "echo \"prog ${SOURCES[1]}\" | mspdebug rf2500" )
+
+        msp430_r = Command( target = "msp430_realtime_blink",
+                        source = self._build_binaries['msp430_realtime_blink'],
+                        action = "msp430-size $SOURCE" )
+        msp430_r_deploy = Command( target = "msp430_realtime_blink_deploy",
+                        source = [msp430_t, self._build_binaries['msp430_realtime_blink']],
                         action = "echo \"prog ${SOURCES[1]}\" | mspdebug rf2500" )
 
     def _SetupEnv(self):

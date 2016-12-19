@@ -113,6 +113,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <reacto/reusables/debug.h>
+#include <reacto/reusables/log.h>
 
 #define macro_cat(a, ...) a ## __VA_ARGS__
 #define function(m, f) macro_cat(m, f)

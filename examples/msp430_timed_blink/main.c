@@ -1,3 +1,12 @@
+/*
+ * This is a blink example showing deferred jobs.
+ *
+ * A single push will toggle led0.
+ * A double push will toggle led1.
+ *
+ */
+
+
 #include <msp430.h>
 #include <legacymsp430.h>
 #include <stdint.h>
@@ -5,13 +14,8 @@
 #include <reacto/queue.h>
 #include <reacto/timed_queue.h>
 
-#ifndef interrupt
-#define interrupt(...) void
-#endif
+#include "../msp430_board.h"
 
-#define LED0 BIT0
-#define LED1 BIT6
-#define BUTTON BIT3
 
 typedef enum button
 {
@@ -81,24 +85,6 @@ static void time_stream_init()
     timed_event_init(&time_stream.event, 250, delayed_handler);
 }
 
-static void board_init(void)
-{
-    __disable_interrupt();
-    WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
-    BCSCTL1 = CALBC1_1MHZ;     // Set range
-    DCOCTL = CALDCO_1MHZ;      // SMCLK = DCO = 1MHz
-    CCTL0 = CCIE;
-    TACTL = TASSEL_2 + MC_1; // Set the timer A to SMCLCK, Continuous
-    TACCR0 = 1000;
-    // Clear the timer and enable timer interrupt
-
-    P1DIR |= (LED0 + LED1); // Set P1.0 to output direction
-    // P1.3 must stay at input
-    P1OUT |= (LED0 + LED1);
-    P1IE |= BUTTON; // P1.3 interrupt enabled
-    P1IFG &= ~BUTTON; // P1.3 IFG cleared
-}
-
 int main (void)
 {
     board_init();
@@ -110,7 +96,6 @@ int main (void)
     button_accumulator = 0;
 
     __enable_interrupt(); // enable all interrupts
-    // __bis_SR_register(LPM0 + GIE); // LPM0 with interrupts enabled
 
     main_loop_run (&loop);
     /* this will not return until main_loop_quit() is called */
@@ -192,25 +177,4 @@ static int led_stream_handler (queue_t * queue)
         P1OUT ^= (LED1); // P1.0 = toggle
 
     return 0;
-}
-
-
-static uint32_t time_ms_cnt;
-
-interrupt(TIMER0_A0_VECTOR) timer_isr (void)
-{
-    time_ms_cnt++;
-}
-
-/* Timed Queue uses the time.h module, it is necessary to define
-   the platform dependent functions */
-uint32_t time_now_ms ()
-{
-    return time_ms_cnt;
-}
-
-void time_sleep (uint32_t delay)
-{
-    volatile uint32_t now = time_ms_cnt;
-    while ((time_ms_cnt - now) < delay);
 }
