@@ -21,7 +21,7 @@ description: "A portable framework for developing reactive embedded systems in C
 source_link: "https://github.com/felipe-lavratti/reacto"
 favicon:     "img/icon-32.png"
 touch_icon:  "img/icon-128.png"
-google_analytics_key: UA-49607422-1 ## put YOUR key here to enable tracking! (blank to disable)
+google_analytics_key: UA-20404182-5 ## put YOUR key here to enable tracking! (blank to disable)
 
 
 ### template colors, used site-wide via css ###
