@@ -21,6 +21,3 @@ after_success:
   - scons -Q .coverage.info
   - scons -Q .codecov.ignore
   - bash <(curl -s https://codecov.io/bash) "$(< .codecov.ignore)"
-
-branches:
-  - master
