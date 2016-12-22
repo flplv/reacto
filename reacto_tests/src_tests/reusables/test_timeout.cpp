@@ -23,7 +23,9 @@ TEST(timeout, test)
 
 	uint32_t now = time_now_ms();
 
-	while (!timeout_check(&tout, 100));
+	bool r = timeout_check(&tout, 100);
+	while (!r)
+	    r = timeout_check(&tout, 100);
 
 	CHECK_TRUE( (now + 100) <= time_now_ms() );
 }

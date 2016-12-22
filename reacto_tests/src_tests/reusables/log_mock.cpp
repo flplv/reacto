@@ -19,7 +19,7 @@ static size_t get_buffer (size_t n, char ** const ret_buf)
         buf = (char *)realloc(buf, size);
     }
 
-    if (ret_buf)
+    if (ret_buf)                                                //LCOV_EXCL_LINE
         *ret_buf = buf;
     return size;
 }
@@ -32,8 +32,8 @@ static const char * format(const char * format, va_list ap)
     va_copy(ap2, ap);
 
     int n = vsnprintf(NULL, 0, format, ap);
-    if (n < 0)
-        FAIL("Error on vsnprintf"); //LCOV_EXCL_LINE
+    if (n < 0)                                                  //LCOV_EXCL_LINE
+        FAIL("Error on vsnprintf");                             //LCOV_EXCL_LINE
 
     size_t size = get_buffer((size_t)n, &buf);
 
