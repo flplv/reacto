@@ -50,7 +50,7 @@ static inline int fast_ring_fifo_init(fast_ring_fifo_t * obj, size_t num_of_slot
         pre_mask >>= 1;
     }
 
-    if (!pre_mask) {
+    if (pre_mask <= 1) {
         obj->mask = 0;
         return -1;
     }

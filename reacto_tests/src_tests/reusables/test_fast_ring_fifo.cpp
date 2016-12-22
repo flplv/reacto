@@ -17,6 +17,68 @@ TEST_GROUP(fast_ring_fifo)
     }
 };
 
+
+TEST(fast_ring_fifo, sizes)
+{
+    fast_ring_fifo_t cut;
+    long long int sz = fast_ring_fifo_init(&cut, 0);
+    CHECK_EQUAL(-1, sz);
+
+    sz = fast_ring_fifo_init(&cut, 1);
+    CHECK_EQUAL(-1, sz);
+
+    sz = fast_ring_fifo_init(&cut, 2);
+    CHECK_EQUAL(2, sz);
+
+    sz = fast_ring_fifo_init(&cut, 3);
+    CHECK_EQUAL(2, sz);
+
+    sz = fast_ring_fifo_init(&cut, 4);
+    CHECK_EQUAL(4, sz);
+
+    sz = fast_ring_fifo_init(&cut, 7);
+    CHECK_EQUAL(4, sz);
+
+    sz = fast_ring_fifo_init(&cut, 8);
+    CHECK_EQUAL(8, sz);
+
+    sz = fast_ring_fifo_init(&cut, 9);
+    CHECK_EQUAL(8, sz);
+
+    sz = fast_ring_fifo_init(&cut, 15);
+    CHECK_EQUAL(8, sz);
+
+    sz = fast_ring_fifo_init(&cut, 16);
+    CHECK_EQUAL(16, sz);
+
+    sz = fast_ring_fifo_init(&cut, 17);
+    CHECK_EQUAL(16, sz);
+
+    sz = fast_ring_fifo_init(&cut, 31);
+    CHECK_EQUAL(16, sz);
+
+    sz = fast_ring_fifo_init(&cut, 32);
+    CHECK_EQUAL(32, sz);
+
+    sz = fast_ring_fifo_init(&cut, 255);
+    CHECK_EQUAL(128, sz);
+
+    sz = fast_ring_fifo_init(&cut, 256);
+    CHECK_EQUAL(256, sz);
+
+    sz = fast_ring_fifo_init(&cut, 0x200);
+    CHECK_EQUAL(0x200, sz);
+
+    sz = fast_ring_fifo_init(&cut, 0x400);
+    CHECK_EQUAL(0x400, sz);
+
+    sz = fast_ring_fifo_init(&cut, 0x800);
+    CHECK_EQUAL(0x800, sz);
+
+    sz = fast_ring_fifo_init(&cut, 0x80000000);
+    CHECK_EQUAL((unsigned)0x80000000, (unsigned)sz);
+}
+
 TEST(fast_ring_fifo, boundaries)
 {
     fast_ring_fifo_t cut;

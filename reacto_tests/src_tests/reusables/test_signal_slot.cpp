@@ -38,6 +38,14 @@ TEST_GROUP(SignalSlotDemo)
     }
 };
 
+TEST(SignalSlotDemo, init_deinit)
+{
+    slot_deinit(&slot);
+    signal_deinit(&signal);
+    signal_init(&signal);
+    slot_init(&slot, handler);
+}
+
 TEST(SignalSlotDemo, emit_invalid_handler)
 {
     mock().expectNoCall("handler");

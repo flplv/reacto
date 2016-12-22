@@ -48,9 +48,8 @@ static void remove_entry (watchdog_t * obj)
 static void check_initialize_hardware ()
 {
     /* Only initialize hardware once */
-    if (root)
-        if (linked_list_next(root, list_head) == NULL)
-            hardware_watchdog_init();
+    if (linked_list_next(root, list_head) == NULL)
+        hardware_watchdog_init();
 }
 
 static void check_deinitialize_hardware ()

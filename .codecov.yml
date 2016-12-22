@@ -3,6 +3,8 @@ coverage:
     - "/usr"
     - "dependencies/*"
     - "*/UtestPlatform.cpp"
+    - "*/signal_slot_queue.c"
+      # This file shares the signal_slot.template but doesn't test it
 
 comment:
   layout: "header, diff, tree"
