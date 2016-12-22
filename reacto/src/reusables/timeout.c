@@ -30,15 +30,6 @@ void timeout_init(timeout_t * cobj)
     *cobj = time_now_ms();
 }
 
-timeout_t timeout_init_cpy(void)
-{
-	timeout_t cobj;
-
-	timeout_init(&cobj);
-
-	return cobj;
-}
-
 void timeout_copy(timeout_t * to, timeout_t * from)
 {
 	*to = *from;

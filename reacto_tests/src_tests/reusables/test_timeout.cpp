@@ -8,54 +8,75 @@ extern "C"
 
 TEST_GROUP(timeout)
 {
-	void setup()
-	{
-	}
+    void setup()
+    {
+    }
 
-	void teardown()
-	{
-	}
+    void teardown()
+    {
+    }
 };
+
+TEST(timeout, init_copy)
+{
+    timeout_t tout, tout2;
+    timeout_init(&tout);
+    timeout_copy(&tout2, &tout);
+    CHECK_EQUAL(tout, tout2);
+}
 
 TEST(timeout, test)
 {
-	timeout_t tout = timeout_init_cpy();
+    timeout_t tout;
+    timeout_init(&tout);
 
-	uint32_t now = time_now_ms();
+    uint32_t now = time_now_ms();
 
-	bool r = timeout_check(&tout, 100);
-	while (!r)
-	    r = timeout_check(&tout, 100);
+    bool r = timeout_check(&tout, 100);
+    while (!r)
+        r = timeout_check(&tout, 100);
 
-	CHECK_TRUE( (now + 100) <= time_now_ms() );
+    CHECK_TRUE( (now + 100) <= time_now_ms() );
 }
 
 TEST(timeout, periodically_test)
 {
-	timeout_t tout = timeout_init_cpy();
+    timeout_t tout;
+    timeout_init(&tout);
 
-	uint32_t now = time_now_ms();
+    uint32_t now = time_now_ms();
 
-	while (!timeout_check_and_reinit(&tout, 100));
-	CHECK_TRUE( (now + 100) <= time_now_ms() );
+    bool r = timeout_check_and_reinit(&tout, 100);
+    while (!r)
+        r = timeout_check_and_reinit(&tout, 100);
 
-	while (!timeout_check_and_reinit(&tout, 100));
-	CHECK_TRUE( (now + 200) <= time_now_ms() );
+    CHECK_TRUE( (now + 100) <= time_now_ms() );
 
-	while (!timeout_check_and_reinit(&tout, 100));
-	CHECK_TRUE( (now + 300) <= time_now_ms() );
+    r = timeout_check_and_reinit(&tout, 100);
+    while (!r)
+        r = timeout_check_and_reinit(&tout, 100);
 
-	while (!timeout_check_and_reinit(&tout, 100));
-	CHECK_TRUE( (now + 400) <= time_now_ms() );
+    CHECK_TRUE( (now + 200) <= time_now_ms() );
+
+    r = timeout_check_and_reinit(&tout, 100);
+    while (!r)
+        r = timeout_check_and_reinit(&tout, 100);
+    CHECK_TRUE( (now + 300) <= time_now_ms() );
+
+    r = timeout_check_and_reinit(&tout, 100);
+    while (!r)
+        r = timeout_check_and_reinit(&tout, 100);
+    CHECK_TRUE( (now + 400) <= time_now_ms() );
 }
 
 TEST(timeout, sleep_test)
 {
-	timeout_t tout = timeout_init_cpy();
-	uint32_t now = time_now_ms();
-	timeout_sleep(&tout, 100);
-	timeout_sleep(&tout, 100); /* This one should not wait at all */
-	CHECK_TRUE( (now + 100*0.8) <= time_now_ms() );
+    timeout_t tout;
+    timeout_init(&tout);
+    uint32_t now = time_now_ms();
+    timeout_sleep(&tout, 100);
+    timeout_sleep(&tout, 100); /* This one should not wait at all */
+    CHECK_TRUE( (now + 100*0.8) <= time_now_ms() );
 }
 
 TEST(timeout, comparator_test)

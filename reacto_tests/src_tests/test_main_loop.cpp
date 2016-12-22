@@ -24,6 +24,13 @@ TEST_GROUP(MainLoop)
     }
 };
 
+
+TEST(MainLoop, init_deinit)
+{
+    main_loop_init(&cut, main_loop_strategy_fare);
+    main_loop_deinit(&cut);
+}
+
 TEST(MainLoop, queue_order)
 {
     queue_t queue0;
@@ -137,6 +144,9 @@ int slot_handler (queue_t * queue)
 {
     int d;
     queue_peek(queue, event_buf, &d);
+
+    /* You probably don't want to do this in production */
+    fast_ring_fifo_read_increment(&queue->fifo);
 
     mock().actualCall("slot_handler")
         .withPointerParameter("queue", queue)
