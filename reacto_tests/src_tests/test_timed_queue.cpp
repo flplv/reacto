@@ -7,16 +7,10 @@
 
 extern "C"
 {
+    #include <reacto/reusables/time.h>
     #include <reacto/main_loop.h>
-
-    /* Faking the time_now */
-    static uint32_t injected_now = 0;
-    static uint32_t time_now ()
-    {
-        return injected_now;
-    }
-
     #include <timed_queue.c>
+    extern reacto_time_t time_now_variable;
 }
 
 
@@ -26,7 +20,7 @@ TEST_GROUP(TimedQueue)
 
     void setup ()
     {
-        injected_now = 0;
+        time_now_variable = 0;
         timed_queue_init(&cut);
     }
 
@@ -69,7 +63,7 @@ TEST(TimedQueue, link_relink_update)
     timed_event_init(&ev1, 1000, handler);
     timed_event_init(&ev2, 500, handler);
 
-    CHECK_EQUAL(UINT32_MAX, sleep(&queue.itf));
+    CHECK_EQUAL((reacto_time_t)-1, sleep(&queue.itf));
 
     timed_queue_link(&queue, &ev1);
     timed_queue_link(&queue, &ev2);
@@ -150,12 +144,12 @@ TEST(TimedQueue, link_order_2)
     timed_event_t evs[5];
     main_loop_t loop;
 
-    injected_now = 0;
+    time_now_variable = 0;
 
-    CHECK_EQUAL(UINT32_MAX, sleep(&cut.itf));
+    CHECK_EQUAL((reacto_time_t)-1, sleep(&cut.itf));
 
 
-    for (uint32_t i = 0; i < 5; i++) {
+    for (reacto_time_t i = 0; i < 5; i++) {
         timed_event_init(&evs[i], (i+1) * 100, handler);
         timed_queue_link(&cut, &evs[i]);
     }
@@ -166,19 +160,19 @@ TEST(TimedQueue, link_order_2)
     loop.looping = false;
     main_loop_add_queue(&loop, timed_queue_interface(&cut), 0);
 
-    injected_now = 0;
+    time_now_variable = 0;
     main_loop_run(&loop);
     mock().checkExpectations();
 
     CHECK_EQUAL(100, sleep(&cut.itf));
 
-    injected_now = 99;
+    time_now_variable = 99;
     main_loop_run(&loop);
     mock().checkExpectations();
 
     CHECK_EQUAL(0, sleep(&cut.itf));
 
-    injected_now = 100;
+    time_now_variable = 100;
     mock().expectOneCall("handler")
             .withParameter("timestamp", 100);
     main_loop_run(&loop);
@@ -187,13 +181,13 @@ TEST(TimedQueue, link_order_2)
 
     CHECK_EQUAL(100, sleep(&cut.itf));
 
-    injected_now = 199;
+    time_now_variable = 199;
     main_loop_run(&loop);
     mock().checkExpectations();
 
     CHECK_EQUAL(0, sleep(&cut.itf));
 
-    injected_now = 299;
+    time_now_variable = 299;
     mock().expectOneCall("handler")
             .withParameter("timestamp", 200);
     main_loop_run(&loop);
@@ -202,7 +196,7 @@ TEST(TimedQueue, link_order_2)
 
     CHECK_EQUAL(0, sleep(&cut.itf));
 
-    injected_now = 300;
+    time_now_variable = 300;
     mock().expectOneCall("handler")
             .withParameter("timestamp", 300);
     main_loop_run(&loop);
@@ -211,7 +205,7 @@ TEST(TimedQueue, link_order_2)
 
     CHECK_EQUAL(100, sleep(&cut.itf));
 
-    injected_now = 500;
+    time_now_variable = 500;
     mock().expectOneCall("handler")
             .withParameter("timestamp", 400);
     mock().expectOneCall("handler")
@@ -220,7 +214,7 @@ TEST(TimedQueue, link_order_2)
     mock().checkExpectations();
     CHECK_EQUAL(0, cut.cnt_cache);
 
-    CHECK_EQUAL(UINT32_MAX, sleep(&cut.itf));
+    CHECK_EQUAL((reacto_time_t)-1, sleep(&cut.itf));
 
     timed_queue_deinit(&cut);
 }
@@ -231,7 +225,7 @@ TEST(TimedQueue, link_order)
     timed_event_t evs[100];
     main_loop_t loop;
 
-    for (uint32_t i = 0; i < 100; i++) {
+    for (reacto_time_t i = 0; i < 100; i++) {
         timed_event_init(&evs[i], 1000000 - (i * 100), handler);
         timed_queue_link(&cut, &evs[i]);
     }
@@ -249,7 +243,7 @@ TEST(TimedQueue, link_order)
     loop.looping = false;
     main_loop_add_queue(&loop, timed_queue_interface(&cut), 0);
 
-    injected_now = 10000000;
+    time_now_variable = 10000000;
     main_loop_run(&loop);
     timed_queue_deinit(&cut);
     mock().checkExpectations();

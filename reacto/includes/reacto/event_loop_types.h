@@ -27,6 +27,7 @@
 #include "reusables/fast_ring_fifo.h"
 #include "reusables/linked_list.h"
 #include "reusables/signal_slot.h"
+#include "reusables/time.h"
 
 struct main_loop_private;
 typedef struct main_loop_private main_loop_t;
@@ -68,7 +69,7 @@ struct queue_interface_private
     linked_list_t ll;
     bool (*emitter)(queue_i *);
     size_t (*count)(queue_i *);
-    uint32_t (*sleep)(queue_i *);
+    reacto_time_t (*sleep)(queue_i *);
     size_t (*hash)(queue_i *);
     void (*pop)(queue_i *);
 };

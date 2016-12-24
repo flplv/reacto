@@ -26,6 +26,7 @@
 
 #include <stddef.h>
 #include "reusables/signal_slot.h"
+#include "reusables/time.h"
 #include "event_loop_types.h"
 
 /* First queues get prioritized */
@@ -47,7 +48,7 @@ void main_loop_quit(main_loop_t * obj);
  * sleep duration.
  * You must wake-up yourself on the occurrence of event.
  */
-uint32_t main_loop_sleep_timeout (main_loop_t * obj);
+reacto_time_t main_loop_sleep_timeout (main_loop_t * obj);
 
 void main_loop_set_sleep_handler (main_loop_t * obj, void (*handler)(main_loop_t *));
 

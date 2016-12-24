@@ -57,20 +57,15 @@ static size_t count(queue_i * itf)
     return obj->cnt_cache;
 }
 
-static uint32_t sleep(queue_i * itf)
+static reacto_time_t sleep(queue_i * itf)
 {
     timed_queue_t * obj = container_of(itf, typeof(*obj), itf);
     if (obj->cnt_cache == 0)
-        return UINT32_MAX;
+        return (reacto_time_t)-1;
 
-    uint32_t now = time_now();
-
-    if (timeout_check_elapsed(now,
-                              obj->root->link_timestamp,
-                              obj->root->timeout - 1))
-        return 0;
-
-    return obj->root->timeout - (now - obj->root->link_timestamp) ;
+    return timeout_remaining(time_now(),
+                             obj->root->link_timestamp,
+                             obj->root->timeout);
 }
 
 static size_t hash(queue_i * obj)
@@ -117,7 +112,7 @@ void timed_queue_deinit(timed_queue_t * obj)
     obj->cnt_cache = 0;
 }
 
-void timed_event_init(timed_event_t * ev, uint32_t timeout, timed_event_handler_t handler)
+void timed_event_init(timed_event_t * ev, reacto_time_t timeout, timed_event_handler_t handler)
 {
     debug_ptr(ev);
     debug_ptr(handler);
@@ -127,7 +122,7 @@ void timed_event_init(timed_event_t * ev, uint32_t timeout, timed_event_handler_
     linked_list_init(ev, ll);
 }
 
-static bool comp (uint32_t seed, timed_event_t * ev)
+static bool comp (reacto_time_t seed, timed_event_t * ev)
 {
     return (ev->link_timestamp + ev->timeout) > seed ? true : false;
 }
@@ -176,7 +171,7 @@ void timed_queue_link(timed_queue_t * obj, timed_event_t * ev)
 }
 
 
-void timed_queue_link_update_timeout(timed_queue_t * obj, timed_event_t * ev, uint32_t timeout)
+void timed_queue_link_update_timeout(timed_queue_t * obj, timed_event_t * ev, reacto_time_t timeout)
 {
     debug_ptr(obj);
     debug_ptr(ev);

@@ -24,7 +24,7 @@ static inline void ab_timing_copy(ab_timing_t * to, ab_timing_t * from)
     timeout_copy(&to->t, &from->t);
 }
 
-static inline bool ab_timing_check_criteria_failed(ab_timing_t * obj, uint32_t time_criteria)
+static inline bool ab_timing_check_criteria_failed(ab_timing_t * obj, reacto_time_t time_criteria)
 {
     debug_ptr(obj, false);
     return timeout_check(&obj->t, time_criteria);

@@ -35,24 +35,33 @@ void timeout_copy(timeout_t * to, timeout_t * from)
 	*to = *from;
 }
 
-bool timeout_check_elapsed(uint32_t now, uint32_t before, uint32_t desired_wait)
+bool timeout_check_elapsed(reacto_time_t now, reacto_time_t before, reacto_time_t desired_wait)
 {
     return (now - before) >= desired_wait;
 }
 
-bool timeout_check_reached(uint32_t timestamp, uint32_t now)
+reacto_time_t timeout_remaining(reacto_time_t now, reacto_time_t before, reacto_time_t desired_wait)
 {
-    const uint32_t stupid_big_number = 0x80000000;
-    uint32_t before = timestamp - stupid_big_number;
+    if (timeout_check_elapsed(now, before, desired_wait - 1))
+        return 0;
+
+    return desired_wait - (now - before);
+}
+
+bool timeout_check_reached(reacto_time_t timestamp, reacto_time_t now)
+{
+    const reacto_time_t max = (reacto_time_t)-1;
+    const reacto_time_t stupid_big_number = (max/2) + 1;
+    reacto_time_t before = timestamp - stupid_big_number;
     return timeout_check_elapsed(now, before, stupid_big_number);
 }
 
-bool timeout_check(timeout_t * cobj, uint32_t tout)
+bool timeout_check(timeout_t * cobj, reacto_time_t tout)
 {
     return timeout_check_elapsed(time_now(), *cobj, tout);
 }
 
-bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period)
+bool timeout_check_and_reinit(timeout_t * cobj, reacto_time_t period)
 {
     if (!timeout_check_elapsed(time_now(), *cobj, period))
     {
@@ -63,12 +72,4 @@ bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period)
     	*cobj += period;
     	return true;
     }
-}
-
-void timeout_sleep(timeout_t *cobj, uint32_t period)
-{
-	if (timeout_check(cobj, period))
-		return;
-
-	time_sleep((*cobj + period) - time_now());
 }

@@ -38,7 +38,7 @@ size_t queue_interface_count(queue_i * itf)
     return itf->count(itf);
 }
 
-uint32_t queue_interface_sleep_tout(queue_i * itf)
+reacto_time_t queue_interface_sleep_tout(queue_i * itf)
 {
     debug_ptr(itf, false);
     debug_ptr(itf->count, false);

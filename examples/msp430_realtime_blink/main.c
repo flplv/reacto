@@ -50,7 +50,7 @@ static main_loop_t loop;
 
 static int button_stream_handler (queue_t * queue);
 static int led_stream_handler (queue_t * queue);
-void time_sleep (uint32_t delay);
+void time_sleep (reacto_time_t delay);
 
 static void button_stream_init()
 {

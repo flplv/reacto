@@ -37,7 +37,7 @@
 struct _watchdog_private
 {
     const char * name;
-    uint32_t period;
+    reacto_time_t period;
     timeout_t timeout;
     linked_list_t list_head;
 };
@@ -48,7 +48,7 @@ typedef struct _watchdog_private watchdog_t;
  * period: the amount of time to the watchdog expire
  * name: the name of the watchdog, must be a string literal or global.
  */
-int watchdog_init(watchdog_t *, uint32_t period, const char * name);
+int watchdog_init(watchdog_t *, reacto_time_t period, const char * name);
 void watchdog_deinit(watchdog_t *);
 
 /* ISR safe */

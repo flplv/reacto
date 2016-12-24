@@ -69,7 +69,7 @@ static bool is_expired (watchdog_t * obj)
     return timeout_check(&obj->timeout, obj->period);
 }
 
-int watchdog_init(watchdog_t * obj, uint32_t period, const char * name)
+int watchdog_init(watchdog_t * obj, reacto_time_t period, const char * name)
 {
     debug_ptr(obj, -1);
 

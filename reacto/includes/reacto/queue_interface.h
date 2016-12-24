@@ -25,12 +25,13 @@
 #define REACTO_QUEUE_INTERFACE_H_
 
 #include <stdbool.h>
+#include "reusables/time.h"
 #include "event_loop_types.h"
 
 bool queue_interface_emit(queue_i * itf);
 size_t queue_interface_count(queue_i * itf);
 void queue_interface_pop(queue_i * itf);
 size_t queue_interface_hash(queue_i * itf);
-uint32_t queue_interface_sleep_tout(queue_i * itf);
+reacto_time_t queue_interface_sleep_tout(queue_i * itf);
 
 #endif /* REACTO_QUEUE_INTERFACE_H_ */

@@ -27,6 +27,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "reusables/linked_list.h"
+#include "reusables/time.h"
 #include "event_loop_types.h"
 
 /*
@@ -38,12 +39,12 @@ typedef void (*timed_event_handler_t)(timed_event_t *);
 
 struct timed_event_private
 {
-    uint32_t link_timestamp;
-    uint32_t timeout;
+    reacto_time_t link_timestamp;
+    reacto_time_t timeout;
     timed_event_handler_t handler;
     linked_list_t ll;
 };
-void timed_event_init(timed_event_t * ev, uint32_t timeout, timed_event_handler_t handler);
+void timed_event_init(timed_event_t * ev, reacto_time_t timeout, timed_event_handler_t handler);
 
 void timed_queue_init(timed_queue_t * obj);
 void timed_queue_deinit(timed_queue_t * obj);
@@ -59,7 +60,7 @@ void timed_queue_link(timed_queue_t * obj, timed_event_t * ev);
 /*
  * Same as last, but now you can change event timeout.
  */
-void timed_queue_link_update_timeout(timed_queue_t * obj, timed_event_t * ev, uint32_t timeout);
+void timed_queue_link_update_timeout(timed_queue_t * obj, timed_event_t * ev, reacto_time_t timeout);
 /*
  * Unlinking an event prevent the handler from being called.
  * When a handler is called, the event is automatically unlinked.

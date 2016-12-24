@@ -26,7 +26,7 @@ static void board_init(void)
     P1IFG &= ~BUTTON; // P1.3 IFG cleared
 }
 
-volatile static uint32_t time_ms_cnt;
+volatile static reacto_time_t time_ms_cnt;
 
 interrupt(TIMER0_A0_VECTOR) timer_isr (void)
 {
@@ -35,13 +35,13 @@ interrupt(TIMER0_A0_VECTOR) timer_isr (void)
 
 /* Examples uses the time.h module, it is necessary to define
    the platform dependent functions */
-uint32_t time_now ()
+reacto_time_t time_now ()
 {
     return time_ms_cnt;
 }
 
-void time_sleep (uint32_t delay)
+void time_sleep (reacto_time_t delay)
 {
-    volatile const uint32_t now = time_ms_cnt;
+    volatile const reacto_time_t now = time_ms_cnt;
     while ((time_ms_cnt - now) < delay);
 }

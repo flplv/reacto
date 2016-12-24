@@ -42,10 +42,10 @@ static size_t count(queue_i * itf)
     return fast_ring_fifo_count(&obj->fifo);
 }
 
-static uint32_t sleep(queue_i * itf)
+static reacto_time_t sleep(queue_i * itf)
 {
     queue_t * obj = container_of(itf, typeof(*obj), itf);
-    return fast_ring_fifo_count(&obj->fifo) == 0 ? UINT32_MAX : 0;
+    return fast_ring_fifo_count(&obj->fifo) == 0 ? (reacto_time_t)-1 : 0;
 }
 
 static size_t hash(queue_i * itf)

@@ -26,29 +26,33 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "time.h"
 
-typedef uint32_t timeout_t;
+typedef reacto_time_t timeout_t;
 
 void timeout_init(timeout_t *);
 void timeout_copy(timeout_t * to, timeout_t * from);
 
 /* Return true if tout has elapsed */
-bool timeout_check(timeout_t *, uint32_t tout);
+bool timeout_check(timeout_t *, reacto_time_t tout);
 
 /* Return true if tout has elapsed and reinit cobj, so it can be used after to create periodically execution */
-bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period);
+bool timeout_check_and_reinit(timeout_t * cobj, reacto_time_t period);
 
 /* Sleep until the next timeout (use only to spend time while waiting for a timeout,
    do not count on time precision of this function) */
-void timeout_sleep(timeout_t *cobj, uint32_t period);
+void timeout_sleep(timeout_t *cobj, reacto_time_t period);
 
 /* This is a elapsed time checker that protects against wrap around.
    Now must always be (physically) bigger than before.*/
-bool timeout_check_elapsed(uint32_t now, uint32_t before, uint32_t desired_wait);
+bool timeout_check_elapsed(reacto_time_t now, reacto_time_t before, reacto_time_t desired_wait);
+
+/* Return the remaining time to timeout expiration.*/
+reacto_time_t timeout_remaining(reacto_time_t now, reacto_time_t before, reacto_time_t desired_wait);
 
 /* This is a reached time checker that protects against wrap around.
    It checks if now has reached timestamp. Timestamp must always be bigger than
    now when first stored. */
-bool timeout_check_reached(uint32_t timestamp, uint32_t now);
+bool timeout_check_reached(reacto_time_t timestamp, reacto_time_t now);
 
 #endif /* REACTO_REUSABLES_TIMEOUT_H_ */

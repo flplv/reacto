@@ -135,15 +135,15 @@ void main_loop_quit(main_loop_t * obj)
     obj->looping = false;
 }
 
-uint32_t main_loop_sleep_timeout (main_loop_t * obj)
+reacto_time_t main_loop_sleep_timeout (main_loop_t * obj)
 {
     debug_ptr(obj, false);
     queue_i * queue = obj->root;
-    uint32_t tout = UINT32_MAX;
+    reacto_time_t tout = (reacto_time_t)-1;
 
     while (queue)
     {
-        uint32_t n = queue_interface_sleep_tout(queue);
+        reacto_time_t n = queue_interface_sleep_tout(queue);
         if (n < tout)
             tout = n;
 

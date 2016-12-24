@@ -26,10 +26,25 @@
 
 #include <stdint.h>
 
-/*
- * Get current platform time in milliseconds
+/* reacto_time_t is the type used to measure time.
+ * - it must be unsigned
+ * - it must be big enough to store the amount of time required
+ *    by the application considering the platform provided time
+ *    unit.
+ * REACTO_TIME_TYPE macro can be used to change the time unit in
+ *  built time. Be aware you can cause ABI mismatch if you build
+ *  the react.o library with a different setting than the one
+ *  used in the application.
  */
-uint32_t time_now(void);
-void time_sleep (uint32_t ms);
+#ifndef REACTO_TIME_TYPE
+typedef unsigned long reacto_time_t;
+#else
+typedef REACTO_TIME_TYPE reacto_time_t;
+#endif
+
+/*
+ * Get current platform time in platform time unit
+ */
+reacto_time_t time_now(void);
 
 #endif /* REACTO_REUSABLES_TIME_H_ */

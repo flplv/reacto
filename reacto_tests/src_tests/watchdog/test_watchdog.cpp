@@ -7,6 +7,8 @@ extern "C"
 {
     #include <reacto/reusables/time.h>
     #include <watchdog/watchdog.c>
+
+    extern reacto_time_t time_now_variable;
 }
 
 TEST_GROUP(Watchdog)
@@ -39,7 +41,7 @@ TEST(Watchdog, repeted_enter)
     watchdog_enter(&cut);
     CHECK_EQUAL(t, cut.timeout);
 
-    time_sleep(1);
+    time_now_variable ++;
 
     watchdog_kick(&cut);
     CHECK_FALSE(t == cut.timeout);
@@ -150,25 +152,24 @@ TEST(Watchdog, expire)
     watchdog_enter(&cut2);
     timeout_init(&tout); /* Tout init, this is the base time */
 
-    timeout_sleep(&tout, 2); /* Wait 2ms after tout init */
+    time_now_variable += 2; /* Wait 2ms after tout init */
     watchdog_periodic(); /* 1st kick */
 
-    timeout_sleep(&tout, 4); /* Wait 4ms after tout init */
+    time_now_variable += 2; /* Wait 4ms after tout init */
     watchdog_periodic(); /* 2nd kick */
 
-    timeout_sleep(&tout, 6); /* Wait 6ms after tout init */
+    time_now_variable += 2; /* Wait 6ms after tout init */
     watchdog_periodic(); /* 3rd kick */
 
-    timeout_sleep(&tout, 8); /* Wait 8ms after tout init */
+    time_now_variable += 2; /* Wait 8ms after tout init */
     watchdog_periodic(); /* 4rd kick */
 
-    timeout_sleep(&tout, 11); /* Wait 11ms after tout init */
+    time_now_variable += 3; /* Wait 11ms after tout init */
     watchdog_periodic(); /* No kick expected here */
 
     watchdog_deinit(&cut);
     watchdog_deinit(&cut2);
 }
-
 
 TEST(Watchdog, enter_exit)
 {
@@ -187,21 +188,21 @@ TEST(Watchdog, enter_exit)
     watchdog_enter(&cut2);
     timeout_init(&tout); /* Tout init, this is the base time */
 
-    timeout_sleep(&tout, 2); /* Wait 2ms after tout init */
+    time_now_variable += 2; /* Wait 2ms after tout init */
     watchdog_periodic(); /* 1st kick */
 
-    timeout_sleep(&tout, 4); /* Wait 4ms after tout init */
+    time_now_variable += 2; /* Wait 4ms after tout init */
     watchdog_periodic(); /* 2nd kick */
 
-    timeout_sleep(&tout, 6); /* Wait 6ms after tout init */
+    time_now_variable += 2; /* Wait 6ms after tout init */
     watchdog_periodic(); /* 3rd kick */
 
-    timeout_sleep(&tout, 8); /* Wait 8ms after tout init */
+    time_now_variable += 2; /* Wait 8ms after tout init */
     watchdog_periodic(); /* 4th kick */
 
     watchdog_exit(&cut); /* Cut exited before expiring */
 
-    timeout_sleep(&tout, 11); /* Wait 11ms after tout init */
+    time_now_variable += 3; /* Wait 11ms after tout init */
     watchdog_periodic(); /* 5th kick */
 
     watchdog_deinit(&cut);

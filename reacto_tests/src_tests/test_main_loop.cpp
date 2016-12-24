@@ -95,7 +95,7 @@ TEST(MainLoop, sleep)
     mock().expectOneCall("handler_sleep")
             .withParameter("loop", &cut);
 
-    CHECK_EQUAL(UINT32_MAX, main_loop_sleep_timeout(&cut));
+    CHECK_EQUAL((reacto_time_t)-1, main_loop_sleep_timeout(&cut));
     main_loop_run(&cut);
     mock().checkExpectations();
 
