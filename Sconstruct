@@ -103,8 +103,8 @@ platforms = EnablePlatformsFor('reacto_tests', available_platforms)
 SConscript('reacto_tests/Sconscript', exports ='platforms')
 
 # Build examples
-platforms = EnablePlatformsFor('host_factory', available_platforms)
-SConscript('examples/host_factory/Sconscript', exports ='platforms')
+platforms = EnablePlatformsFor('rot13_factory', available_platforms)
+SConscript('examples/rot13_factory/Sconscript', exports ='platforms')
 
 # Build examples
 platforms = EnablePlatformsFor('msp430_blink', available_platforms)

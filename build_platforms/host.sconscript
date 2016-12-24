@@ -7,13 +7,13 @@ class HostPlatform(PlatformBaseClass):
         return 'host'
 
     def TargetNameList(self):
-        return [self.Default(str(self._build_binaries['host_factory'])),
+        return [self.Default(str(self._build_binaries['rot13_factory'])),
                 ]
 
     def BuildList(self):
         return [
             'reacto',
-            'host_factory'
+            'rot13_factory'
         ]
 
     def ProfileEnabled(self):

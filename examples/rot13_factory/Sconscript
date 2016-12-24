@@ -9,6 +9,6 @@ for plat in platforms:
     exe = env.SConscript('./src/Sconscript.variant', exports = ['name','env'], variant_dir = build_dir, src = 'src', duplicate=0)
 
     # Add build results symbols to the platform
-    plat.BuildListAddDirectory('host_factory', Dir(build_dir))
-    plat.BuildListAddBinary('host_factory', exe['exe'])
-    # plat['host_factory_map_file'] = exe['map']
+    plat.BuildListAddDirectory('rot13_factory', Dir(build_dir))
+    plat.BuildListAddBinary('rot13_factory', exe['exe'])
+    # plat['rot13_factory_map_file'] = exe['map']

@@ -6,10 +6,10 @@ Import('env')
 Import('name')
 
 env = env.Clone()
-map_file = Dir('../').path + '/host_factory_' + name + '.map'
+map_file = Dir('../').path + '/rot13_factory_' + name + '.map'
 env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
 
 sources = env.FindFiles('../', '*.c')
-exes = env.Program(['../host_factory_' + name, map_file], sources)
+exes = env.Program(['../rot13_factory_' + name, map_file], sources)
 exe = {'exe': exes[0], 'map': exes[1]}
 Return('exe')
