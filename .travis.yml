@@ -16,6 +16,7 @@ script:
   - scons -Q examples/msp430_blink/build/msp430_blink_msp430.elf
   - scons -Q examples/msp430_timed_blink/build/msp430_timed_blink_msp430.elf
   - scons -Q examples/msp430_realtime_blink/build/msp430_realtime_blink_msp430.elf
+  - scons -Q examples/host_factory/build/host_factory_host
 
 after_success:
   - scons -Q .coverage.info

@@ -88,14 +88,14 @@ TEST(MainLoop, sleep)
     queue_push(&queue, b, 10);
     CHECK_EQUAL(10, b[0]); /* This check is to deal with warning variable unused */
 
-    CHECK_FALSE(main_loop_ready_to_sleep(&cut));
+    CHECK_EQUAL(0, main_loop_sleep_timeout(&cut));
     main_loop_run(&cut);
     mock().checkExpectations();
 
     mock().expectOneCall("handler_sleep")
             .withParameter("loop", &cut);
 
-    CHECK_TRUE(main_loop_ready_to_sleep(&cut));
+    CHECK_EQUAL(UINT32_MAX, main_loop_sleep_timeout(&cut));
     main_loop_run(&cut);
     mock().checkExpectations();
 

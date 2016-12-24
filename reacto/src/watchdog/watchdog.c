@@ -66,15 +66,15 @@ static bool is_active (watchdog_t * obj)
 
 static bool is_expired (watchdog_t * obj)
 {
-    return timeout_check(&obj->timeout, obj->period_ms);
+    return timeout_check(&obj->timeout, obj->period);
 }
 
-int watchdog_init(watchdog_t * obj, uint32_t period_ms, const char * name)
+int watchdog_init(watchdog_t * obj, uint32_t period, const char * name)
 {
     debug_ptr(obj, -1);
 
     obj->name = name;
-    obj->period_ms = period_ms;
+    obj->period = period;
     obj->timeout = (timeout_t) 0;
     linked_list_init(obj, list_head);
 

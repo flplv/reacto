@@ -68,6 +68,7 @@ struct queue_interface_private
     linked_list_t ll;
     bool (*emitter)(queue_i *);
     size_t (*count)(queue_i *);
+    uint32_t (*sleep)(queue_i *);
     size_t (*hash)(queue_i *);
     void (*pop)(queue_i *);
 };

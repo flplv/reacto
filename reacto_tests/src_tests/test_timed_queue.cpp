@@ -9,9 +9,9 @@ extern "C"
 {
     #include <reacto/main_loop.h>
 
-    /* Faking the time_now_ms */
+    /* Faking the time_now */
     static uint32_t injected_now = 0;
-    static uint32_t time_now_ms ()
+    static uint32_t time_now ()
     {
         return injected_now;
     }

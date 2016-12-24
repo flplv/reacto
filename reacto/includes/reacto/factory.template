@@ -1,0 +1,80 @@
+#include <reacto/factory.h>
+
+struct reacto_factory_private reacto_factory_private_data = { 
+        .has_loop = false,
+        .has_tq = false,
+        .total_queues = 0
+};
+
+static inline int reacto_factory (const main_loop_strategy strategy,
+                                  const struct reacto_timed_queue_context * tq_ctx,
+                                  const struct reacto_queues_context *q_ctx)
+{
+    debug_ptr(strategy, -100);
+
+    struct reacto_factory_private * const ctx = &reacto_factory_private_data;
+    const int n_of_queues = REACTO_N_OF_QUEUES;
+    const int n_of_handlers = REACTO_MAX_N_OF_HANDLERS_PER_QUEUE;
+    int r;
+    int q, h;
+    main_loop_t * const loop = &ctx->loop;
+
+    main_loop_init(loop, strategy);
+
+    ctx->has_loop = true;
+
+    ctx->total_queues = 0;
+
+    if (q_ctx)
+    {
+        for (q = 0; q < n_of_queues; q++)
+        {
+            bool should_connect_queue = false;
+            queue_t * const queue = &ctx->queues[q];
+            const size_t queue_size = q_ctx->queue_buffer_sizes[q];
+            const int queue_pos = q;
+
+            r = queue_init(queue, queue_size);
+            ctx->total_queues ++;
+
+            if (r < 0)
+                return -1;
+
+            for (h = 0; h < n_of_handlers; h++)
+            {
+                slot_queue_t * const slot = &ctx->slots[q][h];
+                slot_queue_handler_t const handler = q_ctx->queue_handlers[q][h];
+
+                if (!handler)
+                    continue;
+
+                should_connect_queue = true;
+
+                slot_queue_init(slot, handler);
+
+                slot_queue_connect(slot, queue_signal(queue));
+            }
+
+            if (should_connect_queue)
+                main_loop_add_queue(loop,
+                                    queue_interface(queue),
+                                    queue_pos);
+        }
+    }
+
+    ctx->has_tq = false;
+    if (tq_ctx)
+    {
+        timed_queue_t * const timed_queue = &ctx->timed_queue;
+        int priority = tq_ctx->high_priority ? 0 : (int)ctx->total_queues;
+
+        timed_queue_init(timed_queue);
+        ctx->has_tq = true;
+
+        main_loop_add_queue(loop,
+                            timed_queue_interface(timed_queue),
+                            priority);
+    }
+
+    return 0;
+}

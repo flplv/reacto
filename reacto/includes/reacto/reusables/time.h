@@ -29,7 +29,7 @@
 /*
  * Get current platform time in milliseconds
  */
-uint32_t time_now_ms(void);
+uint32_t time_now(void);
 void time_sleep (uint32_t ms);
 
 #endif /* REACTO_REUSABLES_TIME_H_ */

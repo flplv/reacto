@@ -32,15 +32,15 @@ typedef uint32_t timeout_t;
 void timeout_init(timeout_t *);
 void timeout_copy(timeout_t * to, timeout_t * from);
 
-/* Return true if tout_ms has elapsed */
-bool timeout_check(timeout_t *, uint32_t tout_ms);
+/* Return true if tout has elapsed */
+bool timeout_check(timeout_t *, uint32_t tout);
 
-/* Return true if tout_ms has elapsed and reinit cobj, so it can be used after to create periodically execution */
-bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period_ms);
+/* Return true if tout has elapsed and reinit cobj, so it can be used after to create periodically execution */
+bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period);
 
 /* Sleep until the next timeout (use only to spend time while waiting for a timeout,
    do not count on time precision of this function) */
-void timeout_sleep(timeout_t *cobj, uint32_t period_ms);
+void timeout_sleep(timeout_t *cobj, uint32_t period);
 
 /* This is a elapsed time checker that protects against wrap around.
    Now must always be (physically) bigger than before.*/

@@ -42,6 +42,12 @@ static size_t count(queue_i * itf)
     return fast_ring_fifo_count(&obj->fifo);
 }
 
+static uint32_t sleep(queue_i * itf)
+{
+    queue_t * obj = container_of(itf, typeof(*obj), itf);
+    return fast_ring_fifo_count(&obj->fifo) == 0 ? UINT32_MAX : 0;
+}
+
 static size_t hash(queue_i * itf)
 {
     queue_t * obj = container_of(itf, typeof(*obj), itf);
@@ -62,6 +68,7 @@ int queue_init(queue_t * obj, size_t number_of_slots)
     obj->itf.loop = NULL;
     obj->itf.emitter = emitter;
     obj->itf.count = count;
+    obj->itf.sleep = sleep;
     obj->itf.hash = hash;
     obj->itf.pop = pop;
     linked_list_init(&obj->itf, ll);

@@ -43,7 +43,7 @@ static bool emitter(queue_i * itf)
     timed_queue_t * obj = container_of(itf, typeof(*obj), itf);
     timed_event_t * ev = obj->root;
 
-    if (!timeout_check_elapsed(time_now_ms(), ev->link_timestamp, ev->timeout))
+    if (!timeout_check_elapsed(time_now(), ev->link_timestamp, ev->timeout))
         return true; /* Skip this queue */
 
     unlink(obj, ev);
@@ -55,6 +55,22 @@ static size_t count(queue_i * itf)
 {
     timed_queue_t * obj = container_of(itf, typeof(*obj), itf);
     return obj->cnt_cache;
+}
+
+static uint32_t sleep(queue_i * itf)
+{
+    timed_queue_t * obj = container_of(itf, typeof(*obj), itf);
+    if (obj->cnt_cache == 0)
+        return UINT32_MAX;
+
+    uint32_t now = time_now();
+
+    if (timeout_check_elapsed(now,
+                              obj->root->link_timestamp,
+                              obj->root->timeout - 1))
+        return 0;
+
+    return obj->root->timeout - (now - obj->root->link_timestamp) ;
 }
 
 static size_t hash(queue_i * obj)
@@ -77,6 +93,7 @@ void timed_queue_init(timed_queue_t * obj)
     obj->itf.pop = pop;
     obj->itf.count = count;
     obj->itf.hash = hash;
+    obj->itf.sleep = sleep;
     linked_list_init(&obj->itf, ll);
     obj->root = NULL;
     obj->cnt_cache = 0;
@@ -133,7 +150,7 @@ void timed_queue_link(timed_queue_t * obj, timed_event_t * ev)
 
     timed_queue_unlink(obj, ev);
 
-    ev->link_timestamp = time_now_ms();
+    ev->link_timestamp = time_now();
 
 
     if (!obj->root)

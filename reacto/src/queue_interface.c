@@ -38,6 +38,13 @@ size_t queue_interface_count(queue_i * itf)
     return itf->count(itf);
 }
 
+uint32_t queue_interface_sleep_tout(queue_i * itf)
+{
+    debug_ptr(itf, false);
+    debug_ptr(itf->count, false);
+    return itf->sleep(itf);
+}
+
 size_t queue_interface_hash(queue_i * itf)
 {
     debug_ptr(itf, false);

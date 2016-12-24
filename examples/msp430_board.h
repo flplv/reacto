@@ -35,7 +35,7 @@ interrupt(TIMER0_A0_VECTOR) timer_isr (void)
 
 /* Examples uses the time.h module, it is necessary to define
    the platform dependent functions */
-uint32_t time_now_ms ()
+uint32_t time_now ()
 {
     return time_ms_cnt;
 }

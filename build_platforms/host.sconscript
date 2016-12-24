@@ -1,0 +1,44 @@
+#!python
+Import ("default_env")
+from PlatformBaseClass import PlatformBaseClass
+
+class HostPlatform(PlatformBaseClass):
+    def Name(self):
+        return 'host'
+
+    def TargetNameList(self):
+        return [self.Default(str(self._build_binaries['host_factory'])),
+                ]
+
+    def BuildList(self):
+        return [
+            'reacto',
+            'host_factory'
+        ]
+
+    def ProfileEnabled(self):
+        return False
+
+    def CppUTestExtensionsEnabled (self):
+        return False
+
+    def PostBuildTargets(self):
+        pass
+
+    def _SetupEnv(self):
+        self._env = default_env.Clone (
+                # We want lot's of warning on host
+                CXXFLAGS = ['-std=gnu++0x', '-g3', '-O0', '-fno-inline', '-pthread',
+                    '-Wno-c++11-long-long', '-Wno-long-long', '-Wall', '-Wextra', '-Wshadow', '-Wswitch-default', '-Wswitch-enum',
+                    '-Wconversion', '-Wsign-conversion', '-Woverloaded-virtual', '-Wno-disabled-macro-expansion',
+                    '-Wno-padded', '-Wno-reserved-id-macro', '-Wno-keyword-macro', '-Wno-global-constructors',
+                    '-Wno-exit-time-destructors', '-Wno-weak-vtables', '-Wno-old-style-cast'],
+                CFLAGS  = ['-std=gnu11', '-g3', '-O0', '-fno-inline',
+                    '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
+                CPPDEFINES = ['REACTO_ENABLE_DEBUG'],
+                LIBS = ['pthread'],
+                CPPINCLUDES = []
+        )
+
+instance = HostPlatform()
+Return('instance')

@@ -27,7 +27,7 @@
 
 void timeout_init(timeout_t * cobj)
 {
-    *cobj = time_now_ms();
+    *cobj = time_now();
 }
 
 void timeout_copy(timeout_t * to, timeout_t * from)
@@ -47,28 +47,28 @@ bool timeout_check_reached(uint32_t timestamp, uint32_t now)
     return timeout_check_elapsed(now, before, stupid_big_number);
 }
 
-bool timeout_check(timeout_t * cobj, uint32_t tout_ms)
+bool timeout_check(timeout_t * cobj, uint32_t tout)
 {
-    return timeout_check_elapsed(time_now_ms(), *cobj, tout_ms);
+    return timeout_check_elapsed(time_now(), *cobj, tout);
 }
 
-bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period_ms)
+bool timeout_check_and_reinit(timeout_t * cobj, uint32_t period)
 {
-    if (!timeout_check_elapsed(time_now_ms(), *cobj, period_ms))
+    if (!timeout_check_elapsed(time_now(), *cobj, period))
     {
     	return false;
     }
     else
     {
-    	*cobj += period_ms;
+    	*cobj += period;
     	return true;
     }
 }
 
-void timeout_sleep(timeout_t *cobj, uint32_t period_ms)
+void timeout_sleep(timeout_t *cobj, uint32_t period)
 {
-	if (timeout_check(cobj, period_ms))
+	if (timeout_check(cobj, period))
 		return;
 
-	time_sleep((*cobj + period_ms) - time_now_ms());
+	time_sleep((*cobj + period) - time_now());
 }

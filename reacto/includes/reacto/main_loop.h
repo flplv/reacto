@@ -42,7 +42,12 @@ int main_loop_remove_queue(main_loop_t * obj, queue_i * queue);
 void main_loop_run(main_loop_t * obj);
 void main_loop_quit(main_loop_t * obj);
 
-bool main_loop_ready_to_sleep (main_loop_t * obj);
+/*
+ * Return a milliseconds value with the maximum allowed
+ * sleep duration.
+ * You must wake-up yourself on the occurrence of event.
+ */
+uint32_t main_loop_sleep_timeout (main_loop_t * obj);
 
 void main_loop_set_sleep_handler (main_loop_t * obj, void (*handler)(main_loop_t *));
 

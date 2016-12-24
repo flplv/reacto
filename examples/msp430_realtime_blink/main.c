@@ -115,7 +115,7 @@ static int button_stream_handler (queue_t * queue)
     queue_peek (&button_queue, button_buffer, &ev_in);
 
     /* Lets simulate random latency */
-    time_sleep(time_now_ms() % 10);
+    time_sleep(time_now() % 10);
 
     if (ev_in.b == button_0)
     {

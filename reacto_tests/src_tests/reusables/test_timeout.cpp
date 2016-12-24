@@ -30,13 +30,13 @@ TEST(timeout, test)
     timeout_t tout;
     timeout_init(&tout);
 
-    uint32_t now = time_now_ms();
+    uint32_t now = time_now();
 
     bool r = timeout_check(&tout, 100);
     while (!r)
         r = timeout_check(&tout, 100);
 
-    CHECK_TRUE( (now + 100) <= time_now_ms() );
+    CHECK_TRUE( (now + 100) <= time_now() );
 }
 
 TEST(timeout, periodically_test)
@@ -44,39 +44,39 @@ TEST(timeout, periodically_test)
     timeout_t tout;
     timeout_init(&tout);
 
-    uint32_t now = time_now_ms();
+    uint32_t now = time_now();
 
     bool r = timeout_check_and_reinit(&tout, 100);
     while (!r)
         r = timeout_check_and_reinit(&tout, 100);
 
-    CHECK_TRUE( (now + 100) <= time_now_ms() );
+    CHECK_TRUE( (now + 100) <= time_now() );
 
     r = timeout_check_and_reinit(&tout, 100);
     while (!r)
         r = timeout_check_and_reinit(&tout, 100);
 
-    CHECK_TRUE( (now + 200) <= time_now_ms() );
+    CHECK_TRUE( (now + 200) <= time_now() );
 
     r = timeout_check_and_reinit(&tout, 100);
     while (!r)
         r = timeout_check_and_reinit(&tout, 100);
-    CHECK_TRUE( (now + 300) <= time_now_ms() );
+    CHECK_TRUE( (now + 300) <= time_now() );
 
     r = timeout_check_and_reinit(&tout, 100);
     while (!r)
         r = timeout_check_and_reinit(&tout, 100);
-    CHECK_TRUE( (now + 400) <= time_now_ms() );
+    CHECK_TRUE( (now + 400) <= time_now() );
 }
 
 TEST(timeout, sleep_test)
 {
     timeout_t tout;
     timeout_init(&tout);
-    uint32_t now = time_now_ms();
+    uint32_t now = time_now();
     timeout_sleep(&tout, 100);
     timeout_sleep(&tout, 100); /* This one should not wait at all */
-    CHECK_TRUE( (now + 100*0.8) <= time_now_ms() );
+    CHECK_TRUE( (now + 100*0.8) <= time_now() );
 }
 
 TEST(timeout, comparator_test)

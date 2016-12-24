@@ -135,20 +135,22 @@ void main_loop_quit(main_loop_t * obj)
     obj->looping = false;
 }
 
-bool main_loop_ready_to_sleep (main_loop_t * obj)
+uint32_t main_loop_sleep_timeout (main_loop_t * obj)
 {
     debug_ptr(obj, false);
     queue_i * queue = obj->root;
+    uint32_t tout = UINT32_MAX;
 
     while (queue)
     {
-        if (queue_interface_count(queue) != 0)
-            return false;
+        uint32_t n = queue_interface_sleep_tout(queue);
+        if (n < tout)
+            tout = n;
 
         queue = linked_list_next(queue, ll);
     }
 
-    return true;
+    return tout;
 }
 
 static bool priority_queue_and_fare (queue_i * queue, bool priority_enabled)
