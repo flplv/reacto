@@ -6,13 +6,17 @@
 Portable framework for developing reactive embedded systems in C
 - Project web page: [http://felipe-lavratti.github.io/reacto/](http://felipe-lavratti.github.io/reacto/)
 
+# Change Log
+[https://github.com/felipe-lavratti/reacto/releases](https://github.com/felipe-lavratti/reacto/releases)
+
 # Table of Content
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [react.o](#reacto)
+- [Change Log](#change-log)
 - [Table of Content](#table-of-content)
-- [How to Build](#how-to-build)
 - [Project Structure](#project-structure)
+- [How to Build](#how-to-build)
 - [The build system](#the-build-system)
 	- [Cross Building](#cross-building)
 		- [Method 1: Copying code to the embedded project](#method-1-copying-code-to-the-embedded-project)
@@ -20,48 +24,6 @@ Portable framework for developing reactive embedded systems in C
 - [Continuous Integration and Coverage Report Page](#continuous-integration-and-coverage-report-page)
 
 <!-- /TOC -->
-
-# How to Build
-
-**1. Install Dependencies**
-
-- GCC (The compiler)
-- scons (The build generator used)
-- wget (To download dependency source code)
-- lcov (To generate code coverage reports)
-
-In ubuntu:
-```sh
-    sudo apt-get install build-essential scons wget lcov
-```
-
-**2. Build and run Tests**
-
-Inside the project root, this line will build the test executable `reacto_host_tests` in the folder `./reacto_tests/build`:
-
-```sh
-    scons -Q ./reacto_tests/build/reacto_host_tests
-```
-
-You can run tests with:
-
-```sh
-    ./reacto_tests/build/reacto_host_tests
-```
-
-**3. Generate and open code coverage**
-
-To generate code coverage and open in firefox:
-```sh
-    scons -Q coverage
-    firefox ./coverage/index.html
-```
-
-If you need to know what targets are available to build:
-
-```sh
-    scons -Q
-```
 
 # Project Structure
 
@@ -141,6 +103,47 @@ If you need to know what targets are available to build:
                 This README :)
 ```
 
+# How to Build
+
+**1. Install Dependencies**
+
+- GCC (The compiler)
+- scons (The build generator used)
+- wget (To download dependency source code)
+- lcov (To generate code coverage reports)
+
+In ubuntu:
+```sh
+    sudo apt-get install build-essential scons wget lcov
+```
+
+**2. Build and run Tests**
+
+Inside the project root, this line will build the test executable `reacto_host_tests` in the folder `./reacto_tests/build`:
+
+```sh
+    scons -Q ./reacto_tests/build/reacto_host_tests
+```
+
+You can run tests with:
+
+```sh
+    ./reacto_tests/build/reacto_host_tests
+```
+
+**3. Generate and open code coverage**
+
+To generate code coverage and open in firefox:
+```sh
+    scons -Q coverage
+    firefox ./coverage/index.html
+```
+
+If you need to know what targets are available to build:
+
+```sh
+    scons -Q
+```
 # The build system
 
 ## Cross Building
