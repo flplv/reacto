@@ -1,5 +1,5 @@
-#ifndef REACTO_FACTORY_H_
-#define REACTO_FACTORY_H_
+#ifndef REACTO_CONTEXT_H_
+#define REACTO_CONTEXT_H_
 
 #ifndef REACTO_N_OF_QUEUES
 #error "You have to define REACTO_N_OF_QUEUES with the number of queues you want to be allocated."
@@ -32,7 +32,7 @@ struct reacto_main_loop_context
     const main_loop_strategy strategy;
 };
 
-struct reacto_factory_private
+struct reacto_context_private
 {
     slot_queue_t slots [REACTO_N_OF_QUEUES][REACTO_MAX_N_OF_HANDLERS_PER_QUEUE];
     queue_t queues [REACTO_N_OF_QUEUES];
@@ -44,31 +44,31 @@ struct reacto_factory_private
     size_t total_queues;
 };
 
-extern struct reacto_factory_private reacto_factory_private_data;
+extern struct reacto_context_private reacto_context_private_data;
 
-static inline main_loop_t * reacto_factory_main_loop()
+static inline main_loop_t * reacto_context_main_loop()
 {
-    if (!reacto_factory_private_data.has_loop)
+    if (!reacto_context_private_data.has_loop)
         return NULL;
 
-    return &reacto_factory_private_data.loop;
+    return &reacto_context_private_data.loop;
 }
 
-static inline timed_queue_t * reacto_factory_timed_queue()
+static inline timed_queue_t * reacto_context_timed_queue()
 {
-    if (!reacto_factory_private_data.has_tq)
+    if (!reacto_context_private_data.has_tq)
         return NULL;
 
-    return &reacto_factory_private_data.timed_queue;
+    return &reacto_context_private_data.timed_queue;
 }
 
-static inline queue_t * reacto_factory_queue(size_t n)
+static inline queue_t * reacto_context_queue(size_t n)
 {
-    if (n >= reacto_factory_private_data.total_queues)
+    if (n >= reacto_context_private_data.total_queues)
         return NULL;
 
-    return &reacto_factory_private_data.queues[n];
+    return &reacto_context_private_data.queues[n];
 }
 
 
-#endif /* REACTO_FACTORY_H_ */
+#endif /* REACTO_CONTEXT_H_ */

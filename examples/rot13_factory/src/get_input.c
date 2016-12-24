@@ -1,7 +1,6 @@
-#include <reacto/queue.h>
 #include "reacto_factory_config.h"
-#include <reacto/factory.h>
-
+#include <reacto/context.h>
+#include <reacto/queue.h>
 #include "rot13_stage.h"
 
 #include <stdio.h>
@@ -49,12 +48,12 @@ static void get_input_periodic_handler (timed_event_t * ev)
         rot13_stage_push(c);
 
     /* Relink to get called cyclicly */
-    timed_queue_link(reacto_factory_timed_queue(), ev);
+    timed_queue_link(reacto_context_timed_queue(), ev);
 }
 
 void get_input_init()
 {
     timed_event_init(&ev, 5, get_input_periodic_handler);
-    timed_queue_link(reacto_factory_timed_queue(), &ev);
+    timed_queue_link(reacto_context_timed_queue(), &ev);
     setvbuf(stdin, NULL, _IONBF, 0); //turn off buffering
 }

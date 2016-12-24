@@ -1,6 +1,6 @@
-#include <reacto/queue.h>
 #include "reacto_factory_config.h"
-#include <reacto/factory.h>
+#include <reacto/context.h>
+#include <reacto/queue.h>
 #include <reacto/reusables/macros.h>
 
 #include "rot13_stage.h"
@@ -39,5 +39,5 @@ void rot13_stage_push (char c)
 {
     struct stage_data ev;
     ev.c = c;
-    queue_push(reacto_factory_queue(0), stage_buffer, ev);
+    queue_push(reacto_context_queue(0), stage_buffer, ev);
 }

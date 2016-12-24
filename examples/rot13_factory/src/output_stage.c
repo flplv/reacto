@@ -1,6 +1,6 @@
-#include <reacto/queue.h>
 #include "reacto_factory_config.h"
-#include <reacto/factory.h>
+#include <reacto/context.h>
+#include <reacto/queue.h>
 #include "output_stage.h"
 
 #include <stdio.h>
@@ -24,5 +24,5 @@ void output_stage_push (char c)
 {
     struct stage_data ev;
     ev.c = c;
-    queue_push(reacto_factory_queue(1), stage_buffer, ev);
+    queue_push(reacto_context_queue(1), stage_buffer, ev);
 }

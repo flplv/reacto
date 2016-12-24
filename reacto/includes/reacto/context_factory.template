@@ -1,18 +1,18 @@
-#include <reacto/factory.h>
+#include <reacto/context.h>
 
-struct reacto_factory_private reacto_factory_private_data = { 
+struct reacto_context_private reacto_context_private_data = { 
         .has_loop = false,
         .has_tq = false,
         .total_queues = 0
 };
 
-static inline int reacto_factory (const main_loop_strategy strategy,
+static inline int reacto_context_factory (const main_loop_strategy strategy,
                                   const struct reacto_timed_queue_context * tq_ctx,
                                   const struct reacto_queues_context *q_ctx)
 {
     debug_ptr(strategy, -100);
 
-    struct reacto_factory_private * const ctx = &reacto_factory_private_data;
+    struct reacto_context_private * const ctx = &reacto_context_private_data;
     const int n_of_queues = REACTO_N_OF_QUEUES;
     const int n_of_handlers = REACTO_MAX_N_OF_HANDLERS_PER_QUEUE;
     int r;
