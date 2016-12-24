@@ -6,10 +6,14 @@
 Portable framework for developing reactive embedded systems in C
 - Project web page: [http://felipe-lavratti.github.io/reacto/](http://felipe-lavratti.github.io/reacto/)
 
+# Change Log
+[https://github.com/felipe-lavratti/reacto/releases](https://github.com/felipe-lavratti/reacto/releases)
+
 # Table of Content
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [react.o](#reacto)
+- [Change Log](#change-log)
 - [Table of Content](#table-of-content)
 - [How to Build](#how-to-build)
 - [Project Structure](#project-structure)
