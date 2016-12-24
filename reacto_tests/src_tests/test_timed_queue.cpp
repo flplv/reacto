@@ -69,8 +69,12 @@ TEST(TimedQueue, link_relink_update)
     timed_event_init(&ev1, 1000, handler);
     timed_event_init(&ev2, 500, handler);
 
+    CHECK_EQUAL(UINT32_MAX, sleep(&queue.itf));
+
     timed_queue_link(&queue, &ev1);
     timed_queue_link(&queue, &ev2);
+
+    CHECK_EQUAL(500, sleep(&queue.itf));
 
     timed_queue_link_update_timeout(&queue, &ev2, 2000);
     CHECK_EQUAL(&ev1, queue.root);
@@ -148,6 +152,9 @@ TEST(TimedQueue, link_order_2)
 
     injected_now = 0;
 
+    CHECK_EQUAL(UINT32_MAX, sleep(&cut.itf));
+
+
     for (uint32_t i = 0; i < 5; i++) {
         timed_event_init(&evs[i], (i+1) * 100, handler);
         timed_queue_link(&cut, &evs[i]);
@@ -163,9 +170,13 @@ TEST(TimedQueue, link_order_2)
     main_loop_run(&loop);
     mock().checkExpectations();
 
+    CHECK_EQUAL(100, sleep(&cut.itf));
+
     injected_now = 99;
     main_loop_run(&loop);
     mock().checkExpectations();
+
+    CHECK_EQUAL(0, sleep(&cut.itf));
 
     injected_now = 100;
     mock().expectOneCall("handler")
@@ -174,9 +185,13 @@ TEST(TimedQueue, link_order_2)
     mock().checkExpectations();
     CHECK_EQUAL(4, cut.cnt_cache);
 
+    CHECK_EQUAL(100, sleep(&cut.itf));
+
     injected_now = 199;
     main_loop_run(&loop);
     mock().checkExpectations();
+
+    CHECK_EQUAL(0, sleep(&cut.itf));
 
     injected_now = 299;
     mock().expectOneCall("handler")
@@ -185,6 +200,7 @@ TEST(TimedQueue, link_order_2)
     mock().checkExpectations();
     CHECK_EQUAL(3, cut.cnt_cache);
 
+    CHECK_EQUAL(0, sleep(&cut.itf));
 
     injected_now = 300;
     mock().expectOneCall("handler")
@@ -193,6 +209,7 @@ TEST(TimedQueue, link_order_2)
     mock().checkExpectations();
     CHECK_EQUAL(2, cut.cnt_cache);
 
+    CHECK_EQUAL(100, sleep(&cut.itf));
 
     injected_now = 500;
     mock().expectOneCall("handler")
@@ -202,6 +219,8 @@ TEST(TimedQueue, link_order_2)
     main_loop_run(&loop);
     mock().checkExpectations();
     CHECK_EQUAL(0, cut.cnt_cache);
+
+    CHECK_EQUAL(UINT32_MAX, sleep(&cut.itf));
 
     timed_queue_deinit(&cut);
 }
