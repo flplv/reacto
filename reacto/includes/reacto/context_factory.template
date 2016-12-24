@@ -1,10 +1,14 @@
 #include <reacto/context.h>
 
+#ifdef __cplusplus
+struct reacto_context_private reacto_context_private_data = {};
+#else
 struct reacto_context_private reacto_context_private_data = { 
         .has_loop = false,
         .has_tq = false,
         .total_queues = 0
 };
+#endif
 
 static inline int reacto_context_factory (const main_loop_strategy strategy,
                                   const struct reacto_timed_queue_context * tq_ctx,

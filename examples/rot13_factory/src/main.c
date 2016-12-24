@@ -58,17 +58,13 @@ int main()
     int r = reacto_context_factory(main_loop_strategy_priority_queue,
                            &timed_queue_context,
                            &queues_context);
-    if (r < 0) {
+    if (r < 0)
+    {
         printf ("reacto_context_factory failed with %d.", r);
         exit(EXIT_FAILURE);
     }
 
-    /* Register POSIX signal handler */
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = exit_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
+    signal (SIGINT, exit_handler);
 
     get_input_init();
     main_loop_set_sleep_handler(reacto_context_main_loop(), sleep_handler);
