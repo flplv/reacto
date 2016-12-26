@@ -136,8 +136,8 @@ table td{
 nav {
   font-size:15px;
   width:100%;
-  position: sticky;
-  z-index:0;
+  position: fixed;
+  z-index:100;
   top:0;
   left:0;
   background:#2e2e2e;
@@ -273,6 +273,27 @@ nav ul li:hover, nav ul li.active {
   /*-moz-column-rule:    1px outset rgba(255,255,255,0.5);*/
   /*column-rule:         1px outset rgba(255,255,255,0.5);*/
 }
+
+.lefted {
+    -webkit-columns: 1 ;
+       -moz-columns: 1 ;
+            columns: 1 ;
+
+  /*-webkit-column-rule: 1px outset rgba(255,255,255,0.5);*/
+  /*-moz-column-rule:    1px outset rgba(255,255,255,0.5);*/
+  /*column-rule:         1px outset rgba(255,255,255,0.5);*/
+}
+
+.lefted p, .lefted h2, .lefted h3, .lefted h4 {
+    text-align: start;
+    padding-left: 100px;
+}
+
+.lefted ul {
+    text-align: start;
+    padding-left: 160px;
+}
+
 .longlist { font-size: 14px !important; }
 .longlist li { margin-bottom: 3px; }
 
@@ -354,7 +375,7 @@ nav ul li:hover, nav ul li.active {
 	.container h4 { font-size: 18px; }
 
 
-  .section { padding:130px 0; }
+  .section { padding: 30px 0; }
   .sectiondivider {
     width:200px;
     height:200px;
