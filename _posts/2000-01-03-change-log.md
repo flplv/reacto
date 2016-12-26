@@ -18,8 +18,6 @@ New features release
 - Advanced Main Loop **sleep**;
 - An improved cross platform **build system**.
 
-<br>
-
 ### [Release 0.1.0-rc1](https://github.com/felipe-lavratti/reacto/releases/tag/v0.1.0-rc1)
 
 Core features release
