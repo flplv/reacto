@@ -33,7 +33,6 @@ static inline int reacto_context_factory (const main_loop_strategy strategy,
     {
         for (q = 0; q < n_of_queues; q++)
         {
-            bool should_connect_queue = false;
             queue_t * const queue = &ctx->queues[q];
             const size_t queue_size = q_ctx->queue_buffer_sizes[q];
             const int queue_pos = q;
@@ -43,6 +42,10 @@ static inline int reacto_context_factory (const main_loop_strategy strategy,
 
             if (r < 0)
                 return -1;
+                
+            main_loop_add_queue(loop,
+                                queue_interface(queue),
+                                queue_pos);
 
             for (h = 0; h < n_of_handlers; h++)
             {
@@ -52,17 +55,10 @@ static inline int reacto_context_factory (const main_loop_strategy strategy,
                 if (!handler)
                     continue;
 
-                should_connect_queue = true;
-
                 slot_queue_init(slot, handler);
 
                 slot_queue_connect(slot, queue_signal(queue));
             }
-
-            if (should_connect_queue)
-                main_loop_add_queue(loop,
-                                    queue_interface(queue),
-                                    queue_pos);
         }
     }
 

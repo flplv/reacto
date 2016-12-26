@@ -52,6 +52,37 @@ TEST_GROUP(Context)
     }
 };
 
+TEST(Context, no_queues)
+{
+    int r = reacto_context_factory(main_loop_strategy_fare,
+                                   0,
+                                   0);
+
+    CHECK_EQUAL(0 , r);
+    CHECK_EQUAL(0, reacto_context_queue(0));
+    CHECK_EQUAL(0, reacto_context_timed_queue());
+    CHECK_TRUE (0 == reacto_context_main_loop()->root);
+}
+
+TEST(Context, no_handlers)
+{
+    typeof(queues_context.queue_handlers) handlers = {
+            { 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0 },
+    };
+    memcpy(queues_context.queue_handlers, handlers, sizeof(handlers));
+
+    int r = reacto_context_factory(main_loop_strategy_fare,
+                                   0,
+                                   &queues_context);
+
+    CHECK_EQUAL(0 , r);
+    CHECK_FALSE(0 == reacto_context_main_loop()->root);
+}
+
 TEST(Context, handlers)
 {
     int r = reacto_context_factory(main_loop_strategy_fare,
