@@ -10,6 +10,7 @@ r = {
 src = env.FindFiles('./', '*.c')
 lib = env.StaticLibrary('reacto', src)
 
-Depends(env.SourceToObjects(src), env['CPPINCLUDES'])
+Depends(env.SourceToObjects(src), env['CXXINCLUDES'] + env['CINCLUDES'])
+
 r['libs'].extend(lib)
 Return('r')

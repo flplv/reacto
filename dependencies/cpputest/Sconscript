@@ -11,19 +11,20 @@ cpputest_exports = {
     # Scons has no support for gcc -include command line option,
     # we have to do some workaround.
     'CXXFLAGS' : [
-                  '-include',
-                  new_macros,
-                  '-include',
-                  malloc_macros
+                #   '-include',
+                #   new_macros,
+                #   '-include',
+                #   malloc_macros
                  ],
     'CFLAGS' : [
-                  '-include',
-                  malloc_macros
+                #   '-include',
+                #   malloc_macros
                  ],
     'CPPPATH' : [ cpputest_include, Dir('./include') ],
     # This is a ugly workaround becouse scons doesn't detect dependency on C*FLAGS
     # every single build will have to add CPPINCLUDES dependency to their's .o
-    'CPPINCLUDES' : [new_macros, malloc_macros]
+    'CXXINCLUDES' : [new_macros],
+    'CINCLUDES' : [malloc_macros],
 }
 
 # Download and extract cpputest-3.8.tar.gz to cpputest-tree
@@ -36,6 +37,7 @@ for plat in platforms:
     # Modify imported environment to be used by further builds
     plat.Env().Prepend(**cpputest_exports)
     env = plat.Env().Clone()
+    env.UpdateIncludes()
 
     # Call script to build cpputest
     config = {'cpputest_extensions_enabled' : plat.CppUTestExtensionsEnabled()}

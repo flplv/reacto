@@ -75,7 +75,8 @@ class Msp430Platform(PlatformBaseClass):
             CPPFLAGS = ['-g', '-Os', '-Wall'],
             LINKFLAGS = [mcu_flag,
                          ],
-            CPPINCLUDES = [],
+            CINCLUDES = [],
+            CXXINCLUDES = [],
         )
 
 instance = Msp430Platform()

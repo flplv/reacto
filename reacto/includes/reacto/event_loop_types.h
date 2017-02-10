@@ -24,6 +24,10 @@
 #ifndef REACTO_EVENT_LOOP_TYPES_H_
 #define REACTO_EVENT_LOOP_TYPES_H_
 
+#ifndef __GNUC__
+#error "Reacto need GNU Extensions enabled"
+#endif
+
 #include "reusables/fast_ring_fifo.h"
 #include "reusables/linked_list.h"
 #include "reusables/signal_slot.h"

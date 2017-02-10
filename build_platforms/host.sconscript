@@ -37,7 +37,8 @@ class HostPlatform(PlatformBaseClass):
                     '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
                 CPPDEFINES = ['REACTO_ENABLE_DEBUG'],
                 LIBS = ['pthread'],
-                CPPINCLUDES = []
+                CINCLUDES = [],
+                CXXINCLUDES = [],
         )
 
 instance = HostPlatform()

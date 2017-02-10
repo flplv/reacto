@@ -12,7 +12,7 @@ sources.extend (env.FindFiles('./src_tests', '*.cpp'))
 sources.extend (env.FindFiles('./src_' + name, '*.c'))
 sources.extend (env.FindFiles('./src_' + name, '*.cpp'))
 objects = env.SourceToObjects(sources)
-Depends(objects, env['CPPINCLUDES'])
+Depends(objects, env['CXXINCLUDES'] + env['CINCLUDES'])
 
 exes = env.Program(['../reacto_' + name, map_file], sources)
 exe = {'exe': exes[0], 'map': exes[1]}

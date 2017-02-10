@@ -58,7 +58,7 @@ src = env.MultiLineStringToFiles(src_str)
 objs = env.SourceToObjects(src)
 src_ext = env.MultiLineStringToFiles(src_ext_str)
 objs_ext = env.SourceToObjects(src_ext)
-Depends(src + objs + src_ext + objs_ext, env['CPPINCLUDES'])
+#Depends(src + objs + src_ext + objs_ext, env['CXXINCLUDES'] + env['CINCLUDES'])
 
 r = { 'libs' : [], 'path' : [] }
 lib_cpputest = env.StaticLibrary('cpputest', src)

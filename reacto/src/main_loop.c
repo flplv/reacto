@@ -37,7 +37,6 @@ void main_loop_init(main_loop_t * obj, main_loop_strategy strategy)
 {
     debug_ptr(obj);
     debug_ptr(strategy);
-
     obj->root = NULL;
     obj->strategy = strategy;
     obj->looping = true;

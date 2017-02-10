@@ -9,7 +9,6 @@ extern "C"
 
 TEST_GROUP(Array)
 {
-
     array_t cut;
     int buffer[5 + 1];
 

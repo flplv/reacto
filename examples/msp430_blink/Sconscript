@@ -5,6 +5,7 @@ Import('platforms')
 for plat in platforms:
     name = plat.Name()
     env = plat.Env().Clone()
+    env.UpdateIncludes()
     build_dir = './build/' + name
     exe = env.SConscript('./Sconscript.variant', exports = ['name','env'], variant_dir = build_dir, src = 'tests', duplicate=0)
 

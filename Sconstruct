@@ -65,6 +65,15 @@ def ObjectsToGcov(self, source_list):
     return r
 default_env.AddMethod(ObjectsToGcov)
 
+# Create -include flags
+def UpdateIncludes(self):
+    env = {
+        'CXXFLAGS': sum([['-include', i] for i in self['CXXINCLUDES']], []),
+        'CFLAGS' : sum([['-include', i] for i in self['CINCLUDES']], [])
+    }
+    self.Prepend(**env)
+default_env.AddMethod(UpdateIncludes)
+
 def EnablePlatformsFor(build_name, available_platforms):
     r = []
     for plat in available_platforms:

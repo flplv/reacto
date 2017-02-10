@@ -10,13 +10,14 @@ class HostTestsPlatform(PlatformBaseClass):
         return [self.Default('tests'),
                 'coverage', self.Default('coverage_report'),
                 str(self._build_libraries['reacto']),
-                str(self._build_binaries['reacto_tests'])]
+                str(self._build_binaries['reacto_tests']),
+                '.ycm_flags.py.{}'.format(self.Name())]
 
     def BuildList(self):
         return [
             'cpputest',
             'reacto',
-            'reacto_tests'
+            'reacto_tests',
         ]
 
     def ProfileEnabled(self):
@@ -26,6 +27,9 @@ class HostTestsPlatform(PlatformBaseClass):
         return True
 
     def PostBuildTargets(self):
+        self.Env().Command( target = '.ycm_flags.py.{}'.format(self.Name()),
+                 source = "",
+                 action = PlatformBaseClass.MakeYCMFlags)
         #
         #
         # Tests Build
@@ -94,7 +98,8 @@ class HostTestsPlatform(PlatformBaseClass):
                     '-Wall', '-Wextra', '-Wswitch-default', '-Wswitch-enum', '-Wconversion', '-Wno-long-long'],
                 CPPDEFINES = ['REACTO_ENABLE_DEBUG'],
                 LIBS = ['pthread'],
-                CPPINCLUDES = []
+                CINCLUDES = [],
+                CXXINCLUDES = [],
         )
 
 instance = HostTestsPlatform()

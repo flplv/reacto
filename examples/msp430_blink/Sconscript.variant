@@ -11,7 +11,7 @@ env.Append(LINKFLAGS = ['-Xlinker', '-Map=' + map_file])
 
 sources = [File('main.c')]
 objects = env.SourceToObjects(sources)
-Depends(objects, env['CPPINCLUDES'])
+Depends(objects, env['CXXINCLUDES'] + env['CINCLUDES'])
 
 exes = env.Program(['../msp430_blink_' + name + '.elf', map_file], sources)
 exe = {'exe': exes[0], 'map': exes[1]}
