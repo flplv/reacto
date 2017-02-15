@@ -1,6 +1,6 @@
-[![Travis](https://img.shields.io/travis/felipe-lavratti/reacto.svg?style=flat-square)](https://travis-ci.org/felipe-lavratti/reacto)
-[![Codecov](https://img.shields.io/codecov/c/github/felipe-lavratti/reacto.svg?style=flat-square)](https://codecov.io/gh/felipe-lavratti/reacto)
-[![GitHub release](https://img.shields.io/github/release/felipe-lavratti/reacto.svg?style=flat-square)](https://github.com/felipe-lavratti/reacto/releases)
+[![Travis](https://img.shields.io/travis/flplv/reacto.svg?style=flat-square)](https://travis-ci.org/felipe-lavratti/reacto)
+[![Codecov](https://img.shields.io/codecov/c/github/flplv/reacto.svg?style=flat-square)](https://codecov.io/gh/felipe-lavratti/reacto)
+[![GitHub release](https://img.shields.io/github/release/flplv/reacto.svg?style=flat-square)](https://github.com/felipe-lavratti/reacto/releases)
 
 # react.o
 Portable framework for developing reactive embedded systems in C
