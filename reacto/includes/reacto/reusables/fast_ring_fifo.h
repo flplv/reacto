@@ -98,14 +98,14 @@ static inline bool fast_ring_fifo_empty(fast_ring_fifo_t * obj)
     return obj->rdIdx == obj->wrIdx;
 }
 
-static inline bool fast_ring_fifo_full(fast_ring_fifo_t * obj)
-{
-    return (obj->mask & obj->rdIdx) == (obj->mask & (obj->wrIdx+1));
-}
-
 static inline size_t fast_ring_fifo_count(fast_ring_fifo_t * obj)
 {
-    return obj->mask & (obj->wrIdx - obj->rdIdx);
+    return obj->wrIdx - obj->rdIdx;
+}
+
+static inline bool fast_ring_fifo_full(fast_ring_fifo_t * obj)
+{
+    return fast_ring_fifo_count (obj) == fast_ring_fifo_num_of_slots (obj);
 }
 
 #endif /* REACTO_REUSABLES_FAST_RING_FIFO_H_ */
