@@ -6,22 +6,17 @@
 Portable framework for developing reactive embedded systems in C
 - Project web page: [http://flplv.github.io/reacto/](http://flplv.github.io/reacto/)
 
-# Change Log
-[https://github.com/flplv/reacto/releases](https://github.com/flplv/reacto/releases)
+# Links
 
-# Project Planning
-[https://github.com/flplv/reacto/wiki/0.-Planning](https://github.com/flplv/reacto/wiki/0.-Planning)
-
-# Project Wiki
-[https://github.com/flplv/reacto/wiki](https://github.com/flplv/reacto/wiki)
+- Change Log: [https://github.com/flplv/reacto/releases](https://github.com/flplv/reacto/releases)
+- Project Planning: [https://github.com/flplv/reacto/wiki/0.-Planning](https://github.com/flplv/reacto/wiki/0.-Planning)
+- Project Wiki: [https://github.com/flplv/reacto/wiki](https://github.com/flplv/reacto/wiki)
 
 # Table of Content
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [react.o](#reacto)
-- [Change Log](#change-log)
-- [Project Planning](#project-planning)
-- [Project Wiki](#project-wiki)
+- [Links](#links)
 - [Table of Content](#table-of-content)
 - [Project Structure](#project-structure)
 - [How to Build](#how-to-build)
