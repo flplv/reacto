@@ -12,11 +12,16 @@ Portable framework for developing reactive embedded systems in C
 # Project Planning
 [https://github.com/flplv/reacto/wiki/0.-Planning](https://github.com/flplv/reacto/wiki/0.-Planning)
 
+# Project Wiki
+[https://github.com/flplv/reacto/wiki](https://github.com/flplv/reacto/wiki)
+
 # Table of Content
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [react.o](#reacto)
 - [Change Log](#change-log)
+- [Project Planning](#project-planning)
+- [Project Wiki](#project-wiki)
 - [Table of Content](#table-of-content)
 - [Project Structure](#project-structure)
 - [How to Build](#how-to-build)
