@@ -10,7 +10,7 @@ Portable framework for developing reactive embedded systems in C
 [https://github.com/flplv/reacto/releases](https://github.com/flplv/reacto/releases)
 
 # Project Planning
-[https://gist.github.com/flplv/9043817e9ead01e7b13439d6060e5d69](https://gist.github.com/flplv/9043817e9ead01e7b13439d6060e5d69)
+[https://github.com/flplv/reacto/wiki/0.-Planning](https://github.com/flplv/reacto/wiki/0.-Planning)
 
 # Table of Content
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
