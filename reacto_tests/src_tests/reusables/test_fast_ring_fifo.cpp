@@ -122,7 +122,7 @@ TEST(fast_ring_fifo, read_write)
     }
 
     STRCMP_EQUAL(reference_buffer, buffer);
-    CHECK_EQUAL(15, fast_ring_fifo_count(&cut));
+    CHECK_EQUAL(16, fast_ring_fifo_count(&cut));
 
 
     i = 0;
@@ -145,7 +145,7 @@ TEST(fast_ring_fifo, read_write)
             fast_ring_fifo_write_increment(&cut);
         }
 
-        CHECK_EQUAL(15, fast_ring_fifo_count(&cut));
+        CHECK_EQUAL(16, fast_ring_fifo_count(&cut));
 
         i = 0;
 

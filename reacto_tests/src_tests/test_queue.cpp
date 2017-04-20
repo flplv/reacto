@@ -64,9 +64,9 @@ TEST(Queue, enque_full)
         event.data = i++;
         result = queue_push (&cut, data_queue, event);
     }
-    CHECK_EQUAL(255, fast_ring_fifo_count(&cut.fifo));
+    CHECK_EQUAL(256, fast_ring_fifo_count(&cut.fifo));
 
-    for (i = 0; i < 255; i++)
+    for (i = 0; i < 256; i++)
         CHECK_EQUAL(i, data_queue[i].data);
 
     i = 0;
