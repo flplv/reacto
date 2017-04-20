@@ -1,13 +1,16 @@
-[![Travis](https://img.shields.io/travis/felipe-lavratti/reacto.svg?style=flat-square)](https://travis-ci.org/felipe-lavratti/reacto)
-[![Codecov](https://img.shields.io/codecov/c/github/felipe-lavratti/reacto.svg?style=flat-square)](https://codecov.io/gh/felipe-lavratti/reacto)
-[![GitHub release](https://img.shields.io/github/release/felipe-lavratti/reacto.svg?style=flat-square)](https://github.com/felipe-lavratti/reacto/releases)
+[![Travis](https://img.shields.io/travis/flplv/reacto.svg?style=flat-square)](https://travis-ci.org/flplv/reacto)
+[![Codecov](https://img.shields.io/codecov/c/github/flplv/reacto.svg?style=flat-square)](https://codecov.io/gh/flplv/reacto)
+[![GitHub release](https://img.shields.io/github/release/flplv/reacto.svg?style=flat-square)](https://github.com/flplv/reacto/releases)
 
 # react.o
 Portable framework for developing reactive embedded systems in C
-- Project web page: [http://felipe-lavratti.github.io/reacto/](http://felipe-lavratti.github.io/reacto/)
+- Project web page: [http://flplv.github.io/reacto/](http://flplv.github.io/reacto/)
 
 # Change Log
-[https://github.com/felipe-lavratti/reacto/releases](https://github.com/felipe-lavratti/reacto/releases)
+[https://github.com/flplv/reacto/releases](https://github.com/flplv/reacto/releases)
+
+# Project Planning
+[https://gist.github.com/flplv/9043817e9ead01e7b13439d6060e5d69](https://gist.github.com/flplv/9043817e9ead01e7b13439d6060e5d69)
 
 # Table of Content
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
